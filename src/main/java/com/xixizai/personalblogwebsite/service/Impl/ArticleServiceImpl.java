@@ -2,7 +2,9 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.exception.ArticleDTONotFoundException;
 import com.xixizai.personalblogwebsite.exception.ArticleNotFoundException;
+import com.xixizai.personalblogwebsite.exception.CreateNewArticleException;
 import com.xixizai.personalblogwebsite.mapper.ArticleMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -32,5 +34,26 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         return Result.success(articleDTO);
+    }
+
+    /**
+     * 创建文章
+     * @param articleDTO
+     * @return
+     */
+    @Override
+    public Result createNewArticle(ArticleDTO articleDTO) throws ArticleDTONotFoundException, CreateNewArticleException {
+
+        try{
+            //这里判空一下
+            if(BeanUtil.isEmpty(articleDTO)){
+                throw new ArticleDTONotFoundException(MessageConstant.ARTICLEDTO_NOT_FOUND);
+            }
+            articleMapper.createNewArticle(articleDTO);
+            return Result.success("创建文章成功");
+        }catch (Exception exception){
+            throw new CreateNewArticleException(MessageConstant.CREATE_NEW_ARTICLE_FAILSURE);
+        }
+
     }
 }

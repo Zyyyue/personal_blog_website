@@ -20,4 +20,6 @@ public class MessageConstant {
 
     public static final String ID_NOT_VALID = "id不合法";
     public static final String LOGOUT_FAILSURE_EXCEPTION = "退出登录失败";
+    public static final String ARTICLEDTO_NOT_FOUND = "文章dto不存在";
+    public static final String CREATE_NEW_ARTICLE_FAILSURE="创建新文章失败";
 }

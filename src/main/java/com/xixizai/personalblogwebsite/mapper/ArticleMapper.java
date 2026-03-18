@@ -1,6 +1,7 @@
 package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -13,4 +14,7 @@ public interface ArticleMapper {
      */
     @Select("select * from articles where id=#{id}")
     ArticleDTO findArticleById(Long id);
+
+    @Insert("insert into articles () values (#{articleDTO})")
+    void createNewArticle(ArticleDTO articleDTO);
 }
