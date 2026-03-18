@@ -1,0 +1,52 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: Personal-Blog-Website
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/personal_blog_website
+    username: root
+    password: 123456
+  redis:
+    host: 192.168.16.128
+    port: 6380
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 3467884929@qq.com
+    password: ksexqkqbifbjdcaa #这个是qq邮箱的密钥
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+
+# MyBatis 配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+# 网站配置 (对应 WebsiteProperties)
+xixi:
+  website:
+    title: 神になる代償は何ですか？
+    home: https://xixi.cc
+    admin: https://admin.xixi.cc
+    cv: https://xixi.cc/cv
+    blog: https://xixi.cc/blog
+
+  # 邮件配置 (对应 EmailProperties)
+  email:
+    personal: xixi
+    from: 3467884929@qq.com
+
+# JWT 配置 (对应 JwtProperties)
+  jwt:
+    secret-key: "BOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBEE"
+    ttl: 1440
+    token-name: Authorization
