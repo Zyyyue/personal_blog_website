@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--这个写包名加上类名-->
+<mapper namespace="com.xixizai.personalblogwebsite.mapper.ArticleMapper">
+    <update id="updateArticle">
+        update articles
+        <set>
+            <if  test="title !=null">title=#{title},</if>
+            <if test="slug !=null">slug=#{slug},</if>
+            <if test="summary !=null">summary=#{summary},</if>
+            <if test="coverImage !=null">cover_image=#{coverImage},</if>
+            <if test="contentMarkdown !=null">content_markdown=#{contentMarkdown},</if>
+            <if test="contentHtml !=null">content_html=#{contentHtml},</if>
+            <if test="categoryId !=null">category_id=#{categoryId},</if>
+            <if test="isPublished !=null">is_published=#{isPublished},</if>
+            <if test="isTop !=null">is_top=#{isTop},</if>
+            update_time=NOW()
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

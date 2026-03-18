@@ -1,10 +1,7 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
-import com.xixizai.personalblogwebsite.exception.ArticleDTONotFoundException;
-import com.xixizai.personalblogwebsite.exception.ArticleNotFoundException;
-import com.xixizai.personalblogwebsite.exception.CreateNewArticleException;
-import com.xixizai.personalblogwebsite.exception.IdNotValidException;
+import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleService;
@@ -46,6 +43,16 @@ public class ArticleController {
     @PostMapping()
     public Result createNewArticle(@RequestBody ArticleDTO articleDTO) throws ArticleDTONotFoundException, CreateNewArticleException {
         return articleService.createNewArticle(articleDTO);
+    }
+
+    /**
+     * 更新文章
+     * @param articleDTO
+     * @return
+     */
+    @PutMapping()
+    public Result updateArticle(@RequestBody ArticleDTO articleDTO) throws ArticleDTONotFoundException, UpdateArticlesException {
+        return articleService.updateArticle(articleDTO);
     }
 
 

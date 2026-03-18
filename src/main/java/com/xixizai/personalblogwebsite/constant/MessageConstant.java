@@ -17,9 +17,10 @@ public class MessageConstant {
     public static final String UPDATE_NICKNAME_FAILSURE = "昵称修改失败";
     public static final String UPDATE_ADMIN_EMAIL_FAILSURE = "邮箱换绑失败";
     public static final String ARTICLE_NOT_FOUND_EXCEPTION = "没有发现任何文章";
-
     public static final String ID_NOT_VALID = "id不合法";
     public static final String LOGOUT_FAILSURE_EXCEPTION = "退出登录失败";
     public static final String ARTICLEDTO_NOT_FOUND = "文章dto不存在";
     public static final String CREATE_NEW_ARTICLE_FAILSURE="创建新文章失败";
+    public static final String UPDATE_ARTICLES_FAILSURE="更新文章失败";
+    public static final String ID_NOT_FOUND="id不存在";
 }
