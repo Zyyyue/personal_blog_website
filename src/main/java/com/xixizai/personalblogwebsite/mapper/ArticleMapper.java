@@ -35,4 +35,18 @@ public interface ArticleMapper {
      * @param ids
      */
     void batchDeleteArticles( List<Long> ids);
+
+    /**
+     * 发布文章
+     * @param id
+     * @param isPublished
+     */
+    void publishArticle(Long id, Integer isPublished);
+
+    /**
+     * 取消发布文章
+     * @param id
+     * @param isPublished
+     */
+    void unpublishArticle(Long id, Integer isPublished);
 }

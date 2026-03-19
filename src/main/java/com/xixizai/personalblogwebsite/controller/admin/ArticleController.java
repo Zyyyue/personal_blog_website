@@ -66,5 +66,25 @@ public class ArticleController {
         return articleService.batchDeleteArticles(ids);
     }
 
+    /**
+     * 发布文章
+     * @param id
+     * @param isPublished
+     * @return
+     */
+    @PutMapping("/publish/{id}")
+    public Result publishArticle(@PathVariable Long id,@RequestParam Integer isPublished) throws PublishArticleException {
+        return articleService.publishArticle(id,isPublished);
+    }
 
+    /**
+     * 取消发布文章
+     * @param id
+     * @param isPublished
+     * @return
+     */
+    @PutMapping("/unpublish/{id}")
+    public Result unpublishArticle(@PathVariable Long id,@RequestParam Integer isPublished) throws UnpublishArticleException {
+        return articleService.unpublishArticle(id,isPublished);
+    }
 }
