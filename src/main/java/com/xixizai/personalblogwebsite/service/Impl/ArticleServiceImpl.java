@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Repeat;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -75,6 +76,28 @@ public class ArticleServiceImpl implements ArticleService {
             return Result.success("更新成功");
         }catch (Exception exception){
             throw new UpdateArticlesException(MessageConstant.UPDATE_ARTICLES_FAILSURE);
+        }
+
+    }
+
+    /**
+     * 批量删除文章
+     * @param ids
+     * @return
+     */
+    @Override
+    public Result batchDeleteArticles(List<Long> ids) throws IdNotValidException, BatchDeleteArticlesException {
+
+        try{
+            //判空一下ids
+            if(ids.isEmpty()){
+                throw new IdNotValidException(MessageConstant.ID_LIST_NOT_EXIST);
+            }
+            articleMapper.batchDeleteArticles(ids);
+            return Result.success("批量删除成功");
+        }catch (Exception exception){
+            throw new BatchDeleteArticlesException(MessageConstant.BATCH_DELETE_ARTICLES_FAILSURE);
+
         }
 
     }
