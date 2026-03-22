@@ -8,6 +8,7 @@ import com.xixizai.personalblogwebsite.mapper.ArticleTagRelationsMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Repeat;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
@@ -45,17 +46,33 @@ public class ArticleServiceImpl implements ArticleService {
      * @param articleDTO
      * @return
      */
+    @Transactional
     @Override
     public Result createNewArticle(ArticleDTO articleDTO) throws ArticleDTONotFoundException, CreateNewArticleException {
 
         try{
             //这里判空一下
-            if(BeanUtil.isEmpty(articleDTO)){
+            if(articleDTO==null){
                 throw new ArticleDTONotFoundException(MessageConstant.ARTICLEDTO_NOT_FOUND);
             }
+
             articleMapper.createNewArticle(articleDTO);
+
+            //再在这里判断一下传进来的dto中是否有标签列表
+            List<Long> tagIds = articleDTO.getTagIds();
+            if(tagIds!=null){
+                String slug = articleDTO.getSlug();
+                ArticleDTO bySlug = articleTagRelationsMapper.findBySlug(slug);
+                if(bySlug.getId()!=null){
+                    Long id=bySlug.getId();
+                    articleTagRelationsMapper.createArticleTagsAndRelations(tagIds,id);
+                }
+                log.info("获取到的id为:"+bySlug.getId());
+            }
+
             return Result.success("创建文章成功");
         }catch (Exception exception){
+            exception.printStackTrace();
             throw new CreateNewArticleException(MessageConstant.CREATE_NEW_ARTICLE_FAILSURE);
         }
 
