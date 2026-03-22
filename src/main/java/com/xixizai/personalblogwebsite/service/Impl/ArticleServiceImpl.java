@@ -121,6 +121,7 @@ public class ArticleServiceImpl implements ArticleService {
             //批量删除文章
             if(!updatedIds.isEmpty()){
                 articleMapper.batchDeleteArticles(updatedIds);
+                articleMapper.batchDeleteTagsAndRelations(updatedIds);
             }
 
             //返回结果

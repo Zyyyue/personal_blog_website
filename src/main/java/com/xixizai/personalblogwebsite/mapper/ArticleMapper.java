@@ -31,10 +31,16 @@ public interface ArticleMapper {
     void updateArticle(ArticleDTO articleDTO);
 
     /**
-     * 批量删除文章
+     * 批量删除文章表中的文章
      * @param ids
      */
     void batchDeleteArticles( List<Long> ids);
+
+    /**
+     * 批量删除标签和关系中的数据
+     * @param ids
+     */
+    void batchDeleteTagsAndRelations(List<Long>ids);
 
     /**
      * 发布文章
