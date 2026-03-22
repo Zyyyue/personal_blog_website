@@ -6,7 +6,7 @@ spring:
     name: Personal-Blog-Website
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/personal_blog_website
+    url: jdbc:mysql://localhost:3306/personal_blog_website?useSSL=false&serverTimezone=UTC&allowMultiQueries=true&characterEncoding=utf-8
     username: root
     password: 123456
   redis:

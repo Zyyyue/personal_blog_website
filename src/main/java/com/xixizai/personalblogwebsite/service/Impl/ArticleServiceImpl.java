@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.ArticleMapper;
+import com.xixizai.personalblogwebsite.mapper.ArticleTagRelationsMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleService;
@@ -21,6 +22,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Resource
     private ArticleMapper articleMapper;
 
+    @Resource
+    private ArticleTagRelationsMapper articleTagRelationsMapper;
     /**
      * 根据id获取文章详情
      * @param id
@@ -63,20 +66,33 @@ public class ArticleServiceImpl implements ArticleService {
      * @param articleDTO
      * @return
      */
+    @Transactional
     @Override
     public Result updateArticle(ArticleDTO articleDTO) throws ArticleDTONotFoundException, UpdateArticlesException {
         try{
             //这里判空一下
-            if(BeanUtil.isEmpty(articleDTO)){
+            if(articleDTO==null||articleDTO.getId()==null){
                 throw new ArticleDTONotFoundException(MessageConstant.ARTICLEDTO_NOT_FOUND);
             }
-            //再单独判断一下id是否存在
-            if(articleDTO.getId()==null){
+            //再单独判断一下文章是否存在
+            ArticleDTO articleById = articleMapper.findArticleById(articleDTO.getId());
+            if(articleById==null){
                 throw new IdNotFoundException(MessageConstant.ID_NOT_FOUND);
             }
+
+            //先更新文章基本信息
             articleMapper.updateArticle(articleDTO);
+
+            //还得再判断一下dto里面的标签列表是不是为空
+            List<Long> tagIds = articleDTO.getTagIds();
+            if(tagIds!=null){
+                //这里也得改一下标签文章关系表
+                articleTagRelationsMapper.updateArticleTagsAndRelations(tagIds,articleDTO.getId());
+            }
+
             return Result.success("更新成功");
         }catch (Exception exception){
+            exception.printStackTrace();
             throw new UpdateArticlesException(MessageConstant.UPDATE_ARTICLES_FAILSURE);
         }
 
@@ -121,7 +137,7 @@ public class ArticleServiceImpl implements ArticleService {
             //批量删除文章
             if(!updatedIds.isEmpty()){
                 articleMapper.batchDeleteArticles(updatedIds);
-                articleMapper.batchDeleteTagsAndRelations(updatedIds);
+                articleTagRelationsMapper.batchDeleteArticleTagsAndRelations(updatedIds);
             }
 
             //返回结果
