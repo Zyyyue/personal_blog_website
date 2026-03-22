@@ -50,5 +50,14 @@
         where id=#{id}
     </update>
 
+<!--    置顶或取消置顶文章(更新isTop这个字段)-->
+    <update id="cancleOrNotTopArticle">
+        update articles
+        <set>
+            <if test="isTop !=null">is_top=#{isTop}</if>
+        </set>
+        where id=#{id}
+    </update>
+
 
 </mapper>

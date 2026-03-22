@@ -50,4 +50,11 @@ public interface ArticleMapper {
      * @param isPublished
      */
     void unpublishArticle(Long id, Integer isPublished);
+
+    /**
+     * 置顶或者取消置顶
+     * @param id
+     * @param isTop
+     */
+    void cancleOrNotTopArticle(Long id, Integer isTop);
 }

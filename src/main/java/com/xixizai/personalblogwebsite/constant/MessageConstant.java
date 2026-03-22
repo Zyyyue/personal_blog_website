@@ -29,4 +29,8 @@ public class MessageConstant {
 
     public static final String PUBLISH_ARTICLE_FAILSURE = "发布文章失败";
     public static final String UNPUBLISH_ARTICLE_FAILSURE="取消发布文章失败";
+    public static final String PASSED_PARAMETER_NOT_NULL = "传来的参数不能为空";
+    public static final String PASSED_PARAMETER_NOT_VALID = "传来的参数不合法";
+
+    public static final String CANCLE_OR_NOT_TOP_ARTICLE_FALISURE = "置顶或取消置顶文章失败";
 }
