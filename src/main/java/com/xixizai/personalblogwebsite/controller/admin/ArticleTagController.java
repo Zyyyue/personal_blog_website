@@ -3,6 +3,7 @@ package com.xixizai.personalblogwebsite.controller.admin;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleTagDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleTagService;
@@ -38,5 +39,18 @@ public class ArticleTagController {
     public Result addArticleTag(@RequestBody ArticleTagDTO articleTagDTO) throws PassedParameterException, AddOperationException {
         return articleTagService.addArticleTag(articleTagDTO);
     }
+
+    /**
+     * 更新文章标签
+     * @param articleTagDTO
+     * @return
+     * @throws PassedParameterException
+     * @throws UpdateOperationsException
+     */
+    @PutMapping()
+    public Result updateArticleTag(@RequestBody ArticleTagDTO articleTagDTO) throws PassedParameterException, UpdateOperationsException {
+        return articleTagService.updateArticleTag(articleTagDTO);
+    }
+
 
 }
