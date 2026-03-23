@@ -22,4 +22,11 @@ public interface ArticleCategoryMapper {
     //更新文章分类
     @Update("update article_categories set name =#{name},slug=#{slug},description=#{description},sort=#{sort},update_time=now()  where id=#{id};")
     void updateArticleCategories(ArticleCategoryDTO articleCategoryDTO);
+
+    //批量删除文章分类
+    void batchDeleteArticleCategories(List<Long> ids);
+
+    //根据id查找文章分类
+    @Select("select * from article_categories where id=#{id}")
+    ArticleCategories findArticleCategoryById(Long id);
 }

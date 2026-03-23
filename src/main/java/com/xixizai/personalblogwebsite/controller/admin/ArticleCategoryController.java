@@ -1,6 +1,7 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.xixizai.personalblogwebsite.exception.AddFailsureException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteArticleCategoriesException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.exception.UpdateArticleCategoriesException;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCategoryDTO;
@@ -9,6 +10,7 @@ import com.xixizai.personalblogwebsite.service.ArticleCategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController("adminArticleCategoryController")
 @RequestMapping("/admin/articleCategory")
@@ -46,5 +48,17 @@ public class ArticleCategoryController {
     @PutMapping()
     public Result updateArticleCategories(@RequestBody ArticleCategoryDTO articleCategoryDTO) throws PassedParameterException, UpdateArticleCategoriesException {
         return articleCategoryService.updateArticleCategories(articleCategoryDTO);
+    }
+
+    /**
+     * 批量删除文章分类
+     * @param ids
+     * @return
+     * @throws PassedParameterException
+     * @throws BatchDeleteArticleCategoriesException
+     */
+    @DeleteMapping()
+    public Result batchDeleteArticleCategories(@RequestParam List<Long>ids) throws PassedParameterException, BatchDeleteArticleCategoriesException {
+        return articleCategoryService.batchDeleteArticleCategories(ids);
     }
 }
