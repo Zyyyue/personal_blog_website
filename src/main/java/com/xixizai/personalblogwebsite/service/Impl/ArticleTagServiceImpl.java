@@ -2,11 +2,14 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.ArticleTagMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleTagDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleTags;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleTagService;
+import org.redisson.transaction.operation.set.AddOperation;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +37,26 @@ public class ArticleTagServiceImpl implements ArticleTagService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw  new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+    }
+
+    /**
+     * 添加标签
+     * @param articleTagDTO
+     * @return
+     */
+    @Override
+    public Result addArticleTag(ArticleTagDTO articleTagDTO) throws PassedParameterException, AddOperationException {
+        try{
+            //判断是否为空
+            if(articleTagDTO==null||articleTagDTO.getId()==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+            articleTagMapper.addArticleTag(articleTagDTO);
+            return Result.success("添加成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
         }
     }
 }

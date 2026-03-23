@@ -1,13 +1,12 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleTagDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleTagService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -27,4 +26,17 @@ public class ArticleTagController {
     public Result getAllArticleTags() throws PassedParameterException, GetOptsException {
         return articleTagService.getAllArticleTags();
     }
+
+    /**
+     * 添加标签
+     * @param articleTagDTO
+     * @return
+     * @throws PassedParameterException
+     * @throws AddOperationException
+     */
+    @PostMapping()
+    public Result addArticleTag(@RequestBody ArticleTagDTO articleTagDTO) throws PassedParameterException, AddOperationException {
+        return articleTagService.addArticleTag(articleTagDTO);
+    }
+
 }
