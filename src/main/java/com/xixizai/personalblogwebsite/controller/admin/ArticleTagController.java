@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteArticleTagException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleTagDTO;
@@ -10,6 +11,7 @@ import com.xixizai.personalblogwebsite.service.ArticleTagService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/article/tag")
@@ -52,5 +54,16 @@ public class ArticleTagController {
         return articleTagService.updateArticleTag(articleTagDTO);
     }
 
+    /**
+     * 批量删除文章标签
+     * @param ids
+     * @return
+     * @throws PassedParameterException
+     * @throws BatchDeleteArticleTagException
+     */
+    @DeleteMapping()
+    public Result batchDeleteArticleTag(@RequestParam List<Long> ids) throws PassedParameterException, BatchDeleteArticleTagException {
+        return articleTagService.batchDeleteArticleTag(ids);
+    }
 
 }
