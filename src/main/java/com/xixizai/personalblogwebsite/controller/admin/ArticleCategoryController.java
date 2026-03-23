@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.xixizai.personalblogwebsite.exception.AddFailsureException;
+import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateArticleCategoriesException;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCategoryDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleCategoryService;
@@ -33,5 +35,16 @@ public class ArticleCategoryController {
     @PostMapping()
     public Result addArticleCategories(@RequestBody ArticleCategoryDTO articleCategoryDTO) throws AddFailsureException {
         return articleCategoryService.addArticleCategories(articleCategoryDTO);
+    }
+
+
+    /**
+     * 更新文章分类
+     * @param articleCategoryDTO
+     * @return
+     */
+    @PutMapping()
+    public Result updateArticleCategories(@RequestBody ArticleCategoryDTO articleCategoryDTO) throws PassedParameterException, UpdateArticleCategoriesException {
+        return articleCategoryService.updateArticleCategories(articleCategoryDTO);
     }
 }
