@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddFailsureException;
+import com.xixizai.personalblogwebsite.exception.IdNotValidException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.exception.UpdateArticleCategoriesException;
 import com.xixizai.personalblogwebsite.mapper.ArticleCategoryMapper;
@@ -70,8 +71,13 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
             if(articleCategoryDTO==null){
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
+
+            //这里判断一下id是否为空是否合法
             if(articleCategoryDTO.getId()==null){
                 throw new PassedParameterException(MessageConstant.ID_NOT_FOUND);
+            }
+            if(articleCategoryDTO.getId()<=0){
+                throw new IdNotValidException(MessageConstant.ID_NOT_VALID);
             }
             articleCategoryMapper.updateArticleCategories(articleCategoryDTO);
             return Result.success("更新成功");
