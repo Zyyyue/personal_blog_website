@@ -20,4 +20,10 @@ public interface ArticleService {
 
     //批量删除文章
     Result batchDeleteArticles(List<Long> ids) throws IdNotValidException, BatchDeleteArticlesException;
+
+    //发布文章
+    Result publishArticle(Long id, Integer isPublished) throws PublishArticleException;
+
+    //取消发布
+    Result unpublishArticle(Long id,Integer isPublished) throws UnpublishArticleException;
 }

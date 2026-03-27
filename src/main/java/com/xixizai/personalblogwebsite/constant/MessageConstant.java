@@ -25,4 +25,8 @@ public class MessageConstant {
     public static final String ID_NOT_FOUND="id不存在";
     public static final String ID_LIST_NOT_EXIST = "id列表不存在";
     public static final String BATCH_DELETE_ARTICLES_FAILSURE = "批量删除失败";
+    public static final String ISPUBLISHED_NOT_VALID_EXCEPTION = "isPublished这个参数不合法";
+
+    public static final String PUBLISH_ARTICLE_FAILSURE = "发布文章失败";
+    public static final String UNPUBLISH_ARTICLE_FAILSURE="取消发布文章失败";
 }

@@ -101,4 +101,60 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
     }
+
+    /**
+     * 发布文章
+     * @param id
+     * @param isPublished
+     * @return
+     */
+    @Override
+    public Result publishArticle(Long id, Integer isPublished) throws PublishArticleException {
+
+        try{
+            //判断一下id和isPublished
+            if(id==null||id<=0){
+                throw new IdNotValidException(MessageConstant.ID_NOT_VALID);
+            }
+
+            if(isPublished==null||isPublished!=1){
+                throw new IsPublishedNotValidException(MessageConstant.ISPUBLISHED_NOT_VALID_EXCEPTION);
+            }
+
+            articleMapper.publishArticle(id,isPublished);
+
+            return Result.success();
+        }catch (Exception exception){
+            throw new PublishArticleException(MessageConstant.PUBLISH_ARTICLE_FAILSURE);
+        }
+    }
+
+    /**
+     * 取消发布文章
+     * @param id
+     * @param isPublished
+     * @return
+     */
+    @Override
+    public Result unpublishArticle(Long id, Integer isPublished) throws UnpublishArticleException {
+
+        try{
+            //判断一下id和isPublished
+            if(id==null||id<=0){
+                throw new IdNotValidException(MessageConstant.ID_NOT_VALID);
+            }
+
+            if(isPublished==null||isPublished!=0){
+                throw new IsPublishedNotValidException(MessageConstant.ISPUBLISHED_NOT_VALID_EXCEPTION);
+            }
+
+            articleMapper.unpublishArticle(id,isPublished);
+
+            return Result.success();
+        }catch (Exception exception){
+            throw new UnpublishArticleException(MessageConstant.UNPUBLISH_ARTICLE_FAILSURE);
+        }
+    }
+
+
 }
