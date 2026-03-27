@@ -15,4 +15,7 @@ public interface MessageMapper {
 
     //批量审核留言
     void batchApproveMessages(List<Long> ids);
+
+    //批量删除留言
+    void batchDeleteMessages(List<Long> ids);
 }
