@@ -27,4 +27,7 @@ public interface FriendLinkMapper {
     //根据id修改友链信息
     @Update("update friend_links set   name=#{name},url=#{url},avatar_url=#{avatarUrl},description=#{description},sort=#{sort},is_visible=#{isVisible},update_time=now() where id=#{id}")
     void updateFriendLink(FriendLinkDTO friendLinkDTO);
+
+    //批量删除友链
+    void batchDeleteFriendLinks(List<Long> ids);
 }

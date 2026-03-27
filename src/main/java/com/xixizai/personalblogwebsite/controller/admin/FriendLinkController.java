@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteFriendLinksException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.FriendLinkDTO;
@@ -50,6 +51,17 @@ public class FriendLinkController {
     @PutMapping()
     public Result updateFriendLink(@RequestBody FriendLinkDTO friendLinkDTO) throws PassedParameterException, UpdateOperationsException {
         return friendLinkServic.updateFriendLink(friendLinkDTO);
+    }
+
+    /**
+     * 批量删除友链
+     * @param ids
+     * @return
+     * @throws BatchDeleteFriendLinksException
+     */
+    @DeleteMapping()
+    public Result batchDeleteFriendLinks(@RequestParam List<Long>ids) throws BatchDeleteFriendLinksException {
+        return friendLinkServic.batchDeleteFriendLinks(ids);
     }
 
 }

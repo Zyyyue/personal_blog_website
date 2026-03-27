@@ -2,11 +2,14 @@ package com.xixizai.personalblogwebsite.service;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteFriendLinksException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.FriendLinkDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface FriendLinkService {
@@ -18,4 +21,7 @@ public interface FriendLinkService {
 
     //更新友链
     Result updateFriendLink(FriendLinkDTO friendLinkDTO) throws PassedParameterException, UpdateOperationsException;
+
+    //批量删除友链
+    Result batchDeleteFriendLinks(List<Long> ids) throws BatchDeleteFriendLinksException;
 }
