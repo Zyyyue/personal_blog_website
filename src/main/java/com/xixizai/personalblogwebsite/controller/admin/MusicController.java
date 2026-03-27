@@ -2,12 +2,15 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteMusicsException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.MusicDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.MusicService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/music")
@@ -39,5 +42,26 @@ public class MusicController {
     }
 
 
+    /**
+     * 更新音乐
+     * @param musicDTO
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @PutMapping()
+    public Result updateMusic(@RequestBody MusicDTO musicDTO) throws UpdateOperationsException {
+        return musicService.updateMusic(musicDTO);
+    }
+
+    /**
+     * 批量删除音乐
+     * @param ids
+     * @return
+     * @throws BatchDeleteMusicsException
+     */
+    @DeleteMapping()
+    public Result batchDeleteMusics(@RequestParam List<Long>ids) throws BatchDeleteMusicsException {
+        return musicService.batchDeleteMusics(ids);
+    }
 
 }
