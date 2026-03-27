@@ -9,8 +9,10 @@ import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleService;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Repeat;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -85,16 +87,51 @@ public class ArticleServiceImpl implements ArticleService {
      * @param ids
      * @return
      */
+    @Transactional
     @Override
     public Result batchDeleteArticles(List<Long> ids) throws IdNotValidException, BatchDeleteArticlesException {
 
         try{
             //判空一下ids
-            if(ids.isEmpty()){
+            if(ids==null|| ids.isEmpty()){
                 throw new IdNotValidException(MessageConstant.ID_LIST_NOT_EXIST);
             }
-            articleMapper.batchDeleteArticles(ids);
-            return Result.success("批量删除成功");
+
+            //去除一下重复id
+            List<Long>distinctIds=new ArrayList<>();
+            for (Long id : ids) {
+                if(!distinctIds.contains(id)){
+                    distinctIds.add(id);
+                }
+            }
+
+            //数据库中存在id的集合是updatedIds
+            List<Long>updatedIds=new ArrayList<>();
+            //数据库中不存在id的集合是nulledIds
+            List<Long>nulledIds=new ArrayList<>();
+            //再判断一下ids中的id是否都在数据库中存在,如果不存在的话就需要提示一下，然后删除已经存在的
+            for (Long id : distinctIds) {
+                if(articleMapper.findArticleById(id)==null){
+                    nulledIds.add(id);
+                }else{
+                    updatedIds.add(id);
+                }
+            }
+
+            //批量删除文章
+            if(!updatedIds.isEmpty()){
+                articleMapper.batchDeleteArticles(updatedIds);
+            }
+
+            //返回结果
+            if(updatedIds.isEmpty()){
+                return Result.error("传入的ID列表中，没有任何一个存在：" +nulledIds);
+            }
+            if(nulledIds.isEmpty()){
+                return Result.success(("批量删除成功，共删除 " + updatedIds.size() + " 篇文章"));
+            }
+            return Result.success("批量删除成功，成功删除 " + updatedIds.size() + " 篇，"
+                    + "不存在的ID：" + nulledIds);
         }catch (Exception exception){
             throw new BatchDeleteArticlesException(MessageConstant.BATCH_DELETE_ARTICLES_FAILSURE);
 
