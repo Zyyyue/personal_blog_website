@@ -4,6 +4,7 @@ import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.mapper.ArticleTagMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleTagDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleTags;
@@ -57,6 +58,26 @@ public class ArticleTagServiceImpl implements ArticleTagService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
+    }
+
+    /**
+     * 更新标签
+     * @param articleTagDTO
+     * @return
+     */
+    @Override
+    public Result updateArticleTag(ArticleTagDTO articleTagDTO) throws PassedParameterException, UpdateOperationsException {
+        try{
+            //判断是否为空
+            if(articleTagDTO==null||articleTagDTO.getId()==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+            articleTagMapper.updateArticleTag(articleTagDTO);
+            return Result.success("更新标签操作成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
         }
     }
 }
