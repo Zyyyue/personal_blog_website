@@ -2,11 +2,14 @@ package com.xixizai.personalblogwebsite.service;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteSystemConfigsException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.SystemConfigDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.SystemConfig;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface SystemConfigService {
@@ -24,4 +27,7 @@ public interface SystemConfigService {
 
     //更新配置
     Result updateSystemConfig(SystemConfigDTO systemConfigdto) throws UpdateOperationsException;
+
+    //批量删除配置
+    Result batchDeleteSystemConfigs(List<Long> ids) throws BatchDeleteSystemConfigsException;
 }

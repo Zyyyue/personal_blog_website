@@ -4,6 +4,19 @@
 <!--这个写包名加上类名-->
 <mapper namespace="com.xixizai.personalblogwebsite.mapper.SystemConfigMapper">
 
+    <!--    批量删除配置-->
+    <delete id="batchDeleteSystemConfigs">
+        delete from system_config
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+
+            #{id}
+
+        </foreach>
+
+    </delete>
+
+    <!--    获取所有系统配置-->
     <select id="getAllSystemConfig" resultType="com.xixizai.personalblogwebsite.pojo.entity.SystemConfig">
         select * from system_config;
     </select>

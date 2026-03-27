@@ -49,4 +49,5 @@ public class MessageConstant {
     public static final String BATCH_DELETE_SKILLS_FAILSURE = "批量删除技能失败";
     public static final String BATCH_DELETE_EXPERIENCE_FAILSURE = "批量删除经历失败";
     public static final String BATCH_DELETE_SOCIAL_MEDIAS_FAILSURE = "批量删除社交媒体失败";
+    public static final String BATCH_DELETE_SYSTEM_CONFIGS_FAILSURE = "批量删除系统配置";
 }

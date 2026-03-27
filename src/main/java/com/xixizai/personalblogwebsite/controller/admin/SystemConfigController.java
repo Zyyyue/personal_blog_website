@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteSystemConfigsException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.SystemConfigDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.SystemConfig;
@@ -10,6 +11,7 @@ import com.xixizai.personalblogwebsite.service.SystemConfigService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/systemConfig")
@@ -72,5 +74,15 @@ public class SystemConfigController {
         return systemConfigService.updateSystemConfig(systemConfigdto);
     }
 
+    /**
+     * 批量删除系统配置
+     * @param ids
+     * @return
+     * @throws BatchDeleteSystemConfigsException
+     */
+    @DeleteMapping()
+    public Result batchDeleteSystemConfigs(@RequestParam List<Long> ids) throws BatchDeleteSystemConfigsException {
+        return systemConfigService.batchDeleteSystemConfigs(ids);
+    }
 
 }

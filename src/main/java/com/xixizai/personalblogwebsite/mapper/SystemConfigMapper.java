@@ -30,4 +30,7 @@ public interface SystemConfigMapper {
     //更新配置
     @Update("update system_config set config_key=#{configKey},config_value=#{configValue},config_type=#{configType},description=#{description},update_time=now() where id=#{id}")
     void updateSystemConfig(SystemConfigDTO systemConfigdto);
+
+    //批量删除配置
+    void batchDeleteSystemConfigs(List<Long> ids);
 }
