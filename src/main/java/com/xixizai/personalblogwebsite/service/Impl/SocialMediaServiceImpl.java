@@ -2,7 +2,10 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.SocialMediaMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.SocialMediaDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.SocialMedia;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SocialMediaService;
@@ -41,5 +44,24 @@ public class SocialMediaServiceImpl implements SocialMediaService {
             exception.printStackTrace();
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
+    }
+
+    @Override
+    public Result addSocialMedia(SocialMediaDTO socialMediaDTO) throws AddOperationException {
+        try{
+
+            //判断是否为空
+            if(socialMediaDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
+
+
     }
 }
