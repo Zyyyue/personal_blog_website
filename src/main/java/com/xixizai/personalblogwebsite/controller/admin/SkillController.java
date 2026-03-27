@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.SkillDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SkillService;
@@ -36,4 +37,17 @@ public class SkillController {
     public Result addSkill(@RequestBody SkillDTO skillDTO) throws AddOperationException {
         return skillService.addSkill(skillDTO);
     }
+
+    /**
+     * 更新技能
+     * @param skillDTO
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @PutMapping()
+    public Result updateSkill(@RequestBody SkillDTO skillDTO) throws UpdateOperationsException {
+        return skillService.updateSkill(skillDTO);
+    }
+
+
 }

@@ -4,6 +4,7 @@ import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.mapper.SkillMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.SkillDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Skills;
@@ -60,6 +61,37 @@ public class SkillServiceImpl implements SkillService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
+    }
+
+    /**
+     * 更新技能
+     * @param skillDTO
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @Override
+    public Result updateSkill(SkillDTO skillDTO) throws UpdateOperationsException {
+        try{
+
+            if(skillDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(skillDTO.getId()==null){
+                throw new PassedParameterException(MessageConstant.ID_NOT_FOUND);
+            }
+
+
+            if(skillMapper.findById(skillDTO.getId())==null){
+                return Result.error("此id的数据不存在");
+            }
+
+            skillMapper.updateSkill(skillDTO);
+            return Result.success("更新成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
         }
     }
 
