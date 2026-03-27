@@ -1,12 +1,11 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.pojo.entity.SystemConfig;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SystemConfigService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -49,4 +48,14 @@ public class SystemConfigController {
         return systemConfigService.getSystemConfigById(id);
     }
 
+    /**
+     * 添加配置
+     * @param systemConfig
+     * @return
+     * @throws AddOperationException
+     */
+    @PostMapping()
+    public Result addSystemConfig(@RequestBody SystemConfig systemConfig) throws AddOperationException {
+        return systemConfigService.addSystemConfig(systemConfig);
+    }
 }

@@ -1,6 +1,7 @@
 package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.entity.SystemConfig;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,4 +20,8 @@ public interface SystemConfigMapper {
     //根据id获取配置
     @Select("select * from system_config where id=#{id}")
     SystemConfig getSystemConfigById(Long id);
+
+    //添加配置
+    @Insert("insert into system_config (config_key, config_value, config_type, description, create_time, update_time) values (#{configKey},#{configValue},#{configType},#{description},now(),now())")
+    void addSystemConfig(SystemConfig systemConfig);
 }
