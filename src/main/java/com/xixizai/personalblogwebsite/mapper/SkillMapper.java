@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.xixizai.personalblogwebsite.pojo.dto.SkillDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Skills;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -11,4 +13,8 @@ public interface SkillMapper {
     //获取所有技能
     @Select("select * from skills")
     List<Skills> getAllSkills();
+
+    //添加技能
+    @Insert("insert into skills (name,description,icon,sort,is_visible,create_time,update_time) values (#{name},#{description},#{icon},#{sort},#{isVisible},now(),now())")
+    void addSkill(SkillDTO skillDTO);
 }

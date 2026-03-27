@@ -1,11 +1,11 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.pojo.dto.SkillDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SkillService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -26,4 +26,14 @@ public class SkillController {
         return skillService.getAllSkills();
     }
 
+    /**
+     * 添加技能
+     * @param skillDTO
+     * @return
+     * @throws AddOperationException
+     */
+    @PostMapping()
+    public Result addSkill(@RequestBody SkillDTO skillDTO) throws AddOperationException {
+        return skillService.addSkill(skillDTO);
+    }
 }

@@ -2,7 +2,10 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.SkillMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.SkillDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Skills;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SkillService;
@@ -35,6 +38,29 @@ public class SkillServiceImpl implements SkillService {
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
 
+    }
+
+
+    /**
+     * 添加技能
+     * @param skillDTO
+     * @return
+     * @throws AddOperationException
+     */
+    @Override
+    public Result addSkill(SkillDTO skillDTO) throws AddOperationException {
+        try{
+
+            if(skillDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            skillMapper.addSkill(skillDTO);
+            return Result.success("添加成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
     }
 
 }
