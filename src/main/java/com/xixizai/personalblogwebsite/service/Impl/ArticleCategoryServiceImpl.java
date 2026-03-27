@@ -3,6 +3,7 @@ package com.xixizai.personalblogwebsite.service.Impl;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddFailsureException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateArticleCategoriesException;
 import com.xixizai.personalblogwebsite.mapper.ArticleCategoryMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCategoryDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleCategories;
@@ -53,6 +54,30 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new AddFailsureException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
+    }
+
+    /**
+     * 更新文章分类,这里传了id进去
+     * @param articleCategoryDTO
+     * @return
+     */
+    @Override
+    public Result updateArticleCategories(ArticleCategoryDTO articleCategoryDTO) throws PassedParameterException, UpdateArticleCategoriesException {
+
+        try{
+            //判空一下
+            if(articleCategoryDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+            if(articleCategoryDTO.getId()==null){
+                throw new PassedParameterException(MessageConstant.ID_NOT_FOUND);
+            }
+            articleCategoryMapper.updateArticleCategories(articleCategoryDTO);
+            return Result.success("更新成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateArticleCategoriesException(MessageConstant.UPDATE_ARTICLES_CATEGORIES_FAILSURE);
         }
     }
 

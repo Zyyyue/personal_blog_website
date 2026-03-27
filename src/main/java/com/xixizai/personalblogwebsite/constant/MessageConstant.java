@@ -34,4 +34,5 @@ public class MessageConstant {
 
     public static final String CANCLE_OR_NOT_TOP_ARTICLE_FALISURE = "置顶或取消置顶文章失败";
     public static final String ADD_OPERATION_FAILSURE = "添加操作失败";
+    public static final String UPDATE_ARTICLES_CATEGORIES_FAILSURE = "更新文章分类失败";
 }
