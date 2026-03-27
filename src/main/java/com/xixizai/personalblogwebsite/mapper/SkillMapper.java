@@ -26,4 +26,7 @@ public interface SkillMapper {
     //更新技能
     @Update("update skills set name=#{name},description=#{description},icon=#{icon},sort=#{sort},is_visible=#{isVisible},update_time=now() where id=#{id}")
     void updateSkill(SkillDTO skillDTO);
+
+    //批量删除技能
+    void batchDeleteSkills(List<Long> ids);
 }

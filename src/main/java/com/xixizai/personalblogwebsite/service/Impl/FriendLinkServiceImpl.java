@@ -95,7 +95,12 @@ public class FriendLinkServiceImpl implements FriendLinkService {
         }
     }
 
-
+    /**
+     * 批量删除友链
+     * @param ids
+     * @return
+     * @throws BatchDeleteFriendLinksException
+     */
     @Override
     public Result batchDeleteFriendLinks(List<Long> ids) throws BatchDeleteFriendLinksException {
         try {

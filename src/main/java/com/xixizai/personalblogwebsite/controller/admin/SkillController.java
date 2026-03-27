@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteSkillsException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.SkillDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -9,6 +10,7 @@ import com.xixizai.personalblogwebsite.service.SkillService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/skill")
@@ -49,5 +51,15 @@ public class SkillController {
         return skillService.updateSkill(skillDTO);
     }
 
+    /**
+     * 批量删除技能
+     * @param ids
+     * @return
+     * @throws BatchDeleteSkillsException
+     */
+    @DeleteMapping()
+    public Result batchDeleteSkill(@RequestParam List<Long>ids) throws BatchDeleteSkillsException {
+        return skillService.batchDeleteSkill(ids);
+    }
 
 }
