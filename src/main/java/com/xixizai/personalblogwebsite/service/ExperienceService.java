@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.service;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteExperienceException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.ExperienceDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -19,4 +20,7 @@ public interface ExperienceService {
 
     //更新经历
     Result updateExperience(ExperienceDTO experienceDTO) throws UpdateOperationsException;
+
+    //批量删除经历
+    Result batchDeleteExperience(List<Long> ids) throws BatchDeleteExperienceException;
 }

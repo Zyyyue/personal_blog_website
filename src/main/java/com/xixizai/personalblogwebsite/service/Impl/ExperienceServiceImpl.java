@@ -2,10 +2,7 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
-import com.xixizai.personalblogwebsite.exception.AddOperationException;
-import com.xixizai.personalblogwebsite.exception.IdNotFoundException;
-import com.xixizai.personalblogwebsite.exception.PassedParameterException;
-import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
+import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.ExperienceMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ExperienceDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Experiences;
@@ -133,6 +130,66 @@ public class ExperienceServiceImpl implements ExperienceService {
             throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
         }
     }
+
+    /**
+     * 批量删除经历
+     * @param ids
+     * @return
+     * @throws BatchDeleteExperienceException
+     */
+    @Override
+    public Result batchDeleteExperience(List<Long> ids) throws BatchDeleteExperienceException {
+        try {
+
+            //判空
+            if(ids==null||ids.isEmpty()){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            //去重一下id
+            List<Long>distinctIds=new ArrayList<>();
+            for (Long id : ids) {
+                if(!distinctIds.contains(id)){
+                    distinctIds.add(id);
+                }
+            }
+
+            //再看一下数据库中是否有对应id
+
+            //数据库中存在id的集合是updatedIds
+            List<Long>updatedIds=new ArrayList<>();
+            //数据库中不存在id的集合是nulledIds
+            List<Long>nulledIds=new ArrayList<>();
+            //再判断一下ids中的id是否都在数据库中存在,如果不存在的话就需要提示一下，然后删除已经存在的
+            for (Long id : distinctIds) {
+                if(experienceMapper.findById(id)==null){
+                    nulledIds.add(id);
+                }else{
+                    updatedIds.add(id);
+                }
+            }
+
+            //批量删除经历
+            if(!updatedIds.isEmpty()){
+                experienceMapper.batchDeleteExperiences(ids);
+            }
+
+            //返回结果
+            if(updatedIds.isEmpty()){
+                return Result.error("传入的ID列表中，没有任何一个存在：" +nulledIds);
+            }
+            if(nulledIds.isEmpty()){
+                return Result.success(("批量删除成功，共删除 " + updatedIds.size() + " 条经历/"));
+            }
+            return Result.success("批量删除成功，成功删除 " + updatedIds.size() + " 条，"
+                    + "不存在的ID：" + nulledIds);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new BatchDeleteExperienceException(MessageConstant.BATCH_DELETE_EXPERIENCE_FAILSURE);
+        }
+    }
+
 
 
 }

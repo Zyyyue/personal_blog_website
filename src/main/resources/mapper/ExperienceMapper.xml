@@ -3,6 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!--这个写包名加上类名-->
 <mapper namespace="com.xixizai.personalblogwebsite.mapper.ExperienceMapper">
+
     <select id="getExperienceList" parameterType="list" resultType="com.xixizai.personalblogwebsite.pojo.entity.Experiences">
         select * from experiences
         where type in
@@ -11,4 +12,14 @@
         </foreach>
         order by type ASC
     </select>
+
+<!--    批量删除经历-->
+    <delete id="batchDeleteExperiences">
+        delete  from experiences
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>

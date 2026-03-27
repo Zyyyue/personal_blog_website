@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteExperienceException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.ExperienceDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -45,8 +46,19 @@ public class ExperienceController {
      * @return
      * @throws UpdateOperationsException
      */
-    @PutMapping
+    @PutMapping()
     public Result updateExperience(@RequestBody ExperienceDTO experienceDTO) throws UpdateOperationsException {
         return experienceService.updateExperience(experienceDTO);
+    }
+
+    /**
+     * 批量删除经历
+     * @param ids
+     * @return
+     * @throws BatchDeleteExperienceException
+     */
+    @DeleteMapping()
+    public Result batchDeleteExperience(@RequestParam List<Long>ids) throws BatchDeleteExperienceException {
+        return experienceService.batchDeleteExperience(ids);
     }
 }

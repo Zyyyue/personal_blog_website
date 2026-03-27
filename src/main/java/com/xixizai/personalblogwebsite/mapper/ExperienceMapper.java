@@ -4,6 +4,7 @@ import com.xixizai.personalblogwebsite.pojo.dto.ExperienceDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Experiences;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -19,4 +20,11 @@ public interface ExperienceMapper {
 
     @Update("update experiences set type=#{type},title=#{title},subtitle=#{subtitle},logo_url=#{logoUrl},content=#{content},start_date=#{startDate},end_date=#{endDate},is_visible=#{isVisible},update_time=now() where id=#{id}")
     void updateExperience(ExperienceDTO experienceDTO);
+
+    //根据id查找经历
+    @Select("select * from experiences where id=#{id}")
+    Experiences findById(Long id);
+
+    //批量删除经历
+    void batchDeleteExperiences(List<Long> ids);
 }
