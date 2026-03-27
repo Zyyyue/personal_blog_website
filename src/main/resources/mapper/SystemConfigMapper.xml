@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--这个写包名加上类名-->
+<mapper namespace="com.xixizai.personalblogwebsite.mapper.SystemConfigMapper">
+
+    <select id="getAllSystemConfig" resultType="com.xixizai.personalblogwebsite.pojo.entity.SystemConfig">
+        select * from system_config;
+    </select>
+</mapper>
