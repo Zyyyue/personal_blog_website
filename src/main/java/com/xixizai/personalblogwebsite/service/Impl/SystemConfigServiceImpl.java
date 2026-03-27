@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.SystemConfigMapper;
 import com.xixizai.personalblogwebsite.pojo.entity.SystemConfig;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -33,6 +34,52 @@ public class SystemConfigServiceImpl implements SystemConfigService {
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
 
+    }
+
+    /**
+     * 根据配置键获取配置
+     * @param configKey
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result getSystemConfigByConfigKey(String configKey) throws GetOptsException {
+
+        try{
+
+            if(configKey==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            SystemConfig systemConfig=systemConfigMapper.getSystemConfigByConfigKey(configKey);
+            if(systemConfig==null){
+                return Result.error("暂无任何系统配置");
+            }
+            return Result.success(systemConfig);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+
+    }
+
+    @Override
+    public Result getSystemConfigById(Long id) throws GetOptsException {
+        try{
+
+            if(id==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            SystemConfig systemConfig=systemConfigMapper.getSystemConfigById(id);
+            if(systemConfig==null){
+                return Result.error("暂无任何系统配置");
+            }
+            return Result.success(systemConfig);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
     }
 
 }
