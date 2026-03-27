@@ -30,6 +30,15 @@ public class ArticleCommentController {
         return articleCommentService.getArticleCommentById(id);
     }
 
-
+    /**
+     * 批量审核通过评论
+     * @param ids
+     * @return
+     * @throws PassedParameterException
+     */
+    @PutMapping("/approve")
+    public Result batchApproveArticleComment(@RequestParam List<Long>ids) throws PassedParameterException {
+        return articleCommentService.batchApproveArticleComment(ids);
+    }
 
 }

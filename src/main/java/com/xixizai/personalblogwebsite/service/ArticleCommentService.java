@@ -13,4 +13,7 @@ public interface ArticleCommentService {
 
     //根据文章id查询评论
     Result getArticleCommentById(Long id) throws PassedParameterException, ArticleNotFoundException, GetOptsException;
+
+    //批量审核通过评论
+    Result batchApproveArticleComment(List<Long> ids) throws PassedParameterException;
 }
