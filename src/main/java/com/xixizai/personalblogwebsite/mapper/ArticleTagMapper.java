@@ -22,4 +22,11 @@ public interface ArticleTagMapper {
     //更新标签
     @Update("update article_tags set name=#{name},slug=#{slug},update_time=now() where id=#{id}")
     void updateArticleTag(ArticleTagDTO articleTagDTO);
+
+    //根据id查找文章标签
+    @Select("select * from article_tags where id=#{id}")
+    ArticleTags findArticleTagById(Long id);
+
+    //批量删除标签
+    void batchDeleteArticleTags(List<Long> ids);
 }
