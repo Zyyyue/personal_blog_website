@@ -36,11 +36,6 @@ public interface ArticleMapper {
      */
     void batchDeleteArticles( List<Long> ids);
 
-    /**
-     * 批量删除标签和关系中的数据
-     * @param ids
-     */
-    void batchDeleteTagsAndRelations(List<Long>ids);
 
     /**
      * 发布文章

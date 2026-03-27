@@ -50,12 +50,5 @@
         where id=#{id}
     </update>
 
-<!--    删除标签和关系表中的数据-->
-    <delete id="batchDeleteTagsAndRelations">
-        delete from article_tag_relations
-        where article_tag_relations.article_id in
-        <foreach collection="list" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
+
 </mapper>

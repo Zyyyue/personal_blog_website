@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--这个写包名加上类名-->
+<mapper namespace="com.xixizai.personalblogwebsite.mapper.ArticleTagRelationsMapper">
+
+    <!--    删除标签和关系表中的数据-->
+    <delete id="batchDeleteArticleTagsAndRelations">
+        delete from article_tag_relations
+        where article_tag_relations.article_id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--        根据id更新文章表中的tagId-->
+<!--mybatis中不能用#,作为注释-->
+    <update id="updateArticleTagsAndRelations">
+        <!--    先删除旧的关联-->
+        delete from article_tag_relations where article_id=#{id};
+
+
+        <!--根据id更新文章表中的tagId-->
+        insert into article_tag_relations (article_id, tag_id) values
+        <foreach collection="tagIds" item="tagId" separator=",">
+            (#{id},#{tagId})
+        </foreach>
+    </update>
+</mapper>
