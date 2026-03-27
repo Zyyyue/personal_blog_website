@@ -62,7 +62,7 @@ public class ArticleTagController {
      * @throws BatchDeleteArticleTagException
      */
     @DeleteMapping()
-    public Result batchDeleteArticle(@RequestParam List<Long> ids) throws PassedParameterException, BatchDeleteArticleTagException {
+    public Result batchDeleteArticleTag(@RequestParam List<Long> ids) throws PassedParameterException, BatchDeleteArticleTagException {
         return articleTagService.batchDeleteArticleTag(ids);
     }
 
