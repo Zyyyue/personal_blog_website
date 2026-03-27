@@ -1,16 +1,15 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.exception.ArticleDTONotFoundException;
 import com.xixizai.personalblogwebsite.exception.ArticleNotFoundException;
+import com.xixizai.personalblogwebsite.exception.CreateNewArticleException;
 import com.xixizai.personalblogwebsite.exception.IdNotValidException;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -37,6 +36,16 @@ public class ArticleController {
             throw new IdNotValidException(MessageConstant.ID_NOT_VALID);
         }
         return articleService.getAdminArticle(id);
+    }
+
+    /**
+     * 创建文章
+     * @param articleDTO
+     * @return
+     */
+    @PostMapping()
+    public Result createNewArticle(@RequestBody ArticleDTO articleDTO) throws ArticleDTONotFoundException, CreateNewArticleException {
+        return articleService.createNewArticle(articleDTO);
     }
 
 
