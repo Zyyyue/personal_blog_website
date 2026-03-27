@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--这个写包名加上类名-->
+<mapper namespace="com.xixizai.personalblogwebsite.mapper.MessageMapper">
+<!--        批量审核通过留言-->
+    <update id="batchApproveMessages">
+        update messages
+        set is_approved=1, update_time=now()
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>
