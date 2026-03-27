@@ -1,10 +1,9 @@
 package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface ArticleMapper {
@@ -30,4 +29,10 @@ public interface ArticleMapper {
      */
 
     void updateArticle(ArticleDTO articleDTO);
+
+    /**
+     * 批量删除文章
+     * @param ids
+     */
+    void batchDeleteArticles( List<Long> ids);
 }

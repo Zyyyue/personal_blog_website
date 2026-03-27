@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 管理端文章接口
@@ -55,6 +56,15 @@ public class ArticleController {
         return articleService.updateArticle(articleDTO);
     }
 
+    /**
+     * 批量删除文章
+     * @param ids
+     * @return
+     */
+    @DeleteMapping()
+    public Result batchDeleteArticles(@RequestParam List<Long>ids) throws BatchDeleteArticlesException, IdNotValidException {
+        return articleService.batchDeleteArticles(ids);
+    }
 
 
 }

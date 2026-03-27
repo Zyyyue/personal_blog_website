@@ -1,12 +1,11 @@
 package com.xixizai.personalblogwebsite.service;
 
-import com.xixizai.personalblogwebsite.exception.ArticleDTONotFoundException;
-import com.xixizai.personalblogwebsite.exception.ArticleNotFoundException;
-import com.xixizai.personalblogwebsite.exception.CreateNewArticleException;
-import com.xixizai.personalblogwebsite.exception.UpdateArticlesException;
+import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface ArticleService {
@@ -18,4 +17,7 @@ public interface ArticleService {
 
     //更新文章
     Result updateArticle(ArticleDTO articleDTO) throws ArticleDTONotFoundException, UpdateArticlesException;
+
+    //批量删除文章
+    Result batchDeleteArticles(List<Long> ids) throws IdNotValidException, BatchDeleteArticlesException;
 }
