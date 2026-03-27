@@ -2,6 +2,8 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.SocialMediaDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SocialMediaService;
@@ -39,5 +41,16 @@ public class SocialMediaController {
         return socialMediaService.addSocialMedia(socialMediaDTO);
     }
 
+    /**
+     * 更新社交媒体
+     * @param socialMediaDTO
+     * @return
+     * @throws PassedParameterException
+     * @throws UpdateOperationsException
+     */
+    @PutMapping()
+    public Result updateSocialMedia(@RequestBody SocialMediaDTO socialMediaDTO) throws PassedParameterException, UpdateOperationsException {
+        return socialMediaService.updateSocialMedia(socialMediaDTO);
+    }
 
 }
