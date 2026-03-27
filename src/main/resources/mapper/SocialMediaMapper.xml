@@ -4,4 +4,11 @@
 <!--这个写包名加上类名-->
 <mapper namespace="com.xixizai.personalblogwebsite.mapper.SocialMediaMapper">
 
+    <delete id="batchDeleteSocialMedias">
+        delete from social_media
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

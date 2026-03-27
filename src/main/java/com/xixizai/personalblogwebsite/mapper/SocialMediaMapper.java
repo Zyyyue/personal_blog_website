@@ -27,4 +27,7 @@ public interface SocialMediaMapper  {
     //根据id更新社交媒体
     @Update("update social_media set name=#{name},link=#{link} ,icon=#{icon} ,sort=#{sort},is_visible=#{isVisible},update_time=now() where id=#{id}")
     void updateSocialMedia(SocialMediaDTO socialMediaDTO);
+
+    //批量删除社交媒体
+    void batchDeleteSocialMedias(List<Long> ids);
 }

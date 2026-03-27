@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteSocialMediasException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.SocialMediaDTO;
@@ -10,6 +11,7 @@ import com.xixizai.personalblogwebsite.service.SocialMediaService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/socialMedia")
@@ -52,5 +54,17 @@ public class SocialMediaController {
     public Result updateSocialMedia(@RequestBody SocialMediaDTO socialMediaDTO) throws PassedParameterException, UpdateOperationsException {
         return socialMediaService.updateSocialMedia(socialMediaDTO);
     }
+
+    /**
+     * 批量删除社交媒体
+     * @param ids
+     * @return
+     * @throws BatchDeleteSocialMediasException
+     */
+    @DeleteMapping()
+    public Result batchDeleteSocialMedia(@RequestParam List<Long> ids) throws BatchDeleteSocialMediasException {
+        return socialMediaService.batchDeleteSocialMedia(ids);
+    }
+
 
 }
