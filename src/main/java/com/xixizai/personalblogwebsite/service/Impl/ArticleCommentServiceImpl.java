@@ -2,8 +2,7 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
-import com.xixizai.personalblogwebsite.exception.ArticleNotFoundException;
-import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.ArticleCommentMapper;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -49,49 +48,116 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         }
     }
 
+    /**
+     * 批量审核通过评论
+     * @param ids
+     * @return
+     * @throws PassedParameterException
+     */
     @Override
-    public Result batchApproveArticleComment(List<Long> ids) throws PassedParameterException {
-        //判空
-        if(ids==null||ids.isEmpty()){
-            throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
-        }
+    public Result batchApproveArticleComment(List<Long> ids) throws PassedParameterException, BatchApproveArticleCommentException {
 
-        //去重一下id
-        List<Long>distinctIds=new ArrayList<>();
-        for (Long id : ids) {
-            if(!distinctIds.contains(id)){
-                distinctIds.add(id);
+        try{
+            //判空
+            if(ids==null||ids.isEmpty()){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
-        }
 
-        //再看一下数据库中是否有对应id
-
-        //数据库中存在id的集合是updatedIds
-        List<Long>updatedIds=new ArrayList<>();
-        //数据库中不存在id的集合是nulledIds
-        List<Long>nulledIds=new ArrayList<>();
-        //再判断一下ids中的id是否都在数据库中存在,如果不存在的话就需要提示一下，然后删除已经存在的
-        for (Long id : distinctIds) {
-            if(articleCommentMapper.findArticleCommentById(id)==null){
-                nulledIds.add(id);
-            }else{
-                updatedIds.add(id);
+            //去重一下id
+            List<Long>distinctIds=new ArrayList<>();
+            for (Long id : ids) {
+                if(!distinctIds.contains(id)){
+                    distinctIds.add(id);
+                }
             }
+
+            //再看一下数据库中是否有对应id
+
+            //数据库中存在id的集合是updatedIds
+            List<Long>updatedIds=new ArrayList<>();
+            //数据库中不存在id的集合是nulledIds
+            List<Long>nulledIds=new ArrayList<>();
+            //再判断一下ids中的id是否都在数据库中存在,如果不存在的话就需要提示一下，然后删除已经存在的
+            for (Long id : distinctIds) {
+                if(articleCommentMapper.findArticleCommentById(id)==null){
+                    nulledIds.add(id);
+                }else{
+                    updatedIds.add(id);
+                }
+            }
+
+            //批量审核文章评论
+            if(!updatedIds.isEmpty()){
+                articleCommentMapper.batchApproveArticleComment(ids);
+            }
+
+            //返回结果
+            if(updatedIds.isEmpty()){
+                return Result.error("传入的ID列表中，没有任何一个存在：" +nulledIds);
+            }
+            if(nulledIds.isEmpty()){
+                return Result.success(("批量审核成功，共审核 " + updatedIds.size() + " 条文章评论/"));
+            }
+            return Result.success("批量审核成功，成功审核 " + updatedIds.size() + " 条，"
+                    + "不存在的ID：" + nulledIds);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new BatchApproveArticleCommentException(MessageConstant.BATCH_APPROVE_ARTICLE_COMMENT_EXCEPTION);
+        }
+    }
+
+
+    @Override
+    public Result batchDeleteArticleComment(List<Long> ids) throws BatchDeleteArticleCommentException {
+        try {
+
+            //判空
+            if(ids==null||ids.isEmpty()){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            //去重一下id
+            List<Long>distinctIds=new ArrayList<>();
+            for (Long id : ids) {
+                if(!distinctIds.contains(id)){
+                    distinctIds.add(id);
+                }
+            }
+
+            //再看一下数据库中是否有对应id
+
+            //数据库中存在id的集合是updatedIds
+            List<Long>updatedIds=new ArrayList<>();
+            //数据库中不存在id的集合是nulledIds
+            List<Long>nulledIds=new ArrayList<>();
+            //再判断一下ids中的id是否都在数据库中存在,如果不存在的话就需要提示一下，然后删除已经存在的
+            for (Long id : distinctIds) {
+                if(articleCommentMapper.findArticleCommentById(id)==null){
+                    nulledIds.add(id);
+                }else{
+                    updatedIds.add(id);
+                }
+            }
+
+            //批量审核文章评论
+            if(!updatedIds.isEmpty()){
+                articleCommentMapper.batchDeleteArticleComment(ids);
+            }
+
+            //返回结果
+            if(updatedIds.isEmpty()){
+                return Result.error("传入的ID列表中，没有任何一个存在：" +nulledIds);
+            }
+            if(nulledIds.isEmpty()){
+                return Result.success(("批量审核成功，共审核 " + updatedIds.size() + " 条文章评论/"));
+            }
+            return Result.success("批量审核成功，成功审核 " + updatedIds.size() + " 条，"
+                    + "不存在的ID：" + nulledIds);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new BatchDeleteArticleCommentException(MessageConstant.BATCH_DELETE_ARTICLE_COMMENT_FAILSURE);
         }
 
-        //批量审核文章评论
-        if(!updatedIds.isEmpty()){
-            articleCommentMapper.batchDeleteArticleComment(ids);
-        }
-
-        //返回结果
-        if(updatedIds.isEmpty()){
-            return Result.error("传入的ID列表中，没有任何一个存在：" +nulledIds);
-        }
-        if(nulledIds.isEmpty()){
-            return Result.success(("批量审核成功，共审核 " + updatedIds.size() + " 条文章评论/"));
-        }
-        return Result.success("批量审核成功，成功审核 " + updatedIds.size() + " 条，"
-                + "不存在的ID：" + nulledIds);
     }
 }

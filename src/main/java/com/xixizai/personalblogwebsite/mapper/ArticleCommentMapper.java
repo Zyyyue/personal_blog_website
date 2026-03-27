@@ -18,5 +18,8 @@ public interface ArticleCommentMapper {
     ArticleComments findArticleCommentById(Long id);
 
     //批量审核评论
+    void batchApproveArticleComment(List<Long> ids);
+
+    //批量删除评论
     void batchDeleteArticleComment(List<Long> ids);
 }

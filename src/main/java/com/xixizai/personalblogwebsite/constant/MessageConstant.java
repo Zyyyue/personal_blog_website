@@ -39,4 +39,6 @@ public class MessageConstant {
     public static final String GET_OPERATIONS_FAILSURE = "get操作失败";
     public static final String UPDATE_OPERATIONS_FAILSURE = "更新操作失败";
     public static final String BATCH_DELETE_ARTICLE_TAGS_FAILSURE = "批量删除文章标签失败";
+    public static final String BATCH_APPROVE_ARTICLE_COMMENT_EXCEPTION = "批量删除评论";
+    public static final String BATCH_DELETE_ARTICLE_COMMENT_FAILSURE = "批量删除文章评论失败";
 }
