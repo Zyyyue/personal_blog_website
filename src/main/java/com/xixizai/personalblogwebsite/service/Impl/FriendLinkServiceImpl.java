@@ -3,6 +3,8 @@ package com.xixizai.personalblogwebsite.service.Impl;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.mapper.FriendLinkMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.FriendLinkDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.FriendLinks;
@@ -59,6 +61,38 @@ public class FriendLinkServiceImpl implements FriendLinkService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
+    }
+
+    /**
+     * 更改友链信息
+     * @param friendLinkDTO
+     * @return
+     * @throws PassedParameterException
+     * @throws UpdateOperationsException
+     */
+    @Override
+    public Result updateFriendLink(FriendLinkDTO friendLinkDTO) throws PassedParameterException, UpdateOperationsException {
+        try{
+            //判空
+            if(friendLinkDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(friendLinkDTO.getId()==null){
+                throw new PassedParameterException(MessageConstant.ID_NOT_FOUND);
+            }
+
+            //再在数据库中查找一下对应id中的数据是否在数据库中存在
+            if(friendLinkMapper.findById(friendLinkDTO.getId())==null){
+                return Result.error("没有对应id的数据");
+            }
+
+            friendLinkMapper.updateFriendLink(friendLinkDTO);
+            return Result.success("更新操作成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
         }
     }
 }
