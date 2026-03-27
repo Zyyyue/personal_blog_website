@@ -1,10 +1,10 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
+import com.xixizai.personalblogwebsite.exception.AddFailsureException;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCategoryDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleCategoryService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -24,4 +24,14 @@ public class ArticleCategoryController {
         return articleCategoryService.getAllArticleCategories();
     }
 
+    /**
+     * 添加文章分类
+     * @param articleCategoryDTO
+     * @return
+     * @throws AddFailsureException
+     */
+    @PostMapping()
+    public Result addArticleCategories(@RequestBody ArticleCategoryDTO articleCategoryDTO) throws AddFailsureException {
+        return articleCategoryService.addArticleCategories(articleCategoryDTO);
+    }
 }
