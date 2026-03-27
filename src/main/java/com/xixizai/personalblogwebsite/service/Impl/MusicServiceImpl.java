@@ -2,8 +2,10 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.MusicMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.MusicDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Music;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.MusicService;
@@ -40,6 +42,29 @@ public class MusicServiceImpl implements MusicService {
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
 
+    }
+
+
+    /**
+     * 添加音乐
+     * @param musicDTO
+     * @return
+     * @throws AddOperationException
+     */
+    @Override
+    public Result addMusic(MusicDTO musicDTO) throws AddOperationException {
+        try{
+
+            if(musicDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            musicMapper.addMusic(musicDTO);
+            return Result.success("添加成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
     }
 
 
