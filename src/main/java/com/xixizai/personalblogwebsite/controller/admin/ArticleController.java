@@ -83,7 +83,7 @@ public class ArticleController {
      * @param isPublished
      * @return
      */
-    @PutMapping("/unpublish/{id}")
+    @PutMapping("/////////unpublish/{id}")
     public Result unpublishArticle(@PathVariable Long id,@RequestParam Integer isPublished) throws UnpublishArticleException {
         return articleService.unpublishArticle(id,isPublished);
     }
