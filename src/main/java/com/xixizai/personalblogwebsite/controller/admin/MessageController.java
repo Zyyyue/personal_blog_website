@@ -43,7 +43,13 @@ public class MessageController {
         return messageService.batchDeleteMessages(ids);
     }
 
-
+    /**
+     * 管理员回复留言
+     * @param messageReplyDTO
+     * @param request
+     * @return
+     * @throws AdminReplyMessageException
+     */
     @PostMapping("/reply")
     public Result adminReplyMessage(@RequestBody MessageReplyDTO messageReplyDTO, HttpServletRequest request) throws AdminReplyMessageException {
         return messageService.adminReplyMessage(messageReplyDTO,request);
