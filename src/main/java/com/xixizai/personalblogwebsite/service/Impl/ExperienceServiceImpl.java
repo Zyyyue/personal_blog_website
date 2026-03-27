@@ -3,7 +3,9 @@ package com.xixizai.personalblogwebsite.service.Impl;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.IdNotFoundException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.mapper.ExperienceMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ExperienceDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Experiences;
@@ -76,7 +78,12 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     }
 
-
+    /**
+     * 添加经历
+     * @param experienceDTO
+     * @return
+     * @throws AddOperationException
+     */
     @Override
     public Result addExperience(ExperienceDTO experienceDTO) throws AddOperationException {
         try{
@@ -98,6 +105,32 @@ public class ExperienceServiceImpl implements ExperienceService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
+    }
+
+    /**
+     * 更新经历
+     * @param experienceDTO
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @Override
+    public Result updateExperience(ExperienceDTO experienceDTO) throws UpdateOperationsException {
+        try{
+
+            if(experienceDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(experienceDTO.getId()==null){
+                throw new IdNotFoundException(MessageConstant.ID_NOT_FOUND);
+            }
+
+            experienceMapper.updateExperience(experienceDTO);
+            return Result.success("更新成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
         }
     }
 
