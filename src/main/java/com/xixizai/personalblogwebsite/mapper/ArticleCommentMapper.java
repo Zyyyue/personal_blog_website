@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,4 +24,8 @@ public interface ArticleCommentMapper {
 
     //批量删除评论
     void batchDeleteArticleComment(List<Long> ids);
+
+    //管理员回复评论
+    @Insert("insert into article_comments (article_id,parent_id,root_id,parent_nickname,content,is_markdown,is_approved,is_edited,is_admin_reply,content_html,location,create_time)values(#{articleId},#{parentId},#{rootId},#{parentNickname},#{content},#{isMarkdown},#{isApproved},#{isEdited},#{isAdminReply},#{contentHtml},#{location},now())")
+    void adminReplyComment(ArticleComments articleComment);
 }

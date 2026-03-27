@@ -41,4 +41,5 @@ public class MessageConstant {
     public static final String BATCH_DELETE_ARTICLE_TAGS_FAILSURE = "批量删除文章标签失败";
     public static final String BATCH_APPROVE_ARTICLE_COMMENT_EXCEPTION = "批量删除评论";
     public static final String BATCH_DELETE_ARTICLE_COMMENT_FAILSURE = "批量删除文章评论失败";
+    public static final String REPLY_COMMENT_FAILSURE = "回复评论失败";
 }

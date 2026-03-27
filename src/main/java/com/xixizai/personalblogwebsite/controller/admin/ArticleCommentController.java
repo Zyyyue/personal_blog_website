@@ -1,15 +1,15 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
-import com.xixizai.personalblogwebsite.exception.ArticleNotFoundException;
-import com.xixizai.personalblogwebsite.exception.BatchApproveArticleCommentException;
-import com.xixizai.personalblogwebsite.exception.BatchDeleteArticleCommentException;
-import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.*;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleCommentService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -53,4 +53,17 @@ public class ArticleCommentController {
     public Result batchDeleteArticleComment(@RequestParam List<Long>ids) throws BatchDeleteArticleCommentException {
         return articleCommentService.batchDeleteArticleComment(ids);
     }
+
+    /**
+     * 管理员回复文章评论
+     * @param articleCommentReplyDTO
+     * @return
+     * @throws AdminReplyCommentException
+     */
+    @PostMapping("/reply")
+    public Result adminReplyComment(@Valid @RequestBody ArticleCommentReplyDTO articleCommentReplyDTO,HttpServletRequest request) throws AdminReplyCommentException {
+        return articleCommentService.adminReplyComment(articleCommentReplyDTO,request);
+    }
+
+
 }

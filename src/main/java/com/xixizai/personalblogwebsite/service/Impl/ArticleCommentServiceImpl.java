@@ -1,19 +1,28 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.constant.StatusConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.ArticleCommentMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleCommentService;
+import com.xixizai.personalblogwebsite.utils.IpUtil;
+import com.xixizai.personalblogwebsite.utils.MarkdownUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
+@Slf4j
 public class ArticleCommentServiceImpl implements ArticleCommentService {
 
     @Resource
@@ -106,7 +115,12 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         }
     }
 
-
+    /**
+     * 批量删除文章评论
+     * @param ids
+     * @return
+     * @throws BatchDeleteArticleCommentException
+     */
     @Override
     public Result batchDeleteArticleComment(List<Long> ids) throws BatchDeleteArticleCommentException {
         try {
@@ -157,6 +171,82 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new BatchDeleteArticleCommentException(MessageConstant.BATCH_DELETE_ARTICLE_COMMENT_FAILSURE);
+        }
+
+    }
+
+    /**
+     *管理员回复评论
+     * @param articleCommentReplyDTO
+     * @return
+     * @throws AdminReplyCommentException
+     */
+    @Override
+    public Result adminReplyComment(ArticleCommentReplyDTO articleCommentReplyDTO, HttpServletRequest request) throws AdminReplyCommentException {
+        try {
+            //判空一下
+            if(articleCommentReplyDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(articleCommentReplyDTO.getArticleId()==null){
+                throw new PassedParameterException("文章ID不能为空");
+            }
+
+            if(articleCommentReplyDTO.getParentId()==null){
+                throw new PassedParameterException("父评论ID不能为空");
+            }
+
+            if(articleCommentReplyDTO.getContent()==null||articleCommentReplyDTO.getContent().trim()==null){
+                throw new PassedParameterException("回复内容不能为空");
+            }
+
+            ArticleComments articleComments = BeanUtil.toBean(articleCommentReplyDTO, ArticleComments.class);
+
+            //设置管理员回复相关字段
+            articleComments.setIsApproved(StatusConstant.ENABLE);
+            articleComments.setIsEdited(StatusConstant.DISABLE);
+            articleComments.setIsAdminReply(StatusConstant.ENABLE);
+
+            //处理markdown
+            if(articleCommentReplyDTO.getIsMarkdown()!=null&&articleCommentReplyDTO.getIsMarkdown()==1){
+                //如果是markdown
+                String html=MarkdownUtil.toHtml(articleCommentReplyDTO.getContent());
+                articleComments.setContentHtml(html);
+            }else{
+                articleComments.setContentHtml(articleCommentReplyDTO.getContent());
+            }
+
+            //获取客户端信息
+            if(request!=null){
+                String clientIp = IpUtil.getClientIp(request);
+
+                //获取地理位置信息
+                Map<String, String> geoInfo = IpUtil.getGeoInfo(clientIp);
+                String province = geoInfo.getOrDefault("province", "");
+                String city=geoInfo.getOrDefault("city","");
+
+                //构建位置字符串
+                String location="";
+                if(!province.isEmpty()){
+                    location=province;
+                    if(!city.isEmpty()&&!city.equals(province)){
+                        location+="-"+city;
+                    }
+                }
+
+                if(!location.isEmpty()){
+                    articleComments.setLocation(location);
+                }
+
+                log.info("管理员回复-IP:{},位置:{}",clientIp,location);
+            }
+
+            articleCommentMapper.adminReplyComment(articleComments);
+            return Result.success("管理员回复成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AdminReplyCommentException(MessageConstant.REPLY_COMMENT_FAILSURE);
         }
 
     }
