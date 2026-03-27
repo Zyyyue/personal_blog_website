@@ -26,4 +26,7 @@ public interface ArticleService {
 
     //取消发布
     Result unpublishArticle(Long id,Integer isPublished) throws UnpublishArticleException;
+
+    //置顶/取消置顶文章
+    Result cancleOrNotTopArticle(Long id, Integer isTop) throws Exception;
 }

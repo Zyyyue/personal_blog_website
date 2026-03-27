@@ -227,5 +227,37 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
+    /**
+     * 置顶/取消置顶文章
+     * @param id
+     * @param isTop
+     * @return
+     */
+    @Override
+    public Result cancleOrNotTopArticle(Long id, Integer isTop) throws Exception {
+
+        try{
+            //判空并且判断是否合法
+            if(id==null||isTop==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(isTop!=0&&isTop!=1){
+                throw  new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_VALID);
+            }
+
+            articleMapper.cancleOrNotTopArticle(id,isTop);
+            if(isTop==1){
+                return Result.success("置顶操作成功");
+            }else {
+                return Result.success("取消置顶操作成功");
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new CancleOrNotTopArticleFailsureException(MessageConstant.CANCLE_OR_NOT_TOP_ARTICLE_FALISURE);
+        }
+
+    }
+
 
 }

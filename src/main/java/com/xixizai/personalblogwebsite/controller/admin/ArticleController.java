@@ -87,4 +87,16 @@ public class ArticleController {
     public Result unpublishArticle(@PathVariable Long id,@RequestParam Integer isPublished) throws UnpublishArticleException {
         return articleService.unpublishArticle(id,isPublished);
     }
+
+
+    /**
+     * 置顶/取消置顶文章,1是置顶，0是取消置顶
+     * @param id
+     * @param isTop
+     * @return
+     */
+    @PutMapping("/top/{id}")
+    public Result cancleOrNotTopArticle(@PathVariable Long id,@RequestParam Integer isTop) throws Exception {
+        return articleService.cancleOrNotTopArticle(id,isTop);
+    }
 }
