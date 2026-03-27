@@ -2,6 +2,8 @@ package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
+import com.xixizai.personalblogwebsite.pojo.dto.SystemConfigDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.SystemConfig;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SystemConfigService;
@@ -50,12 +52,25 @@ public class SystemConfigController {
 
     /**
      * 添加配置
-     * @param systemConfig
+     * @param systemConfigdto
      * @return
      * @throws AddOperationException
      */
     @PostMapping()
-    public Result addSystemConfig(@RequestBody SystemConfig systemConfig) throws AddOperationException {
-        return systemConfigService.addSystemConfig(systemConfig);
+    public Result addSystemConfig(@RequestBody SystemConfigDTO systemConfigdto) throws AddOperationException {
+        return systemConfigService.addSystemConfig(systemConfigdto);
     }
+
+    /**
+     * 更新配置
+     * @param systemConfigdto
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @PutMapping()
+    public Result updateSystemConfig(@RequestBody SystemConfigDTO systemConfigdto) throws UpdateOperationsException {
+        return systemConfigService.updateSystemConfig(systemConfigdto);
+    }
+
+
 }

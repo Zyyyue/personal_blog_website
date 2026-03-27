@@ -2,6 +2,8 @@ package com.xixizai.personalblogwebsite.service;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
+import com.xixizai.personalblogwebsite.pojo.dto.SystemConfigDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.SystemConfig;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import org.springframework.stereotype.Service;
@@ -18,5 +20,8 @@ public interface SystemConfigService {
     Result getSystemConfigById(Long id) throws GetOptsException;
 
     //添加配置
-    Result addSystemConfig(SystemConfig systemConfig) throws AddOperationException;
+    Result addSystemConfig(SystemConfigDTO systemConfigdto) throws AddOperationException;
+
+    //更新配置
+    Result updateSystemConfig(SystemConfigDTO systemConfigdto) throws UpdateOperationsException;
 }

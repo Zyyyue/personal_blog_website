@@ -4,7 +4,9 @@ import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.mapper.SystemConfigMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.SystemConfigDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.SystemConfig;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SystemConfigService;
@@ -69,6 +71,12 @@ public class SystemConfigServiceImpl implements SystemConfigService {
 
     }
 
+    /**
+     * 根据id获取配置
+     * @param id
+     * @return
+     * @throws GetOptsException
+     */
     @Override
     public Result getSystemConfigById(Long id) throws GetOptsException {
         try{
@@ -88,22 +96,53 @@ public class SystemConfigServiceImpl implements SystemConfigService {
         }
     }
 
-
+    /**
+     * 添加配置
+     * @param systemConfig
+     * @return
+     * @throws AddOperationException
+     */
     @Override
-    public Result addSystemConfig(SystemConfig systemConfig) throws AddOperationException {
+    public Result addSystemConfig(SystemConfigDTO systemConfigdto) throws AddOperationException {
         try{
 
-            if(systemConfig==null){
+            if(systemConfigdto==null){
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
 
-            systemConfigMapper.addSystemConfig(systemConfig);
+            systemConfigMapper.addSystemConfig(systemConfigdto);
             return Result.success("添加成功");
         }catch (Exception exception){
             exception.printStackTrace();
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
         }
 
+    }
+
+    /**
+     * 更新配置
+     * @param systemConfigdto
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @Override
+    public Result updateSystemConfig(SystemConfigDTO systemConfigdto) throws UpdateOperationsException {
+        try{
+
+            if(systemConfigdto==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(systemConfigdto.getId()==null){
+                throw new PassedParameterException(MessageConstant.ID_NOT_FOUND);
+            }
+
+            systemConfigMapper.updateSystemConfig(systemConfigdto);
+            return Result.success("更新成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
+        }
     }
 
 }
