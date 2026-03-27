@@ -44,4 +44,5 @@ public class MessageConstant {
     public static final String REPLY_COMMENT_FAILSURE = "回复评论失败";
     public static final String BATCH_APPROVE_MESSAGE_FAILSURE = "批量审核留言失败";
     public static final String BATCH_DELETE_MESSAGE_FAILSURE = "批量删除留言失败";
+    public static final String REPLY_MESSAGE_FAILSURE = "管理员回复留言失败";
 }

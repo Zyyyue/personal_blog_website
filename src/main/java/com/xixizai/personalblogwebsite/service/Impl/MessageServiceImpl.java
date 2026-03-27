@@ -1,20 +1,26 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
-import com.xixizai.personalblogwebsite.exception.BatchApproveMessageException;
-import com.xixizai.personalblogwebsite.exception.BatchDeleteArticleCommentException;
-import com.xixizai.personalblogwebsite.exception.BatchDeleteMessageException;
-import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.constant.StatusConstant;
+import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.MessageMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.MessageReplyDTO;
+import com.xixizai.personalblogwebsite.pojo.entity.Messages;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.MessageService;
+import com.xixizai.personalblogwebsite.utils.IpUtil;
+import com.xixizai.personalblogwebsite.utils.MarkdownUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -141,5 +147,73 @@ public class MessageServiceImpl implements MessageService {
             exception.printStackTrace();
             throw new BatchDeleteMessageException(MessageConstant.BATCH_DELETE_MESSAGE_FAILSURE);
         }
+    }
+
+    @Override
+    public Result adminReplyMessage(MessageReplyDTO messageReplyDTO, HttpServletRequest request) throws AdminReplyMessageException {
+        try{
+
+            //判空一下
+            if(messageReplyDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(messageReplyDTO.getParentId()==null){
+                throw new PassedParameterException("父留言id不能为空");
+            }
+
+            if(messageReplyDTO.getContent()==null||messageReplyDTO.getContent().trim()==null){
+                throw new PassedParameterException("回复内容不能为空");
+            }
+
+            Messages messages = BeanUtil.toBean(messageReplyDTO, Messages.class);
+
+            //设置管理员回复相关字段
+            messages.setIsApproved(StatusConstant.ENABLE);
+            messages.setIsEdited(StatusConstant.ENABLE);
+            messages.setIsAdminReply(StatusConstant.ENABLE);
+
+            //再处理一下markdown
+            if(messageReplyDTO.getIsMarkdown()!=null&&messageReplyDTO.getIsMarkdown()==1){
+                //如果是markdown
+                String html=MarkdownUtil.toHtml(messageReplyDTO.getContent());
+                messages.setContentHtml(html);
+            }else{
+                messages.setContentHtml(messageReplyDTO.getContent());
+            }
+
+            //获取客户端信息
+            if(request!=null){
+                String clientIp = IpUtil.getClientIp(request);
+
+                //获取地理位置信息
+                Map<String, String> geoInfo = IpUtil.getGeoInfo(clientIp);
+                    //获取省
+                String province = geoInfo.get("province");
+                    //获取城市
+                String city = geoInfo.get("city");
+
+                //构建字符串
+                String location="";
+                if(!province.isEmpty()){
+                    location=province;
+                    if(!city.isEmpty()&&!city.equals(province)){
+                        location+="-"+city;
+                    }
+                }
+
+                if(location.isEmpty()){
+                    messages.setLocation(location);
+                }
+
+                log.info("管理员回复-IP:{},位置:{}",clientIp,location);
+            }
+            messageMapper.adminReplyMessage(messages);
+            return Result.success("管理员回复成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AdminReplyMessageException(MessageConstant.REPLY_MESSAGE_FAILSURE);
+        }
+
     }
 }
