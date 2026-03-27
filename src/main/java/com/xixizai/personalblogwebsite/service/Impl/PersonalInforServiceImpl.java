@@ -2,7 +2,10 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.mapper.PersonalInforMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.PersonalInfoDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.PersonalInfo;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.PersonalInforService;
@@ -36,6 +39,30 @@ public class PersonalInforServiceImpl implements PersonalInforService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+
+    }
+
+
+    @Override
+    public Result updatePersonalInfor(PersonalInfoDTO personalInfoDTO) throws PassedParameterException, UpdateOperationsException {
+
+        try{
+
+            if(personalInfoDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(personalInfoDTO.getId()==null){
+                throw new PassedParameterException(MessageConstant.ID_NOT_FOUND);
+            }
+
+            personalInforMapper.updatePersonalInfor(personalInfoDTO);
+            return Result.success("更新个人信息成功");
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
         }
 
     }
