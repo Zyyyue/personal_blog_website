@@ -1,6 +1,7 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.pojo.dto.SocialMediaDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SocialMediaService;
@@ -27,8 +28,14 @@ public class SocialMediaController {
     }
 
 
+    /**
+     * 添加社交媒体
+     * @param socialMediaDTO
+     * @return
+     * @throws AddOperationException
+     */
     @PostMapping()
-    public Result addSocialMedia(@RequestBody SocialMediaDTO socialMediaDTO){
+    public Result addSocialMedia(@RequestBody SocialMediaDTO socialMediaDTO) throws AddOperationException {
         return socialMediaService.addSocialMedia(socialMediaDTO);
     }
 

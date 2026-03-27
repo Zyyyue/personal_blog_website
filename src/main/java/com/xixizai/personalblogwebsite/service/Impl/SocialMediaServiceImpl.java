@@ -55,8 +55,8 @@ public class SocialMediaServiceImpl implements SocialMediaService {
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
 
-            
-
+            socialMediaMapper.addSocialMedia(socialMediaDTO);
+            return Result.success("添加成功");
         }catch (Exception exception){
             exception.printStackTrace();
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
