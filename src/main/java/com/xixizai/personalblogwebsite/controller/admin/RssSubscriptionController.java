@@ -64,4 +64,5 @@ public class RssSubscriptionController {
         return rssSubscriptionService.batchDeleteRssSubscription(ids);
     }
 
+
 }
