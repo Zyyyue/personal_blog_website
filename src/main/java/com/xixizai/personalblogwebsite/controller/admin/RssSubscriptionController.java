@@ -1,6 +1,7 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
+import com.xixizai.personalblogwebsite.exception.BatchDeleteRssSubscriptionException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.RssSubscriptions;
@@ -9,6 +10,7 @@ import com.xixizai.personalblogwebsite.service.RssSubscriptionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/rssSubscription")
@@ -49,6 +51,17 @@ public class RssSubscriptionController {
     @PutMapping("")
     public Result updateRssSubscription(@RequestBody RssSubscriptions rssSubscriptions) throws UpdateOperationsException {
         return rssSubscriptionService.updateRssSubscription(rssSubscriptions);
+    }
+
+    /**
+     * 批量删除订阅
+     * @param ids
+     * @return
+     * @throws BatchDeleteRssSubscriptionException
+     */
+    @DeleteMapping()
+    public Result batchDeleteRssSubscription(@RequestParam List<Long> ids) throws BatchDeleteRssSubscriptionException {
+        return rssSubscriptionService.batchDeleteRssSubscription(ids);
     }
 
 }

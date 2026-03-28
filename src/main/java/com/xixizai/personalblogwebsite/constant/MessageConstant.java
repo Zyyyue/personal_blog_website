@@ -51,4 +51,5 @@ public class MessageConstant {
     public static final String BATCH_DELETE_SOCIAL_MEDIAS_FAILSURE = "批量删除社交媒体失败";
     public static final String BATCH_DELETE_SYSTEM_CONFIGS_FAILSURE = "批量删除系统配置";
     public static final String BATCH_DELETE_MUSICS_FAILSURE = "批量删除音乐失败";
+    public static final String BATCH_DELETE_RSSSUBSCRIPTIONS_FAILSURE="批量删除订阅失败";
 }

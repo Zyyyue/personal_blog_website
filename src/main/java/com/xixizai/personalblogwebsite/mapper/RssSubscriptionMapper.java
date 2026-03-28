@@ -21,4 +21,7 @@ public interface RssSubscriptionMapper {
     //更新订阅
     @Update("update rss_subscriptions set visitor_id=#{visitorId},nickname=#{nickname},email=#{email},is_active=#{isActive},subscribe_time=#{subscribeTime},un_subscribe_time=#{unSubscribeTime}  where  id=#{id}")
     void updateRssSubscription(RssSubscriptions rssSubscriptions);
+
+    //批量删除订阅
+    void batchDeleteRssSubscriptions(List<Long> ids);
 }
