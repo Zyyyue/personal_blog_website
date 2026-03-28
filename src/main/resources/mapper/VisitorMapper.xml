@@ -14,4 +14,13 @@
         </foreach>
 
     </update>
+
+<!--    批量解封游客-->
+    <update id="batchUnblockVisitors">
+        update visitors set  is_blocked=0
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

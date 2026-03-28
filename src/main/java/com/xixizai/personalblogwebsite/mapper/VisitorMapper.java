@@ -16,4 +16,7 @@ public interface VisitorMapper {
 
     //批量封禁游客
     void batchBlockVisitors(List<Long> ids);
+
+    //批量解封游客
+    void batchUnblockVisitors(List<Long> ids);
 }
