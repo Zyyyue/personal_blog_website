@@ -54,4 +54,5 @@ public class MessageConstant {
     public static final String BATCH_DELETE_RSSSUBSCRIPTIONS_FAILSURE="批量删除订阅失败";
     public static final String BATCH_BLOCK_VISITORS_FAILSURE ="批量封禁游客失败" ;
     public static final String BATCH_UNBLOCK_VISITORS_FAILSURE ="批量解封游客失败" ;
+    public static final String BATCH_DELETE_VIEW_RECORDS_FAILSURE = "批量删除浏览记录失败";
 }

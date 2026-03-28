@@ -79,6 +79,12 @@ public class VisitorServiceImpl implements VisitorService {
         }
     }
 
+    /**
+     * 批量解封访客
+     * @param ids
+     * @return
+     * @throws BatchUnblockVisitorsException
+     */
     @Override
     public Result batchUnblockVisitors(List<Long> ids) throws BatchUnblockVisitorsException {
         try {
