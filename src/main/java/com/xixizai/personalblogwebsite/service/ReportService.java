@@ -19,4 +19,7 @@ public interface ReportService {
 
     //获取访客访问Top10
     Result getArticleViewTop10() throws GetOptsException;
+
+    //获取总览数据
+    Result getAdminOverview() throws GetOptsException;
 }

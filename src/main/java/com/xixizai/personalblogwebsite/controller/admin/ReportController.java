@@ -62,4 +62,13 @@ public class ReportController {
         return reportService.getArticleViewTop10();
     }
 
+    /**
+     * 总览数据
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/overview")
+    public Result getAdminOverview() throws GetOptsException {
+        return reportService.getAdminOverview();
+    }
 }

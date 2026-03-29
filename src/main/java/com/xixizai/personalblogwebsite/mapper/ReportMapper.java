@@ -26,4 +26,40 @@ public interface ReportMapper {
 
     //获取文章访问top10
     List<ArticleTitleViewCountDTO> getArticleViewTop10();
+
+    //获取总浏览量
+    @Select("select count(page_title) from views")
+    Integer getTotalViewCount();
+
+    //获取总访客数
+    @Select("select count(id) from visitors")
+    Integer getTotalVisitorCount();
+
+    //获取今日浏览量
+    @Select("select count(page_title) from views where DATE(view_time) = CURDATE()")
+    Integer getTodayViewCount();
+
+    //获取今日新增访客数
+    @Select("select count(id) from visitors where DATE (create_time)=CURDATE()")
+    Integer getTodayNewVisitorCount();
+
+    //获取总文章数
+    @Select("select count(id) from articles where is_published=1")
+    Integer getTotalArticleCount();
+
+    //获取总评论数
+    @Select("select count(id) from article_comments")
+    Integer getTotalCommentCount();
+
+    //获取总留言数
+    @Select("select count(id) from messages where is_approved=1")
+    Integer getTotalMessageCount();
+
+    //获取待审核评论数
+    @Select("select count(id) from article_comments where is_approved=0")
+    Integer getPendingCommentCount();
+
+    //获取审核留言数
+    @Select("select count(id) from messages where is_approved=0")
+    Integer getPendingMessageCount();
 }

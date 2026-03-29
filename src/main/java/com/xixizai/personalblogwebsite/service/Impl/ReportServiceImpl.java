@@ -8,10 +8,7 @@ import com.xixizai.personalblogwebsite.pojo.dto.DailyViewCountDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.DailyVisitorCountDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ProvinceCountDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
-import com.xixizai.personalblogwebsite.pojo.vo.ArticleViewTop10VO;
-import com.xixizai.personalblogwebsite.pojo.vo.ProvinceVisitorVO;
-import com.xixizai.personalblogwebsite.pojo.vo.ViewReportVO;
-import com.xixizai.personalblogwebsite.pojo.vo.VisitorReportVO;
+import com.xixizai.personalblogwebsite.pojo.vo.*;
 import com.xixizai.personalblogwebsite.service.ReportService;
 import com.xixizai.personalblogwebsite.utils.DataUtil;
 import org.springframework.stereotype.Service;
@@ -179,6 +176,43 @@ public class ReportServiceImpl implements ReportService {
             exception.printStackTrace();
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
+
+    }
+
+    /**
+     * 总览数据
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result getAdminOverview() throws GetOptsException {
+       try{
+           //获取总浏览量
+           Integer totalViewCount=reportMapper.getTotalViewCount();
+            //获取总访客数
+           Integer totalVisitorCount=reportMapper.getTotalVisitorCount();
+           //获取今日浏览量
+           Integer todayViewCount= reportMapper.getTodayViewCount();
+           //获取今日新增访客数
+           Integer todayNewVisitorCount= reportMapper.getTodayNewVisitorCount();
+           //获取总文章数
+           Integer totalArticleCount= reportMapper.getTotalArticleCount();
+           //获取总评论数
+           Integer totalCommentCount=reportMapper.getTotalCommentCount();
+           //获取总留言数
+           Integer totalMessageCount=reportMapper.getTotalMessageCount();
+           //获取待审核评论数
+           Integer pendingCommentCount=reportMapper.getPendingCommentCount();
+           //获取待审核留言数
+           Integer pendingMessageCount=reportMapper.getPendingMessageCount();
+            AdminOverviewVO adminOverviewVO=new AdminOverviewVO(totalViewCount,totalVisitorCount,todayViewCount,todayNewVisitorCount,totalArticleCount,totalCommentCount,totalMessageCount,pendingCommentCount,pendingMessageCount);
+            return Result.success(adminOverviewVO);
+       }catch (Exception exception){
+
+        exception.printStackTrace();
+        throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+
+       }
 
     }
 
