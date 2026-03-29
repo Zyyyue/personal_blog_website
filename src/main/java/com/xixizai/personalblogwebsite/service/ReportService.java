@@ -10,4 +10,7 @@ import java.time.LocalDate;
 public interface ReportService {
     //浏览量统计
     Result getViewStatistics(LocalDate begin, LocalDate end) throws GetOptsException;
+
+    //访客统计
+    Result getVisitorStatistics(LocalDate begin, LocalDate end) throws GetOptsException;
 }

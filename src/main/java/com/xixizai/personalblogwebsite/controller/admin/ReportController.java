@@ -31,4 +31,15 @@ public class ReportController {
         return reportService.getViewStatistics(begin,end);
     }
 
+    /**
+     * 访客统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/visitorStatistics")
+    public Result getVisitorStatistics(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) throws GetOptsException {
+        return reportService.getVisitorStatistics(begin,end);
+    }
+
 }
