@@ -3,5 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!--这个写包名加上类名-->
 <mapper namespace="com.xixizai.personalblogwebsite.mapper.ReportMapper">
-
+    <!--    查找省份-->
+    <select id="getProvinceDistribution"
+            resultType="com.xixizai.personalblogwebsite.pojo.dto.ProvinceCountDTO">
+        select ifnull(province,'未知') as province ,count(*) as count
+        from visitors
+        group by province
+        order by count
+        desc
+    </select>
 </mapper>

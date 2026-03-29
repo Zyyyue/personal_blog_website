@@ -42,4 +42,14 @@ public class ReportController {
         return reportService.getVisitorStatistics(begin,end);
     }
 
+    /**
+     * 访客省份分布
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/provinceDistribution")
+    public Result getProvinceDistribution() throws GetOptsException {
+        return reportService.getProvinceDistribution();
+    }
+
 }

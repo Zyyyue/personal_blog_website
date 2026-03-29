@@ -13,4 +13,7 @@ public interface ReportService {
 
     //访客统计
     Result getVisitorStatistics(LocalDate begin, LocalDate end) throws GetOptsException;
+
+    //访客省份分布
+    Result getProvinceDistribution() throws GetOptsException;
 }

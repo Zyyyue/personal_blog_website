@@ -5,7 +5,9 @@ import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.mapper.ReportMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.DailyViewCountDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.DailyVisitorCountDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.ProvinceCountDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.ProvinceVisitorVO;
 import com.xixizai.personalblogwebsite.pojo.vo.ViewReportVO;
 import com.xixizai.personalblogwebsite.pojo.vo.VisitorReportVO;
 import com.xixizai.personalblogwebsite.service.ReportService;
@@ -122,6 +124,29 @@ public class ReportServiceImpl implements ReportService {
             exception.printStackTrace();
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
+    }
+
+    /**
+     * 访客省份分布
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result getProvinceDistribution() throws GetOptsException {
+        try{
+            //从数据库中查,能查到省份和访客熟练，没有的省份字段值写成未知
+            List<ProvinceCountDTO>provinceStats=reportMapper.getProvinceDistribution();
+            ProvinceVisitorVO provinceVisitorVO= ProvinceVisitorVO.builder()
+                    .provinceList(provinceStats.stream().map(ProvinceCountDTO::getProvince).collect(Collectors.joining(",")))
+                    .countList(provinceStats.stream().map(ProvinceCountDTO::getCount).map(String::valueOf).collect(Collectors.joining(",")))
+                    .build();
+            return Result.success(provinceVisitorVO);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+
     }
 
 }
