@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# 忽略敏感环境变量文件
+security.env

@@ -29,4 +29,7 @@ public interface ArticleService {
 
     //置顶/取消置顶文章
     Result cancleOrNotTopArticle(Long id, Integer isTop) throws Exception;
+
+    //根据slug获取文章详情
+    Result getArticleBySlug(String slug);
 }

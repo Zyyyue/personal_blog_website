@@ -9,6 +9,7 @@ import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Repeat;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Resource
     private ArticleMapper articleMapper;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     @Resource
     private ArticleTagRelationsMapper articleTagRelationsMapper;
@@ -256,6 +260,11 @@ public class ArticleServiceImpl implements ArticleService {
             exception.printStackTrace();
             throw new CancleOrNotTopArticleFailsureException(MessageConstant.CANCLE_OR_NOT_TOP_ARTICLE_FALISURE);
         }
+
+    }
+
+    @Override
+    public Result getArticleBySlug(String slug) {
 
     }
 
