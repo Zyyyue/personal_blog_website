@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleTitleViewCountDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.DailyViewCountDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.DailyVisitorCountDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ProvinceCountDTO;
@@ -22,4 +23,7 @@ public interface ReportMapper {
 
     //获取省份分布统计
     List<ProvinceCountDTO> getProvinceDistribution();
+
+    //获取文章访问top10
+    List<ArticleTitleViewCountDTO> getArticleViewTop10();
 }

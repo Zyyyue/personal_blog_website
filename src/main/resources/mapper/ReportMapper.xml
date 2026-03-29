@@ -12,4 +12,14 @@
         order by count
         desc
     </select>
+    <!--    获取文章访问top10-->
+    <select id="getArticleViewTop10"
+            resultType="com.xixizai.personalblogwebsite.pojo.dto.ArticleTitleViewCountDTO">
+
+        select title,view_count as viewCount
+        from articles
+        where is_published=1
+        order by view_count desc
+        limit 10
+    </select>
 </mapper>

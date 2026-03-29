@@ -52,4 +52,14 @@ public class ReportController {
         return reportService.getProvinceDistribution();
     }
 
+    /**
+     * 获取文章访问top10
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/articleViewTop10")
+    public Result getArticleViewTop10() throws GetOptsException {
+        return reportService.getArticleViewTop10();
+    }
+
 }

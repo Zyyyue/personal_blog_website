@@ -16,4 +16,7 @@ public interface ReportService {
 
     //访客省份分布
     Result getProvinceDistribution() throws GetOptsException;
+
+    //获取访客访问Top10
+    Result getArticleViewTop10() throws GetOptsException;
 }

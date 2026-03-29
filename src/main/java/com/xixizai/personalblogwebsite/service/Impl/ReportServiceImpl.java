@@ -3,10 +3,12 @@ package com.xixizai.personalblogwebsite.service.Impl;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.mapper.ReportMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleTitleViewCountDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.DailyViewCountDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.DailyVisitorCountDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ProvinceCountDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.ArticleViewTop10VO;
 import com.xixizai.personalblogwebsite.pojo.vo.ProvinceVisitorVO;
 import com.xixizai.personalblogwebsite.pojo.vo.ViewReportVO;
 import com.xixizai.personalblogwebsite.pojo.vo.VisitorReportVO;
@@ -141,6 +143,37 @@ public class ReportServiceImpl implements ReportService {
                     .countList(provinceStats.stream().map(ProvinceCountDTO::getCount).map(String::valueOf).collect(Collectors.joining(",")))
                     .build();
             return Result.success(provinceVisitorVO);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+
+    }
+
+    /**
+     * 获取文章访问量top10
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result getArticleViewTop10() throws GetOptsException {
+        try{
+            //获取访问top10的数据
+            List<ArticleTitleViewCountDTO>top10List=reportMapper.getArticleViewTop10();
+            List<String>titleList=new ArrayList<>();
+            List<Integer>viewCountList=new ArrayList<>();
+            for (ArticleTitleViewCountDTO articleTitleViewCountDTO : top10List) {
+                titleList.add(articleTitleViewCountDTO.getTitle());
+                viewCountList.add(articleTitleViewCountDTO.getViewCount());
+            }
+
+            ArticleViewTop10VO articleViewTop10VO= ArticleViewTop10VO.builder()
+                    .titleList(titleList)
+                    .viewCountList(viewCountList)
+                    .build();
+
+            return Result.success(articleViewTop10VO);
 
         }catch (Exception exception){
             exception.printStackTrace();
