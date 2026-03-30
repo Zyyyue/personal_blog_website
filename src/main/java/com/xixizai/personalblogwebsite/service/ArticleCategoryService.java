@@ -24,4 +24,6 @@ public interface ArticleCategoryService {
 
     //批量删除文章分类
     Result batchDeleteArticleCategories(List<Long> ids) throws PassedParameterException, BatchDeleteArticleCategoriesException;
+
+
 }

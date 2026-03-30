@@ -49,7 +49,7 @@ xixi:
     personal: xixi
     from: 3467884929@qq.com
   jwt:
-    secret-key: "BOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOY"
+    secret-key: "BOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBEE"
     ttl: 1440
     token-name: Authorization
   alioss:
