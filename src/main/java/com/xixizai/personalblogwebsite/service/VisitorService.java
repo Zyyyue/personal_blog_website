@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.service;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.BatchBlockVisitorsException;
 import com.xixizai.personalblogwebsite.exception.BatchUnblockVisitorsException;
@@ -22,4 +23,7 @@ public interface VisitorService {
 
     //添加访客
     void addVisitors(Visitors visitors, HttpServletRequest request) throws AddOperationException;
+
+    //根据请求获取访客id
+    Long getVisitorIdByRequest(HttpServletRequest request) throws GetOptsException;
 }

@@ -24,4 +24,8 @@ public interface VisitorMapper {
     //添加游客
     @Insert("insert into visitors (fingerprint, session_id, ip, user_agent, country, province, city, longitude, latitude, first_visit_time,  total_views, is_blocked,  create_time, update_time) values (#{fingerprint},#{sessionId},#{ip},#{userAgent},#{country},#{province},#{city},#{longtitude},#{latitude},now(),1,0,now(),now())")
     void addVisitors(Visitors visitors);
+
+    //根据Request获取id
+    @Select("select id from visitors where ip=#{clientIp} and session_id=#{sessionId}")
+    Long getVisitorIdByRequest(String sessionId, String clientIp);
 }

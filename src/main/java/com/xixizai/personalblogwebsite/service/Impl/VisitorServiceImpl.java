@@ -1,11 +1,13 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.VisitorMapper;
 import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.VisitorService;
+import com.xixizai.personalblogwebsite.utils.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -141,7 +144,7 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     /**
-     * 添加访客
+     * 管理端添加访客
      * @param visitors
      * @param request
      * @throws AddOperationException
@@ -162,6 +165,38 @@ public class VisitorServiceImpl implements VisitorService {
         }
     }
 
+    /**
+     * 管理端根据request查询id
+     * @param request
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Long getVisitorIdByRequest(HttpServletRequest request) throws GetOptsException {
+        try{
+            
+            if(request==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            String clientIp = IpUtil.getClientIp(request);
+            if(IpUtil.isLocalIp(clientIp)){
+                clientIp=IpUtil.getLocalHostIp();
+            }
+            Map<String, String> geoInfo = IpUtil.getGeoInfo(clientIp);
+            String country = geoInfo.get("country");
+            String province=geoInfo.get("province");
+            String city=geoInfo.get("city");
+            String sessionId=request.getSession().getId();
+
+            Long id=visitorMapper.getVisitorIdByRequest(sessionId,clientIp);
+            return id;
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+    }
 
 
 }
