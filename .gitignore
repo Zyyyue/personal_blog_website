@@ -33,4 +33,9 @@ build/
 .vscode/
 
 # 忽略敏感环境变量文件
-security.env
+.env
+*.env
+
+# 本地配置
+application-local.yaml
+application-dev.yaml
