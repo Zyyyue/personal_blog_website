@@ -8,6 +8,8 @@ import com.xixizai.personalblogwebsite.mapper.ArticleMapper;
 import com.xixizai.personalblogwebsite.mapper.ArticleTagRelationsMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.ArticleArchiveItemVO;
+import com.xixizai.personalblogwebsite.pojo.vo.ArticleArchiveVO;
 import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleDetailVO;
 import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleVO;
 import com.xixizai.personalblogwebsite.service.ArticleService;
@@ -18,8 +20,12 @@ import org.springframework.test.annotation.Repeat;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -305,6 +311,56 @@ public class ArticleServiceImpl implements ArticleService {
             exception.printStackTrace();
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
+
+    }
+
+    /**
+     * 获取文章归档
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result getArtilceArchive() throws GetOptsException {
+
+        try{
+
+            List<ArticleArchiveVO>articleArchiveVOList=new ArrayList<>();
+            //获取文章归档中的单篇文章
+            List<ArticleArchiveItemVO>articleArchiveItemVOList=new ArrayList<>();
+            articleArchiveItemVOList=articleMapper.getArticleArchiveItemVOList();
+
+            //利用数据库中的publish的年和月生成队列(神来之笔的代码)
+            Map<String,ArticleArchiveVO> archiveMap=new LinkedHashMap<>();
+            for (ArticleArchiveItemVO itemVO : articleArchiveItemVOList) {
+                if(itemVO.getPublishTime()==null){
+                    continue;
+                }
+
+                int year = itemVO.getPublishTime().getYear();
+                int month=itemVO.getPublishTime().getMonthValue();
+
+                String key=year+"-"+month;
+                ArticleArchiveVO archiveVO=new ArticleArchiveVO();
+                archiveVO=archiveMap.computeIfAbsent(
+                    key,k->
+                    ArticleArchiveVO.builder()
+                            .year(year)
+                            .month(month)
+                            .articles(new ArrayList<>())
+                            .build()
+                );
+                archiveVO.getArticles().add(itemVO);
+            }
+
+            return Result.success(new ArrayList<>(archiveMap.values()));
+
+        }catch (Exception exception){
+
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+
+        }
+
 
     }
 

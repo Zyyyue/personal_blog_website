@@ -116,4 +116,16 @@
         limit 6
     </select>
 
+<!--    获取文章归档中的已经发布的文章-->
+    <select id="getArticleArchiveItemVOList"
+            resultType="com.xixizai.personalblogwebsite.pojo.vo.ArticleArchiveItemVO">
+
+        select id,title,slug,publish_day,publish_time
+        from articles
+        where is_published=1
+        order by coalesce(publish_time,create_time)desc
+
+    </select>
+
+
 </mapper>

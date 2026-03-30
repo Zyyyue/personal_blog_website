@@ -28,5 +28,13 @@ public class ArticleController {
         return articleService.getArticleBySlug(slug);
     }
 
-
+    /**
+     * 获取文章归档
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/archive")
+    public Result getArtilceArchive() throws GetOptsException {
+        return articleService.getArtilceArchive();
+    }
 }

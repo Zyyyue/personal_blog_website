@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
+import com.xixizai.personalblogwebsite.pojo.vo.ArticleArchiveItemVO;
+import com.xixizai.personalblogwebsite.pojo.vo.ArticleArchiveVO;
 import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleDetailVO;
 import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleVO;
 import org.apache.ibatis.annotations.*;
@@ -74,4 +76,7 @@ public interface ArticleMapper {
 
     //获取相关文章
     List<BlogArticleVO> getRelatedArticles(@Param("articleId") Long articleId, @Param("categoryId") Long categoryId);
+
+    //获取文章归档中的已经发布的文章
+    List<ArticleArchiveItemVO> getArticleArchiveItemVOList();
 }

@@ -33,4 +33,7 @@ public interface ArticleService {
 
     //根据slug获取文章详情
     Result getArticleBySlug(String slug) throws GetOptsException;
+
+    //获取文章归档
+    Result getArtilceArchive() throws GetOptsException;
 }
