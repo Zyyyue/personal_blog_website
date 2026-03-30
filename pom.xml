@@ -154,6 +154,13 @@
             <version>1.16.1</version>
         </dependency>
 
+        <!-- UserAgent 解析库 -->
+        <dependency>
+            <groupId>nl.basjes.parse.useragent</groupId>
+            <artifactId>yauaa</artifactId>
+            <version>7.27.0</version>
+        </dependency>
+
     </dependencies>
 
 

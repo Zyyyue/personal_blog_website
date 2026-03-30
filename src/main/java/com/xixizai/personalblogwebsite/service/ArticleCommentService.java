@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.service;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.*;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import org.springframework.stereotype.Service;
@@ -23,4 +24,7 @@ public interface ArticleCommentService {
 
     //管理员回复评论
     Result adminReplyComment(ArticleCommentReplyDTO articleCommentReplyDTO, HttpServletRequest request) throws AdminReplyCommentException;
+
+    //用户提交评论
+    Result submitComment(ArticleCommentDTO articleCommentDTO,HttpServletRequest request) throws AddOperationException;
 }

@@ -6,13 +6,16 @@ import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.constant.StatusConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.ArticleCommentMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleCommentService;
 import com.xixizai.personalblogwebsite.utils.IpUtil;
 import com.xixizai.personalblogwebsite.utils.MarkdownUtil;
+import com.xixizai.personalblogwebsite.utils.UserAgentUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,12 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.commonmark.internal.util.Escaping.escapeHtml;
+
 @Service
 @Slf4j
 public class ArticleCommentServiceImpl implements ArticleCommentService {
 
     @Resource
     private ArticleCommentMapper articleCommentMapper;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    private UserAgentUtil userAgentUtil;
 
     /**
      * 根据文章id查询评论
@@ -247,6 +258,88 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new AdminReplyCommentException(MessageConstant.REPLY_COMMENT_FAILSURE);
+        }
+
+    }
+
+    /**
+     * 提交评论
+     * @param articleCommentDTO
+     * @param request
+     * @return
+     * @throws AddOperationException
+     */
+    @Override
+    public Result submitComment(ArticleCommentDTO articleCommentDTO,HttpServletRequest request) throws AddOperationException {
+        try{
+
+            if(articleCommentDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            ArticleComments articleComments = BeanUtil.toBean(articleCommentDTO, ArticleComments.class);
+
+            //获取用户使用的浏览器
+            String userAgentString = request.getHeader("User-Agent");
+            String browserName = userAgentUtil.getBrowserName(userAgentString);
+            articleComments.setUserAgentBrowser(browserName);
+
+            //获取用户使用的操作系统
+            String osName = userAgentUtil.getOsName(browserName);
+            articleComments.setUserAgentOs(osName);
+
+            //获取用户的地理位置
+            String clientIp = IpUtil.getClientIp(request);
+            if(IpUtil.isLocalIp(clientIp)){
+                String location="中国 成都";
+                articleComments.setLocation(location);
+            }else{
+                Map<String, String> geoInfo = IpUtil.getGeoInfo(clientIp);
+                String country=geoInfo.getOrDefault("country","未知");
+                String city=geoInfo.getOrDefault("city","未知");
+                if(country==null||country.isEmpty()){
+                    articleComments.setLocation("未知");
+                }
+                String location=country+" "+city;
+                articleComments.setLocation(location);
+            }
+
+            //处理markdown
+
+            if (articleCommentDTO.getIsMarkdown() == 1) {
+                //Markdown
+                if (MarkdownUtil.isHtml(articleCommentDTO.getContent())) {
+                    //内容是HTML过滤后存储
+                    String sanitize = MarkdownUtil.sanitize(articleCommentDTO.getContent());
+                    articleComments.setContentHtml(sanitize);
+                } else {
+                    //内容是Markdown转换为HTML
+                    String contentHtml = MarkdownUtil.toHtml(articleCommentDTO.getContent());
+                    articleComments.setContentHtml(contentHtml);
+                }
+            } else {
+                //普通文本模式
+                String content = articleCommentDTO.getContent();
+
+                if (MarkdownUtil.isHtml(content)) {
+                    //内容是 HTML过滤后存储
+                    String sanitize = MarkdownUtil.sanitize(content);
+                    articleComments.setContentHtml(sanitize);
+                } else {
+                    // 普通文本：转义 + 换行转 <br>
+                    String escaped = escapeHtml(content);
+                    String contentHtml = escaped.replace("\n", "<br>").replace("\r\n", "<br>");
+                    articleComments.setContentHtml(contentHtml);
+                }
+            }
+
+
+            //提交评论
+            articleCommentMapper.submitComment(articleComments);
+            return Result.success("提交成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
         }
 
     }

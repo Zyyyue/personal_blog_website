@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
 import org.apache.ibatis.annotations.Insert;
@@ -28,4 +29,8 @@ public interface ArticleCommentMapper {
     //管理员回复评论
     @Insert("insert into article_comments (article_id,parent_id,root_id,parent_nickname,content,is_markdown,is_approved,is_edited,is_admin_reply,content_html,location,create_time)values(#{articleId},#{parentId},#{rootId},#{parentNickname},#{content},#{isMarkdown},#{isApproved},#{isEdited},#{isAdminReply},#{contentHtml},#{location},now())")
     void adminReplyComment(ArticleComments articleComment);
+
+    //提交评论
+    @Insert("insert into article_comments (article_id, root_id, parent_id, parent_nickname, content,  visitor_id, nickname, email_or_qq,  is_markdown, is_secret,is_notice, create_time, update_time,location,user_agent_browser,user_agent_os,is_approved,content_html) values (#{articleId},#{rootId},#{parentId},#{parentNickname},#{content},#{visitorId},#{nickname},#{emailOrQq},#{isMarkdown},#{isSecret},#{isNotice},now(),now(),#{location},#{userAgentBrowser},#{userAgentOs},0,#{contentHtml})")
+    void submitComment(ArticleComments articleComments);
 }

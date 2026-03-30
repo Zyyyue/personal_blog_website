@@ -1,16 +1,16 @@
 package com.xixizai.personalblogwebsite.controller.blog;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.ArticleNotFoundException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleCommentService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController("blogArticleCommentController")
@@ -33,4 +33,14 @@ public class ArticleCommentController {
         return articleCommentService.getArticleCommentById(articleId);
     }
 
+    /**
+     * 提交评论
+     * @param articleCommentDTO
+     * @return
+     * @throws AddOperationException
+     */
+    @PostMapping()
+    public Result submitComment(@RequestBody ArticleCommentDTO articleCommentDTO, HttpServletRequest request) throws AddOperationException {
+        return articleCommentService.submitComment(articleCommentDTO,request);
+    }
 }
