@@ -1,12 +1,15 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.ArticleMapper;
 import com.xixizai.personalblogwebsite.mapper.ArticleTagRelationsMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleDetailVO;
+import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleVO;
 import com.xixizai.personalblogwebsite.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -262,9 +265,46 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
     }
+    //===========博客端==============
 
+    /**
+     * 根据slug查找articles
+     * @param slug
+     * @return
+     * @throws GetOptsException
+     */
     @Override
-    public Result getArticleBySlug(String slug) {
+    public Result getArticleBySlug(String slug) throws GetOptsException {
+        try {
+
+            BlogArticleDetailVO blogArticleDetailVO=articleMapper.getArticleBySlug(slug);
+
+            if(blogArticleDetailVO==null){
+                return Result.error("文章未找到");
+            }
+            //获取文章标签名称列表
+            List<String>tagName=new ArrayList<>();
+            tagName=articleMapper.getTagNameListByArticleId(blogArticleDetailVO.getId());
+            blogArticleDetailVO.setTagNames(tagName);
+
+            //上一篇/下一篇导航
+            BlogArticleVO prevArticle=new BlogArticleVO();
+            BlogArticleVO nextArticle=new BlogArticleVO();
+            prevArticle=articleMapper.getPrevArticle(blogArticleDetailVO.getId());
+            nextArticle=articleMapper.getNextArticle(blogArticleDetailVO.getId());
+            blogArticleDetailVO.setPrevArticle(prevArticle);
+            blogArticleDetailVO.setNextArticle(nextArticle);
+
+            //相关文章推荐
+            List<BlogArticleVO>relatedArticles=new ArrayList<>();
+            relatedArticles=articleMapper.getRelatedArticles(blogArticleDetailVO.getId(),blogArticleDetailVO.getCategoryId());
+            blogArticleDetailVO.setRelatedArticles(relatedArticles);
+
+            return Result.success(blogArticleDetailVO);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
 
     }
 

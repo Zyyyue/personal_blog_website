@@ -32,6 +32,7 @@
         </foreach>
     </delete>
 
+
     <!--    发布文章-->
     <update id="publishArticle">
         update articles
@@ -59,5 +60,60 @@
         where id=#{id}
     </update>
 
+<!--    ============博客端=============-->
+    <select id="getArticleBySlug" resultType="com.xixizai.personalblogwebsite.pojo.vo.BlogArticleDetailVO">
+        select a.id,a.title,a.slug,a.summary,a.cover_image,a.content_html,a.content_markdown,
+               a.category_id,ac.name as category_name,
+                a.view_count,a.like_count,a.comment_count,a.word_count,a.reading_time,
+               a.publish_time,a.update_time
+
+        from articles a
+        left join article_categories ac on  a.category_id=ac.id
+        where a.slug=#{slug} and a.is_published=1
+    </select>
+
+<!--    获取文章标签名称列表通过id-->
+    <select id="getTagNameListByArticleId" resultType="java.lang.String">
+        select at.name
+        from article_tags at
+        where id in (
+            select atr.tag_id
+            from article_tag_relations atr
+            where atr.article_id=#{id}
+            )
+    </select>
+
+<!--    获取上一篇导航-->
+    <select id="getPrevArticle" resultType="com.xixizai.personalblogwebsite.pojo.vo.BlogArticleVO">
+
+        select id,title,slug
+        from articles
+        where is_published=1 and publish_time>(select publish_time from articles where id=#{id})
+        order by publish_time asc
+        limit  1
+    </select>
+
+<!--    获取下一篇导航-->
+    <select id="getNextArticle" resultType="com.xixizai.personalblogwebsite.pojo.vo.BlogArticleVO">
+
+        select id, title, slug
+        from articles
+        where is_published = 1 and publish_time &lt; (select publish_time from articles where id = #{id})
+        order by publish_time desc
+        limit 1
+
+    </select>
+
+<!--    获取相关文章推荐-->
+    <select id="getRelatedArticles" resultType="com.xixizai.personalblogwebsite.pojo.vo.BlogArticleVO">
+        select a.id,a.title,a.slug,a.summary,a.cover_image,a.category_id,
+        ac.name as category_name,
+        a.view_count,a.like_count,a.comment_count,a.word_count,a.reading_time,a.is_top,a.publish_time
+        from articles a
+        left join article_categories ac on a.category_id = ac.id
+        where a.is_published=1 and a.id!=#{articleId} and a.category_id=#{categoryId}
+        order by a.is_top desc,coalesce(a.publish_time,a.create_time) desc
+        limit 6
+    </select>
 
 </mapper>

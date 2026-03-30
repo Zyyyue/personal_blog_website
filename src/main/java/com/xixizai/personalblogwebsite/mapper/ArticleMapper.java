@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
+import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleDetailVO;
+import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -57,4 +59,19 @@ public interface ArticleMapper {
      * @param isTop
      */
     void cancleOrNotTopArticle(Long id, Integer isTop);
+
+    //获取文章具体信息通过slug
+    BlogArticleDetailVO getArticleBySlug(String slug);
+
+    //获取文章标签名称通过id
+    List<String> getTagNameListByArticleId(Long id);
+
+    //获取下一页导航通过id
+    BlogArticleVO getPrevArticle(Long id);
+
+    //获取上一页导航通过id
+    BlogArticleVO getNextArticle(Long id);
+
+    //获取相关文章
+    List<BlogArticleVO> getRelatedArticles(@Param("articleId") Long articleId, @Param("categoryId") Long categoryId);
 }

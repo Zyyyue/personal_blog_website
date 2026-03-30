@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.controller.blog;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +17,16 @@ public class ArticleController {
     @Resource
     private ArticleService articleService;
 
+    /**
+     * 根据slug查找articles
+     * @param slug
+     * @return
+     * @throws GetOptsException
+     */
     @GetMapping("/detail/{slug}")
-    public Result getArticleBySlug(@PathVariable String slug){
+    public Result getArticleBySlug(@PathVariable String slug) throws GetOptsException {
         return articleService.getArticleBySlug(slug);
     }
+
 
 }

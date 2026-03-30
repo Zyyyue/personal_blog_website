@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.service;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -31,5 +32,5 @@ public interface ArticleService {
     Result cancleOrNotTopArticle(Long id, Integer isTop) throws Exception;
 
     //根据slug获取文章详情
-    Result getArticleBySlug(String slug);
+    Result getArticleBySlug(String slug) throws GetOptsException;
 }
