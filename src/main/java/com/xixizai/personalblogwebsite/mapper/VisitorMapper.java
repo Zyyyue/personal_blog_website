@@ -1,6 +1,7 @@
 package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.javassist.compiler.ast.Visitor;
@@ -19,4 +20,8 @@ public interface VisitorMapper {
 
     //批量解封游客
     void batchUnblockVisitors(List<Long> ids);
+
+    //添加游客
+    @Insert("insert into visitors (fingerprint, session_id, ip, user_agent, country, province, city, longitude, latitude, first_visit_time,  total_views, is_blocked,  create_time, update_time) values (#{fingerprint},#{sessionId},#{ip},#{userAgent},#{country},#{province},#{city},#{longtitude},#{latitude},now(),1,0,now(),now())")
+    void addVisitors(Visitors visitors);
 }

@@ -1,20 +1,22 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
-import com.xixizai.personalblogwebsite.exception.BatchBlockVisitorsException;
-import com.xixizai.personalblogwebsite.exception.BatchDeleteRssSubscriptionException;
-import com.xixizai.personalblogwebsite.exception.BatchUnblockVisitorsException;
-import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.VisitorMapper;
+import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.VisitorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class VisitorServiceImpl implements VisitorService {
 
     @Resource
@@ -137,6 +139,29 @@ public class VisitorServiceImpl implements VisitorService {
             throw new BatchUnblockVisitorsException(MessageConstant.BATCH_UNBLOCK_VISITORS_FAILSURE);
         }
     }
+
+    /**
+     * 添加访客
+     * @param visitors
+     * @param request
+     * @throws AddOperationException
+     */
+    @Override
+    public void addVisitors(Visitors visitors, HttpServletRequest request) throws AddOperationException {
+        try{
+
+            if(visitors==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            visitorMapper.addVisitors(visitors);
+            log.info("添加访客成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
+    }
+
 
 
 }

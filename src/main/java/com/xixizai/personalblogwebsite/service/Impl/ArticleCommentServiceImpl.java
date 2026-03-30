@@ -9,8 +9,10 @@ import com.xixizai.personalblogwebsite.mapper.ArticleCommentMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
+import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleCommentService;
+import com.xixizai.personalblogwebsite.service.ViewService;
 import com.xixizai.personalblogwebsite.utils.IpUtil;
 import com.xixizai.personalblogwebsite.utils.MarkdownUtil;
 import com.xixizai.personalblogwebsite.utils.UserAgentUtil;
@@ -23,7 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import static com.xixizai.personalblogwebsite.constant.RedisConstant.VIEW_LIMIT_PREFIX;
+import static com.xixizai.personalblogwebsite.constant.RedisConstant.VIEW_LIMIT_SECONDS;
 import static org.commonmark.internal.util.Escaping.escapeHtml;
 
 @Service
@@ -38,6 +43,9 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
     @Resource
     private UserAgentUtil userAgentUtil;
+
+    @Resource
+    private ViewService viewService;
 
     /**
      * 根据文章id查询评论
@@ -333,7 +341,17 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
                 }
             }
 
+            String key = getKey(request, articleCommentDTO.getArticleId());
+            if(!stringRedisTemplate.hasKey(key)){
+                //如果没有key的话
+                stringRedisTemplate.opsForValue().set(key,"1",VIEW_LIMIT_SECONDS, TimeUnit.SECONDS);
+                //这本书的浏览量+1
+                Views view =Views.builder()
 
+                                .build();
+                viewService.addViewRecord(view);
+
+            }
             //提交评论
             articleCommentMapper.submitComment(articleComments);
             return Result.success("提交成功");
@@ -342,5 +360,20 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
         }
 
+    }
+
+    /**
+     * 获取key
+     * @param request
+     * @return
+     */
+    private String getKey(HttpServletRequest request,Long id){
+        String clientIp = IpUtil.getClientIp(request);
+        if(IpUtil.isLocalIp(clientIp)){
+            //如果是的话就找主机ip
+            clientIp = IpUtil.getLocalHostIp();
+        }
+        String key=VIEW_LIMIT_PREFIX+":"+clientIp+":"+id;
+        return key;
     }
 }

@@ -5,6 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -113,5 +117,43 @@ public class IpUtil {
             name = name.substring(0, name.length() - 1);
         }
         return name;
+    }
+
+    /**
+     * 获取本机（服务器）IP地址
+     * @return 本机IP地址
+     */
+    public static String getLocalHostIp() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                // 跳过回环接口和未启用的接口
+                if (networkInterface.isLoopback() || !networkInterface.isUp()) {
+                    continue;
+                }
+                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = addresses.nextElement();
+                    // 只获取 IPv4 地址
+                    if (address instanceof Inet4Address && !address.isLoopbackAddress()) {
+                        String ip = address.getHostAddress();
+                        if (!ip.startsWith("127.")) {
+                            return ip;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("获取本机IP地址失败", e);
+        }
+        // 获取默认IP地址
+        try {
+            InetAddress localHost = InetAddress.getLocalHost();
+            return localHost.getHostAddress();
+        } catch (Exception e) {
+            log.error("获取本机IP地址失败", e);
+            return "127.0.0.1";
+        }
     }
 }

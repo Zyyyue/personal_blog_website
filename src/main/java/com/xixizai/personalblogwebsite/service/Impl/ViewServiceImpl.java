@@ -1,10 +1,13 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteViewRecordsException;
 import com.xixizai.personalblogwebsite.exception.BatchUnblockVisitorsException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.ViewMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
+import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ViewService;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,12 @@ public class ViewServiceImpl implements ViewService {
     @Resource
     private ViewMapper viewMapper;
 
+    /**
+     * 批量删除浏览记录
+     * @param ids
+     * @return
+     * @throws BatchDeleteViewRecordsException
+     */
     @Override
     public Result batchDeleteViewRecords(List<Long> ids) throws BatchDeleteViewRecordsException {
         try {
@@ -72,4 +81,29 @@ public class ViewServiceImpl implements ViewService {
             throw new BatchDeleteViewRecordsException(MessageConstant.BATCH_DELETE_VIEW_RECORDS_FAILSURE);
         }
     }
+
+    /**
+     * 添加浏览记录
+     * @param views
+     * @throws AddOperationException
+     */
+    @Override
+    public void addViewRecord(Views views) throws AddOperationException {
+        try{
+
+            //如果传进来的参数为空添加失败
+            if(views==null){
+                throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+            }
+
+            viewMapper.addViewRecord(views);
+
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+        }
+    }
+
+
 }
