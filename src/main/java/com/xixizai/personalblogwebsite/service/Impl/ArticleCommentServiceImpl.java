@@ -47,7 +47,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
             List<ArticleComments> articleCommentById = articleCommentMapper.getArticleCommentById(id);
 
             if(articleCommentById==null||articleCommentById.isEmpty()){
-                return Result.error("查找失败");
+                return Result.error("查找失败,该文章暂时没有评论");
             }else{
                 return Result.success(articleCommentById);
             }

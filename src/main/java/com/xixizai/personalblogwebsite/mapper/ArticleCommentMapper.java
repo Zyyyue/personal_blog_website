@@ -12,7 +12,7 @@ import java.util.List;
 public interface ArticleCommentMapper {
 
     //根据列表id获取评论
-    @Select("select * from article_comments where id=#{articleId}")
+    @Select("select * from article_comments where article_id=#{id}")
     List<ArticleComments> getArticleCommentById(Long id);
 
     //根据id获取评论
