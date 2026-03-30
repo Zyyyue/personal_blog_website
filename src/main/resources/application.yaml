@@ -2,6 +2,11 @@ server:
   port: 8081
 
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
   application:
     name: Personal-Blog-Website
   datasource:
@@ -16,14 +21,15 @@ spring:
     host: smtp.qq.com
     port: 587
     username: 3467884929@qq.com
-    password: your-email-password
+    password: ksexqkqbifbjdcaa
+    default-encoding: UTF-8
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-    default-encoding: UTF-8
+            required: true
 
 # MyBatis 配置
 mybatis:
@@ -31,7 +37,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
-# 网站配置 (对应 WebsiteProperties)
+# 网站配置
 xixi:
   website:
     title: 神になる代償は何ですか？
@@ -39,21 +45,15 @@ xixi:
     admin: https://admin.xixi.cc
     cv: https://xixi.cc/cv
     blog: https://xixi.cc/blog
-
-  # 邮件配置 (对应 EmailProperties)
   email:
     personal: xixi
     from: 3467884929@qq.com
-
-# JWT 配置 (对应 JwtProperties)
   jwt:
-    secret-key: "your-jwt-secret-key"
+    secret-key: "BOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOYBOY"
     ttl: 1440
     token-name: Authorization
-
-# 阿里云 OSS 配置 (请在 security.env 中配置)
-#  alioss:
-#    endpoint: ${ALI_OSS_ENDPOINT}
-#    access-key-id: ${ALI_OSS_ACCESS_KEY_ID}
-#    access-key-secret: ${ALI_OSS_ACCESS_KEY_SECRET}
-#    bucket-name: ${ALI_OSS_BUCKET_NAME}
+  alioss:
+    endpoint: ${ALI_OSS_ENDPOINT}
+    access-key-id: ${ALI_OSS_ACCESS_KEY_ID}
+    access-key-secret: ${ALI_OSS_ACCESS_KEY_SECRET}
+    bucket-name: ${ALI_OSS_BUCKET_NAME}
