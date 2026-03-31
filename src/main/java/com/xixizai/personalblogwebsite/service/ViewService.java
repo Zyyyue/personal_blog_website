@@ -7,6 +7,7 @@ import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -16,5 +17,5 @@ public interface ViewService {
     Result batchDeleteViewRecords(List<Long> ids) throws BatchDeleteViewRecordsException;
 
     //添加浏览记录
-    void addViewRecord(Views view) throws AddOperationException;
+    void addViewRecord(Views view, HttpServletRequest request) throws AddOperationException;
 }

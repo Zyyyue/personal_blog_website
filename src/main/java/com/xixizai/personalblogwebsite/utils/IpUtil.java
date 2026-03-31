@@ -156,4 +156,24 @@ public class IpUtil {
             return "127.0.0.1";
         }
     }
+
+    /**
+     * 根据IP获取经纬度（高德地图API）
+     */
+    public static Map<String, Double> getLatLngByIp(String ip, String amapKey) {
+        // TODO: 实现实际的API调用
+        Map<String, Double> result = new HashMap<>();
+        result.put("longitude", 116.397128);
+        result.put("latitude", 39.916527);
+        return result;
+    }
+
+    /**
+     * 一站式获取：从request直接获取经纬度
+     */
+    public static Map<String, Double> getLocationFromRequest(HttpServletRequest request, String amapKey) {
+        String ip = getClientIp(request);
+        return getLatLngByIp(ip, amapKey);
+    }
+
 }

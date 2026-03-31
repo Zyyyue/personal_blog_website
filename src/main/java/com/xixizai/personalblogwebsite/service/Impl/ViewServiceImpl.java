@@ -8,13 +8,20 @@ import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.ViewMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Views;
+import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ViewService;
+import com.xixizai.personalblogwebsite.service.VisitorService;
+import com.xixizai.personalblogwebsite.utils.IpUtil;
+import com.xixizai.personalblogwebsite.utils.UserAgentUtil;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ViewServiceImpl implements ViewService {
@@ -22,6 +29,15 @@ public class ViewServiceImpl implements ViewService {
 
     @Resource
     private ViewMapper viewMapper;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    private VisitorService visitorService;
+
+    @Resource
+    private UserAgentUtil userAgentUtil;
 
     /**
      * 批量删除浏览记录
@@ -88,7 +104,7 @@ public class ViewServiceImpl implements ViewService {
      * @throws AddOperationException
      */
     @Override
-    public void addViewRecord(Views views) throws AddOperationException {
+    public void addViewRecord(Views views, HttpServletRequest request) throws AddOperationException {
         try{
 
             //如果传进来的参数为空添加失败
@@ -96,6 +112,41 @@ public class ViewServiceImpl implements ViewService {
                 throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
             }
 
+            //根据请求获取游客的id
+            Long visitorIdByRequest = visitorService.getVisitorIdByRequest(request);
+            if(visitorIdByRequest==null){
+                //如果查找出来为空,说明这是一个新访客，需要创建
+                Visitors visitor=new Visitors();
+                String clientIp = IpUtil.getClientIp(request);
+                if(IpUtil.isLocalIp(clientIp)){
+                    //如果是本地ip,就转化,这里获取到了ip
+                    clientIp = IpUtil.getLocalHostIp();
+                }
+                Map<String, String> geoInfo = IpUtil.getGeoInfo(clientIp);
+                //获取国家省份城市
+                String country = geoInfo.get("country");
+                String province=geoInfo.get("province");
+                String city=geoInfo.get("city");
+                //获取sessionId
+                String sessionId = request.getSession().getId();
+                //获取用户代理
+                String userAgentString = request.getHeader("User-Agent");
+                String browserName = userAgentUtil.getBrowserName(userAgentString);
+                String osName = userAgentUtil.getOsName(browserName);
+
+                visitor.builder()
+                        .country(country)
+                        .province(province)
+                        .city(city)
+                        .sessionId(sessionId)
+                        .userAgent(osName)
+                        .ip(clientIp)
+                        .build();
+
+
+                visitorService.addVisitors(visitor,request);
+            }
+            views.setId(visitorIdByRequest);
             viewMapper.addViewRecord(views);
 
 

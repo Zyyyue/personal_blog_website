@@ -346,10 +346,8 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
                 //如果没有key的话
                 stringRedisTemplate.opsForValue().set(key,"1",VIEW_LIMIT_SECONDS, TimeUnit.SECONDS);
                 //这本书的浏览量+1
-                Views view =Views.builder()
-
-                                .build();
-                viewService.addViewRecord(view);
+                Views view =new Views();
+                viewService.addViewRecord(view,request);
 
             }
             //提交评论
