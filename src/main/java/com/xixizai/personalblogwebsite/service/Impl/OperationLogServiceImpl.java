@@ -2,7 +2,6 @@ package com.xixizai.personalblogwebsite.service.Impl;
 
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteOperationLogsException;
-import com.xixizai.personalblogwebsite.exception.BatchDeleteRssSubscriptionException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.OperationLogMapper;
 import com.xixizai.personalblogwebsite.pojo.result.Result;

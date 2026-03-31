@@ -1,6 +1,5 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteViewRecordsException;
@@ -157,8 +156,17 @@ public class ViewServiceImpl implements ViewService {
                 //添加访客
                 visitorService.addVisitors(visitor,request);
 
-                //重新再取一次
-                visitorIdByRequest = visitorService.getVisitorIdByRequest(request);
+                //获取访客从新建的visitor对象中获取
+                visitorIdByRequest = visitor.getId();
+            }else{
+                //老访客调用 addVisitors增加total_views
+                Visitors visitor = new Visitors();
+                String clientIp = IpUtil.getClientIp(request);
+                if(IpUtil.isLocalIp(clientIp)){
+                    clientIp = IpUtil.getLocalHostIp();
+                }
+                visitor.setIp(clientIp);
+                visitorService.addVisitors(visitor, request);
             }
             //获取访客Id
             views.setVisitorId(visitorIdByRequest);

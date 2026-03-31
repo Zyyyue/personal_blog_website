@@ -2,10 +2,12 @@ package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.vo.ArticleArchiveItemVO;
-import com.xixizai.personalblogwebsite.pojo.vo.ArticleArchiveVO;
 import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleDetailVO;
 import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleVO;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 

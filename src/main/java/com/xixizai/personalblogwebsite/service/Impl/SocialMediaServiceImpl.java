@@ -8,11 +8,9 @@ import com.xixizai.personalblogwebsite.pojo.dto.SocialMediaDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.SocialMedia;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.SocialMediaService;
-import org.apache.catalina.LifecycleState;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.mail.Message;
 import java.util.ArrayList;
 import java.util.List;
 

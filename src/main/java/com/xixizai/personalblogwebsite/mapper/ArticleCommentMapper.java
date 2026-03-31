@@ -1,7 +1,5 @@
 package com.xixizai.personalblogwebsite.mapper;
 
-import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
-import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

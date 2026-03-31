@@ -3,7 +3,6 @@ package com.xixizai.personalblogwebsite.service.Impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
-import com.xixizai.personalblogwebsite.constant.StatusConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.AdminMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.*;
@@ -21,7 +20,6 @@ import com.xixizai.personalblogwebsite.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.annotation.Resource;
 

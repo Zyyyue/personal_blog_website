@@ -2,7 +2,6 @@ package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
 import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.javassist.compiler.ast.Visitor;
 
 import java.util.List;
 

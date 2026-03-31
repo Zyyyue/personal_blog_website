@@ -5,7 +5,6 @@ import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.constant.StatusConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.MessageMapper;
-import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Messages;
 import com.xixizai.personalblogwebsite.pojo.result.Result;

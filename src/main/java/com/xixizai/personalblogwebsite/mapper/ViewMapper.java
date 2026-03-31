@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import javax.swing.text.View;
 import java.util.List;
 
 @Mapper

@@ -8,17 +8,13 @@ import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.VisitorService;
 import com.xixizai.personalblogwebsite.utils.FingerprintGeneratorUtil;
-import com.xixizai.personalblogwebsite.utils.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j

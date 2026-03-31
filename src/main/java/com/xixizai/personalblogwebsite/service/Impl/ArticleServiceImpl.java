@@ -16,11 +16,9 @@ import com.xixizai.personalblogwebsite.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.test.annotation.Repeat;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

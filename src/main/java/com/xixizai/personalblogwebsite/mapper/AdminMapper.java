@@ -1,6 +1,5 @@
 package com.xixizai.personalblogwebsite.mapper;
 
-import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Admin;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

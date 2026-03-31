@@ -4,7 +4,6 @@ import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.RssSubscriptionMapper;
-import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.RssSubscriptions;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.RssSubscriptionService;
