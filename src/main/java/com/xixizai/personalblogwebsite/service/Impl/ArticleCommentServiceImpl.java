@@ -6,12 +6,15 @@ import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.constant.StatusConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.ArticleCommentMapper;
+import com.xixizai.personalblogwebsite.mapper.ArticleMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
 import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleCommentService;
+import com.xixizai.personalblogwebsite.service.ArticleService;
 import com.xixizai.personalblogwebsite.service.ViewService;
 import com.xixizai.personalblogwebsite.utils.IpUtil;
 import com.xixizai.personalblogwebsite.utils.MarkdownUtil;
@@ -19,6 +22,7 @@ import com.xixizai.personalblogwebsite.utils.UserAgentUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +51,9 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     @Resource
     private ViewService viewService;
 
+    @Resource
+    private ArticleMapper articleMapper;
+
     /**
      * 根据文章id查询评论
      * @param id
@@ -55,6 +62,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
      * @throws ArticleNotFoundException
      * @throws GetOptsException
      */
+    @Transactional
     @Override
     public Result getArticleCommentById(Long id) throws PassedParameterException, ArticleNotFoundException, GetOptsException {
 
@@ -277,6 +285,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
      * @return
      * @throws AddOperationException
      */
+    @Transactional
     @Override
     public Result submitComment(ArticleCommentDTO articleCommentDTO,HttpServletRequest request) throws AddOperationException {
         try{
@@ -347,6 +356,9 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
                 stringRedisTemplate.opsForValue().set(key,"1",VIEW_LIMIT_SECONDS, TimeUnit.SECONDS);
                 //这本书的浏览量+1
                 Views view =new Views();
+                Long articleId=articleCommentDTO.getArticleId();
+                ArticleDTO articleById = articleMapper.findArticleById(articleId);
+                view.setPageTitle(articleById.getTitle());
                 viewService.addViewRecord(view,request);
 
             }

@@ -7,6 +7,7 @@ import com.xixizai.personalblogwebsite.mapper.VisitorMapper;
 import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.VisitorService;
+import com.xixizai.personalblogwebsite.utils.FingerprintGeneratorUtil;
 import com.xixizai.personalblogwebsite.utils.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,11 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Resource
     private VisitorMapper visitorMapper;
+
+    @Resource
+    private FingerprintGeneratorUtil fingerprintGeneratorUtil;
+
+
 
     /**
      * 批量封禁访客
@@ -157,8 +164,23 @@ public class VisitorServiceImpl implements VisitorService {
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
 
+            String fingerprint = fingerprintGeneratorUtil.generateSimple(request);
+
+            // 根据指纹查询是否存在
+            Visitors existingVisitor = visitorMapper.findByFingerprint(fingerprint);
+
+            if (existingVisitor != null) {
+                // 如果已存在，更新访问次数,更新时间
+                existingVisitor.setFingerprint(fingerprint);
+                existingVisitor.setTotalViews(existingVisitor.getTotalViews() + 1);
+                visitorMapper.updateVisitor(existingVisitor);
+                visitors.setId(existingVisitor.getId());
+                return;
+            }
+
+            visitors.setFingerprint(fingerprint);
             visitorMapper.addVisitors(visitors);
-            log.info("添加访客成功");
+            log.info("添加访客成功，id={}", visitors.getId());
         }catch (Exception exception){
             exception.printStackTrace();
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
@@ -179,19 +201,12 @@ public class VisitorServiceImpl implements VisitorService {
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
 
-            String clientIp = IpUtil.getClientIp(request);
-            if(IpUtil.isLocalIp(clientIp)){
-                clientIp=IpUtil.getLocalHostIp();
+            String fingerprint = fingerprintGeneratorUtil.generateSimple(request);
+            Visitors visitor = visitorMapper.findByFingerprint(fingerprint);
+            if(visitor.getId()!=null){
+                return visitor.getId();
             }
-            Map<String, String> geoInfo = IpUtil.getGeoInfo(clientIp);
-            String country = geoInfo.get("country");
-            String province=geoInfo.get("province");
-            String city=geoInfo.get("city");
-            String sessionId=request.getSession().getId();
-
-            Long id=visitorMapper.getVisitorIdByRequest(sessionId,clientIp);
-            return id;
-
+            throw new GetOptsException(MessageConstant.ID_NOT_FOUND);
         }catch (Exception exception){
             exception.printStackTrace();
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);

@@ -1,12 +1,11 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteViewRecordsException;
-import com.xixizai.personalblogwebsite.exception.BatchUnblockVisitorsException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.ViewMapper;
-import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -14,6 +13,7 @@ import com.xixizai.personalblogwebsite.service.ViewService;
 import com.xixizai.personalblogwebsite.service.VisitorService;
 import com.xixizai.personalblogwebsite.utils.IpUtil;
 import com.xixizai.personalblogwebsite.utils.UserAgentUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +38,9 @@ public class ViewServiceImpl implements ViewService {
 
     @Resource
     private UserAgentUtil userAgentUtil;
+
+    @Value("${amap.api.key}")
+    private String amapKey;
 
     /**
      * 批量删除浏览记录
@@ -133,22 +136,44 @@ public class ViewServiceImpl implements ViewService {
                 String userAgentString = request.getHeader("User-Agent");
                 String browserName = userAgentUtil.getBrowserName(userAgentString);
                 String osName = userAgentUtil.getOsName(browserName);
+                //获取经纬度
 
-                visitor.builder()
+                Map<String, String> locationFromRequest = IpUtil.getGeoInfo(clientIp);
+                String longitude = locationFromRequest.get("longitude");
+                String latitude = locationFromRequest.get("latitude");
+
+
+                visitor=visitor.builder()
                         .country(country)
                         .province(province)
                         .city(city)
                         .sessionId(sessionId)
                         .userAgent(osName)
                         .ip(clientIp)
+                        .longitude(longitude)
+                        .latitude(latitude)
                         .build();
 
-
+                //添加访客
                 visitorService.addVisitors(visitor,request);
-            }
-            views.setId(visitorIdByRequest);
-            viewMapper.addViewRecord(views);
 
+                //重新再取一次
+                visitorIdByRequest = visitorService.getVisitorIdByRequest(request);
+            }
+            //获取访客Id
+            views.setVisitorId(visitorIdByRequest);
+            //获取用户代理
+            String userAgentString = request.getHeader("User-Agent");
+            String browserName = userAgentUtil.getBrowserName(userAgentString);
+            String osName = userAgentUtil.getOsName(browserName);
+            views.setUserAgent(osName);
+            //获取ip地址
+            String clientIp=IpUtil.getClientIp(request);
+            if(IpUtil.isLocalIp(clientIp)){
+                clientIp=IpUtil.getLocalHostIp();
+            }
+            views.setIpAddress(clientIp);
+            viewMapper.addViewRecord(views);
 
         }catch (Exception exception){
             exception.printStackTrace();

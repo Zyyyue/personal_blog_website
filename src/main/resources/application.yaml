@@ -56,8 +56,8 @@ xixi:
     endpoint: ${ALI_OSS_ENDPOINT}
     access-key-id: ${ALI_OSS_ACCESS_KEY_ID}
     access-key-secret: ${ALI_OSS_ACCESS_KEY_SECRET}
-
 #高德地图key
 amap:
   api:
     key: d11d678317c461e4b0bd978ac962dea7
+    url: https://restapi.amap.com/v5/ip

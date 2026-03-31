@@ -4,9 +4,13 @@ import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.ArticleNotFoundException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.mapper.ArticleMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
+import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleCommentService;
+import com.xixizai.personalblogwebsite.service.ViewService;
 import com.xixizai.personalblogwebsite.utils.IpUtil;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +34,12 @@ public class ArticleCommentController {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+    @Resource
+    private ArticleMapper articleMapper;
+
+    @Resource
+    private ViewService viewService;
+
     /**
      * 获取评论列表
      * @param articleId
@@ -39,11 +49,17 @@ public class ArticleCommentController {
      * @throws GetOptsException
      */
     @GetMapping("/article/{articleId}")
-    public Result getComments(@PathVariable Long articleId,HttpServletRequest request) throws PassedParameterException, ArticleNotFoundException, GetOptsException {
+    public Result getComments(@PathVariable Long articleId,HttpServletRequest request) throws PassedParameterException, ArticleNotFoundException, GetOptsException, AddOperationException {
         String key = getKey(request, articleId);
         //如果这本书的key没了，可以重新设置key,时间1小时
         if(!stringRedisTemplate.hasKey(key)){
             stringRedisTemplate.opsForValue().set(key,"1",VIEW_LIMIT_SECONDS, TimeUnit.SECONDS);
+            //然后添加浏览量
+            //这本书的浏览量+1
+            Views view =new Views();
+            ArticleDTO articleById = articleMapper.findArticleById(articleId);
+            view.setPageTitle(articleById.getTitle());
+            viewService.addViewRecord(view,request);
         }
         return articleCommentService.getArticleCommentById(articleId);
     }
