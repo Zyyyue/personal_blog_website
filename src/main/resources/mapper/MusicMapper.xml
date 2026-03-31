@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!--这个写包名加上类名-->
-<mapper namespace="com.xixizai.personalblogwebsite.service.Impl.mapper.MusicMapper">
+<mapper namespace="com.xixizai.personalblogwebsite.mapper.MusicMapper">
 
     <!--    批量删除音乐-->
     <delete id="batchDeleteMusics">
