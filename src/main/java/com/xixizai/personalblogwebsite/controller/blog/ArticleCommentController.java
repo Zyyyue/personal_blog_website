@@ -4,8 +4,10 @@ import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.ArticleNotFoundException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.mapper.ArticleMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentEditDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -88,4 +90,28 @@ public class ArticleCommentController {
         String key=VIEW_LIMIT_PREFIX+":"+clientIp+":"+id;
         return key;
     }
+
+    /**
+     * 访客编辑评论
+     * @param articleCommentEditDTO
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @PutMapping("/edit")
+    public Result editComment(@RequestBody ArticleCommentEditDTO articleCommentEditDTO) throws UpdateOperationsException {
+        return articleCommentService.editComment(articleCommentEditDTO);
+    }
+
+    /**
+     * 删除评论
+     * @param id
+     * @param visitorId
+     * @return
+     * @throws Exception
+     */
+    @DeleteMapping("/{id}")
+    public Result deleteComment(@PathVariable Long id,@RequestParam Long visitorId) throws Exception {
+        return articleCommentService.deleteComment(id,visitorId);
+    }
+
 }

@@ -8,6 +8,7 @@ import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.ArticleCommentMapper;
 import com.xixizai.personalblogwebsite.mapper.ArticleMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentEditDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -369,6 +371,96 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
         }
 
+    }
+
+    /**
+     * 访客编辑评论
+     * @param articleCommentEditDTO
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @Override
+    public Result editComment(ArticleCommentEditDTO articleCommentEditDTO) throws UpdateOperationsException {
+        try{
+
+            if(articleCommentEditDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            Long id = articleCommentEditDTO.getId();
+            ArticleComments comment = articleCommentMapper.findArticleCommentById(id);
+
+            if(comment==null){
+                throw new Exception("该评论不存在");
+            }
+
+            if(!comment.getVisitorId().equals(articleCommentEditDTO.getVisitorId())){
+                throw new ValidationException("无权编辑此评论");
+            }
+
+            ArticleComments updateComment= new ArticleComments();
+            updateComment=updateComment.builder()
+                    .id(articleCommentEditDTO.getId())
+                    .content(articleCommentEditDTO.getContent())
+                    .build();
+            articleCommentEditDTO.setIsMarkdown(comment.getIsMarkdown());
+            if(articleCommentEditDTO.getIsMarkdown()!=null&&articleCommentEditDTO.getIsMarkdown()==1){
+                String toHtml = MarkdownUtil.toHtml(updateComment.getContent());
+                updateComment.setContentHtml(toHtml);
+            }else{
+                updateComment.setContentHtml(updateComment.getContent());
+            }
+            articleCommentMapper.updateContent(updateComment);
+            return Result.success("访客编辑评论成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
+        }
+    }
+
+    /**
+     * 访客删除评论
+     * @param id
+     * @param visitorId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Result deleteComment(Long id, Long visitorId) throws Exception {
+        try{
+
+            if(id==null||visitorId==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            ArticleComments comment = articleCommentMapper.findArticleCommentById(id);
+            if (comment == null) {
+                throw new ValidationException("评论不存在");
+            }
+            if (!comment.getVisitorId().equals(visitorId)) {
+                throw new ValidationException("无权删除此评论");
+            }
+
+            // 如果是根评论，级联删除所有子评论
+            if (comment.getRootId() == null || comment.getRootId() == 0) {
+                Integer childCount = articleCommentMapper.countByRootId(id);
+                if (childCount != null && childCount > 0) {
+                    articleCommentMapper.deleteByRootId(id);
+                    // 评论数减去子评论数
+                    for (int i = 0; i < childCount; i++) {
+                        articleCommentMapper.decrementCommentCount(comment.getArticleId());
+                    }
+                }
+            }
+
+            articleCommentMapper.deleteById(id);
+            // 文章评论数-1
+            articleCommentMapper.decrementCommentCount(comment.getArticleId());
+            return Result.success("访客删除评论成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new Exception("删除访客评论失败");
+        }
     }
 
     /**

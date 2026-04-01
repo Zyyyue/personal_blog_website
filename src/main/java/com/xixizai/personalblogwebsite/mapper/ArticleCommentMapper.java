@@ -1,9 +1,7 @@
 package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -31,4 +29,23 @@ public interface ArticleCommentMapper {
     //提交评论
     @Insert("insert into article_comments (article_id, root_id, parent_id, parent_nickname, content,  visitor_id, nickname, email_or_qq,  is_markdown, is_secret,is_notice, create_time, update_time,location,user_agent_browser,user_agent_os,is_approved,content_html) values (#{articleId},#{rootId},#{parentId},#{parentNickname},#{content},#{visitorId},#{nickname},#{emailOrQq},#{isMarkdown},#{isSecret},#{isNotice},now(),now(),#{location},#{userAgentBrowser},#{userAgentOs},0,#{contentHtml})")
     void submitComment(ArticleComments articleComments);
+
+    //访客编辑评论
+    void updateContent(ArticleComments updateComment);
+
+    //统计待审核评论数
+    @Select("select count(*) from article_comments where root_id=#{id}")
+    Integer countByRootId(Long id);
+
+    //根据根评论ID删除所有子评论
+    @Delete("delete from article_comments where root_id=#{id}")
+    void deleteByRootId(Long id);
+
+    //评论数-1(最小为0)
+    @Update("update articles set comment_count = case when comment_count > 0 then comment_count - 1 else 0 end where id = #{articleId}")
+    void decrementCommentCount(Long articleId);
+
+    //删除单挑评论
+    @Delete("delete from article_comments where id = #{id}")
+    void deleteById(Long id);
 }

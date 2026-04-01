@@ -14,7 +14,8 @@
         </foreach>
     </update>
 
-<!--    批量删除评论-->
+
+    <!--    批量删除评论-->
     <delete id="batchDeleteArticleComment">
         delete  from article_comments
         where id in
@@ -22,4 +23,12 @@
             #{id}
         </foreach>
     </delete>
+
+    <!--    访客编辑评论-->
+    <update id="updateContent">
+        update article_comments set
+        content_html=#{contentHtml},is_edited=1,
+        content=#{content},update_time=now()
+        where id=#{id}
+    </update>
 </mapper>

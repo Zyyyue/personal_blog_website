@@ -3,6 +3,7 @@ package com.xixizai.personalblogwebsite.service;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentEditDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,10 @@ public interface ArticleCommentService {
 
     //用户提交评论
     Result submitComment(ArticleCommentDTO articleCommentDTO,HttpServletRequest request) throws AddOperationException;
+
+    //访客编辑评论
+    Result editComment(ArticleCommentEditDTO articleCommentEditDTO) throws UpdateOperationsException;
+
+    //访客删除评论
+    Result deleteComment(Long id, Long visitorId) throws Exception;
 }
