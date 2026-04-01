@@ -13,6 +13,8 @@ public interface PersonalInforService {
     //获取个人信息
     Result getPersonalInfor() throws GetOptsException;
 
+
+
     //更新个人信息
     Result updatePersonalInfor(PersonalInfoDTO personalInfoDTO) throws PassedParameterException, UpdateOperationsException;
 }

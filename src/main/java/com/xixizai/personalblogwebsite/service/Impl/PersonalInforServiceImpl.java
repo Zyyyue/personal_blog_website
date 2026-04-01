@@ -44,7 +44,13 @@ public class PersonalInforServiceImpl implements PersonalInforService {
 
     }
 
-
+    /**
+     * 更新个人信息
+     * @param personalInfoDTO
+     * @return
+     * @throws PassedParameterException
+     * @throws UpdateOperationsException
+     */
     @Override
     public Result updatePersonalInfor(PersonalInfoDTO personalInfoDTO) throws PassedParameterException, UpdateOperationsException {
 
