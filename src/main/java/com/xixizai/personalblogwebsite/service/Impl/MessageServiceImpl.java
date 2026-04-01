@@ -389,4 +389,41 @@ public class MessageServiceImpl implements MessageService {
         }
 
     }
+
+    /**
+     * 删除留言
+     * @param id
+     * @param visitorId
+     * @return
+     * @throws Exception
+     */
+    @Transactional
+    @Override
+    public Result deleteMessage(Long id, Long visitorId) throws Exception {
+       try{
+
+           if(id==null||visitorId==null){
+               throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+           }
+
+           if(id<=0||visitorId<=0){
+               throw new IdNotValidException(MessageConstant.ID_NOT_VALID);
+           }
+            Messages messages=messageMapper.findMessagesById(id);
+            //如果是根留言删除连结所有子留言
+            if(messages.getRootId()==null||messages.getRootId()==0){
+              Integer childCount= messageMapper.countByRootId(id);
+              if(childCount!=null&&childCount>0){
+                messageMapper.deleteByRootId(id);
+              }
+            }
+            messageMapper.deleteById(id);
+            return Result.success("删除成功");
+       }catch (Exception exception){
+
+           exception.printStackTrace();
+           throw new Exception("删除留言失败");
+
+       }
+    }
 }

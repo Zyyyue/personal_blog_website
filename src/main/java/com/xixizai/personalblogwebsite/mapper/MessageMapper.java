@@ -4,10 +4,7 @@ import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageEditDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Messages;
 import com.xixizai.personalblogwebsite.pojo.vo.MessageVO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -38,4 +35,16 @@ public interface MessageMapper {
     //编辑留言
     @Update("update messages set is_markdown=#{isMarkdown},visitor_id=#{visitorId},content=#{content},content_html=#{contentHtml},update_time =now()  where id=#{id}")
     void editMessge(Messages messages);
+
+    //统计根目录下的子留言数量
+    @Select("select  count(*) from messages where root_id=#{id}")
+    Integer countByRootId(Long id);
+
+    //删除根留言id下的所有子留言
+    @Delete("delete from messages where root_id=#{id}")
+    void deleteByRootId(Long id);
+
+    //删除该留言
+    @Delete("delete from messages where id=#{id}")
+    void deleteById(Long id);
 }

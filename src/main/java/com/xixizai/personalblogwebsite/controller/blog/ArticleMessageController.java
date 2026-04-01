@@ -52,4 +52,16 @@ public class ArticleMessageController {
         return messageService.editMessage(messageEditDTO);
     }
 
+    /**
+     * 删除留言
+     * @param id
+     * @param visitorId
+     * @return
+     * @throws Exception
+     */
+    @DeleteMapping("/{id}")
+    public Result deleteMessage(@PathVariable Long id,@RequestParam Long visitorId) throws Exception {
+        return messageService.deleteMessage(id,visitorId);
+    }
+
 }

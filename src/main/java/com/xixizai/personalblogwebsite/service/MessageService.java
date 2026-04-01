@@ -35,4 +35,7 @@ public interface MessageService {
 
     //编辑留言
     Result editMessage(MessageEditDTO messageEditDTO) throws Exception;
+
+    //删除留言
+    Result deleteMessage(Long id, Long visitorId) throws Exception;
 }
