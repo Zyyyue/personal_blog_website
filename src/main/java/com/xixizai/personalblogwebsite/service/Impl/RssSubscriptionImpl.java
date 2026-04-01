@@ -4,10 +4,12 @@ import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.RssSubscriptionMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.RssSubscriptions;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.RssSubscriptionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -140,6 +142,33 @@ public class RssSubscriptionImpl implements RssSubscriptionService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new BatchDeleteRssSubscriptionException(MessageConstant.BATCH_DELETE_RSSSUBSCRIPTIONS_FAILSURE);
+        }
+    }
+
+    /**
+     * 添加订阅
+     * @param rssSubscriptionDTO
+     * @return
+     * @throws AddOperationException
+     */
+    @Transactional
+    @Override
+    public Result addRssSubscription(RssSubscriptionDTO rssSubscriptionDTO) throws AddOperationException {
+        try{
+
+            if(rssSubscriptionDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(rssSubscriptionMapper.findByVisitorId(rssSubscriptionDTO.getVisitorId())!=null){
+                return Result.error("添加失败");
+            }
+
+            rssSubscriptionMapper.addRssSubscription(rssSubscriptionDTO);
+            return Result.success("添加成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
         }
     }
 

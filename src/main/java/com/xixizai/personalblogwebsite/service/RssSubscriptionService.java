@@ -1,6 +1,7 @@
 package com.xixizai.personalblogwebsite.service;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteRssSubscriptionException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
@@ -24,4 +25,7 @@ public interface RssSubscriptionService {
 
     //批量删除订阅
     Result batchDeleteRssSubscription(List<Long> ids) throws BatchDeleteRssSubscriptionException;
+
+    //添加订阅
+    Result addRssSubscription(RssSubscriptionDTO rssSubscriptionDTO) throws AddOperationException;
 }

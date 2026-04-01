@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.RssSubscriptions;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -24,4 +26,12 @@ public interface RssSubscriptionMapper {
 
     //批量删除订阅
     void batchDeleteRssSubscriptions(List<Long> ids);
+
+    //添加订阅
+    @Insert("insert into rss_subscriptions (email,visitor_id,subscribe_time,nickname) values (#{email},#{visitorId},now(),#{nickname})")
+    void addRssSubscription(RssSubscriptionDTO rssSubscriptionDTO);
+
+    //根据visitorId查找
+    @Select("select * from rss_subscriptions where visitor_id=#{visitorId}")
+    RssSubscriptions findByVisitorId(Long visitorId);
 }
