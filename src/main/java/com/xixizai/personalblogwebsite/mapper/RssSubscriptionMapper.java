@@ -34,4 +34,7 @@ public interface RssSubscriptionMapper {
     //根据visitorId查找
     @Select("select * from rss_subscriptions where visitor_id=#{visitorId}")
     RssSubscriptions findByVisitorId(Long visitorId);
+
+    @Update("update rss_subscriptions set is_active=0,un_subscribe_time=now() where email=#{email}")
+    void unSubscribe(String email);
 }

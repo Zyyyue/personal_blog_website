@@ -173,4 +173,21 @@ public class RssSubscriptionImpl implements RssSubscriptionService {
     }
 
 
+    @Override
+    public Result unSubscribe(String email) throws UpdateOperationsException {
+        try{
+
+            if(email==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            rssSubscriptionMapper.unSubscribe(email);
+            return Result.success("取消订阅成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
+        }
+    }
+
+
 }

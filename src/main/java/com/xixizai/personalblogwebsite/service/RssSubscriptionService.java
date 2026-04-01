@@ -28,4 +28,7 @@ public interface RssSubscriptionService {
 
     //添加订阅
     Result addRssSubscription(RssSubscriptionDTO rssSubscriptionDTO) throws AddOperationException;
+
+    //取消订阅
+    Result unSubscribe(String email) throws UpdateOperationsException;
 }

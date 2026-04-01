@@ -1,13 +1,11 @@
 package com.xixizai.personalblogwebsite.controller.blog;
 
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.RssSubscriptionService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -29,5 +27,13 @@ public class RssSubscriptionController {
         return rssSubscriptionService.addRssSubscription(rssSubscriptionDTO);
     }
 
-
+    /**
+     * 取消订阅
+     * @param email
+     * @return
+     */
+    @PutMapping()
+    public Result unSubscribe(@RequestParam String email) throws UpdateOperationsException {
+        return rssSubscriptionService.unSubscribe(email);
+    }
 }
