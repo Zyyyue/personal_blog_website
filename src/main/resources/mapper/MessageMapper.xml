@@ -22,4 +22,10 @@
         </foreach>
     </delete>
 
+    <!--    获取留言列表-->
+    <select id="getMessagesList" resultType="com.xixizai.personalblogwebsite.pojo.vo.MessageVO">
+        select * from messages
+        where visitor_id=#{visitorId}
+    </select>
+
 </mapper>

@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Messages;
+import com.xixizai.personalblogwebsite.pojo.vo.MessageVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -19,6 +21,15 @@ public interface MessageMapper {
 
     //批量删除留言
     void batchDeleteMessages(List<Long> ids);
+
+    //回复留言
     @Insert("insert into messages (parent_id,root_id,parent_nickname,content,content_html,is_markdown,is_admin_reply,is_edited,is_approved,update_time) values (#{parentId},#{rootId},#{parentNickname},#{content},#{contentHtml},#{isMarkdown},#{isAdminReply},#{isEdited},#{isApproved},now()) ")
     void adminReplyMessage(Messages messages);
+
+    //添加留言
+    @Insert("insert into messages (content, content_html, root_id, parent_id, parent_nickname, visitor_id, nickname, email_or_qq, location, user_agent_os, user_agent_browser, create_time, update_time,is_markdown,is_secret,is_notice) values (#{content},#{contentHtml},#{rootId},#{parentId},#{parentNickname},#{visitorId},#{nickname},#{emailOrQq},#{location},#{userAgentOs},#{userAgentBrowser},now(),now(),#{isMarkdown},#{isSecret},#{isNotice})")
+    void submitMessage(Messages messages);
+
+    //获取留言列表
+    List<MessageVO> getMessagesList(Long visitorId);
 }

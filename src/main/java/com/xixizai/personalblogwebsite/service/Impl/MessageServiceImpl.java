@@ -1,16 +1,20 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.constant.StatusConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.MessageMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Messages;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.MessageVO;
 import com.xixizai.personalblogwebsite.service.MessageService;
 import com.xixizai.personalblogwebsite.utils.IpUtil;
 import com.xixizai.personalblogwebsite.utils.MarkdownUtil;
+import com.xixizai.personalblogwebsite.utils.UserAgentUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,6 +33,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Resource
     private MessageMapper messageMapper;
+
+    @Resource
+    private UserAgentUtil userAgentUtil;
 
     /**
      * 批量审核留言
@@ -148,6 +156,13 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 
+    /**
+     * 用户回复留言
+     * @param messageReplyDTO
+     * @param request
+     * @return
+     * @throws AdminReplyMessageException
+     */
     @Override
     public Result adminReplyMessage(MessageReplyDTO messageReplyDTO, HttpServletRequest request) throws AdminReplyMessageException {
         try{
@@ -214,5 +229,118 @@ public class MessageServiceImpl implements MessageService {
             throw new AdminReplyMessageException(MessageConstant.REPLY_MESSAGE_FAILSURE);
         }
 
+    }
+
+
+    /**
+     * 提交留言
+     * @param messageDTO
+     * @return
+     * @throws AddOperationException
+     */
+    @Transactional
+    @Override
+    public Result submitMessage(MessageDTO messageDTO,HttpServletRequest request) throws AddOperationException {
+       try{
+
+           if(messageDTO==null){
+               throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+           }
+            Messages messages=new Messages();
+           //判断是否是markdown,然后处理contentHtml
+           Integer isMarkdown = messageDTO.getIsMarkdown();
+           String contentHtml = messages.getContentHtml();
+           if(MarkdownUtil.isHtml(messageDTO.getContent())){
+                isMarkdown=0;
+                contentHtml=messageDTO.getContent();
+            }else{
+                isMarkdown=1;
+                contentHtml=MarkdownUtil.toHtml(messageDTO.getContent());
+            }
+            //获取ip地址操作系统和使用的浏览器
+           String clientIp = IpUtil.getClientIp(request);
+           if(IpUtil.isLocalIp(clientIp)){
+               clientIp=IpUtil.getLocalHostIp();
+           }
+           //获取地址
+           Map<String, String> geoInfo = IpUtil.getGeoInfo(clientIp);
+           String country = geoInfo.get("country");
+           String city = geoInfo.get("city");
+           String location=country+"-"+city;
+           //获取操作系统和浏览器
+           String userAgentString = request.getHeader("User-Agent");
+           String browserName = userAgentUtil.getBrowserName(userAgentString);
+           String osName = userAgentUtil.getOsName(userAgentString);
+
+
+           messages=messages.builder()
+                    .content(messageDTO.getContent())
+                    .contentHtml(contentHtml)
+                    .isMarkdown(isMarkdown)
+                    .rootId(messageDTO.getRootId())
+                    .parentId(messageDTO.getParentId())
+                    .parentNickname(messageDTO.getParentNickname())
+                    .visitorId(messageDTO.getVisitorId())
+                    .nickname(messageDTO.getNickname())
+                    .emailOrQq(messageDTO.getEmailOrQq())
+                    .isSecret(messageDTO.getIsSecret())
+                    .isNotice(messageDTO.getIsNotice())
+                   .location(location)
+                   .userAgentBrowser(browserName)
+                   .userAgentOs(osName)
+                            .build();
+            messageMapper.submitMessage(messages);
+            return Result.success("提交成功");
+       }catch (Exception exception){
+        exception.printStackTrace();
+        throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+       }
+
+    }
+
+    /**
+     * 获取留言列表
+     * @param visitorId
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result getMessagesList(Long visitorId) throws GetOptsException {
+        try{
+
+            if(visitorId==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(visitorId<=0){
+                throw new PassedParameterException(MessageConstant.ID_NOT_VALID);
+            }
+
+            List<MessageVO>list=messageMapper.getMessagesList(visitorId);
+
+            //构造树结构
+            List<MessageVO>rootMessages=new ArrayList<>();
+            Map<Long,MessageVO>messageMap=list.stream()
+                    .collect(Collectors.toMap(MessageVO::getId,m->m));
+
+            for(MessageVO msg:list){
+                if (msg.getRootId() == null || msg.getRootId() == 0) {
+                    msg.setChildren(new ArrayList<>());
+                    rootMessages.add(msg);
+                } else {
+                    MessageVO rootMsg = messageMap.get(msg.getRootId());
+                    if (rootMsg != null) {
+                        if (rootMsg.getChildren() == null) {
+                            rootMsg.setChildren(new ArrayList<>());
+                        }
+                        rootMsg.getChildren().add(msg);
+                    }
+                }
+            }
+            return Result.success(rootMessages);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
     }
 }

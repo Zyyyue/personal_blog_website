@@ -1,5 +1,7 @@
 package com.xixizai.personalblogwebsite.service;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
+import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.AdminReplyMessageException;
 import com.xixizai.personalblogwebsite.exception.BatchApproveMessageException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteMessageException;
@@ -23,4 +25,10 @@ public interface MessageService {
 
     //管理员回复留言
     Result adminReplyMessage(MessageReplyDTO messageReplyDTO, HttpServletRequest request) throws AdminReplyMessageException;
+
+    //提交留言
+    Result submitMessage(MessageDTO messageDTO,HttpServletRequest request) throws AddOperationException;
+
+    //获取留言列表
+    Result getMessagesList(Long visitorId) throws GetOptsException;
 }
