@@ -7,6 +7,7 @@ import com.xixizai.personalblogwebsite.constant.StatusConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.MessageMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.MessageEditDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Messages;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -342,5 +343,50 @@ public class MessageServiceImpl implements MessageService {
             exception.printStackTrace();
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
+    }
+
+    /**
+     * 编辑留言
+     * @param messageEditDTO
+     * @return
+     * @throws Exception
+     */
+    @Transactional
+    @Override
+    public Result editMessage(MessageEditDTO messageEditDTO) throws Exception {
+        try{
+
+            if(messageEditDTO==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+            Messages messagesById = messageMapper.findMessagesById(messageEditDTO.getId());
+            Integer isMarkdown = messagesById.getIsMarkdown();
+            Messages messages=new Messages();
+            String html=new String();
+            //处理content,contentHtml
+            if(MarkdownUtil.isHtml(messageEditDTO.getContent())){
+                html=messageEditDTO.getContent();
+                isMarkdown=0;
+            }else{
+                 html = MarkdownUtil.toHtml(messageEditDTO.getContent());
+                messages.setContentHtml(html);
+                isMarkdown=1;
+            }
+
+            messages=messages.builder()
+                    .isMarkdown(isMarkdown)
+                    .content(messageEditDTO.getContent())
+                    .visitorId(messageEditDTO.getVisitorId())
+                    .id(messageEditDTO.getId())
+                    .contentHtml(html)
+                            .build();
+
+            messageMapper.editMessge(messages);
+            return Result.success("编辑成功");
+        }catch(Exception exception){
+            exception.printStackTrace();
+            throw new Exception(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
+        }
+
     }
 }

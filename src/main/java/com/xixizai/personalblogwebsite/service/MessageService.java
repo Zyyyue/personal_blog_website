@@ -6,6 +6,7 @@ import com.xixizai.personalblogwebsite.exception.AdminReplyMessageException;
 import com.xixizai.personalblogwebsite.exception.BatchApproveMessageException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteMessageException;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.MessageEditDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import org.springframework.stereotype.Service;
@@ -31,4 +32,7 @@ public interface MessageService {
 
     //获取留言列表
     Result getMessagesList(Long visitorId) throws GetOptsException;
+
+    //编辑留言
+    Result editMessage(MessageEditDTO messageEditDTO) throws Exception;
 }

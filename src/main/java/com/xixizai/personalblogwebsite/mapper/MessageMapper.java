@@ -1,11 +1,13 @@
 package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
+import com.xixizai.personalblogwebsite.pojo.dto.MessageEditDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Messages;
 import com.xixizai.personalblogwebsite.pojo.vo.MessageVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -32,4 +34,8 @@ public interface MessageMapper {
 
     //获取留言列表
     List<MessageVO> getMessagesList(Long visitorId);
+
+    //编辑留言
+    @Update("update messages set is_markdown=#{isMarkdown},visitor_id=#{visitorId},content=#{content},content_html=#{contentHtml},update_time =now()  where id=#{id}")
+    void editMessge(Messages messages);
 }
