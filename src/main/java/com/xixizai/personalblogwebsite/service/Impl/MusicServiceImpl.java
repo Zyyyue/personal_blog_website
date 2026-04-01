@@ -7,6 +7,7 @@ import com.xixizai.personalblogwebsite.mapper.MusicMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.MusicDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Music;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.MusicVO;
 import com.xixizai.personalblogwebsite.service.MusicService;
 import org.springframework.stereotype.Service;
 
@@ -148,6 +149,26 @@ public class MusicServiceImpl implements MusicService {
             exception.printStackTrace();
             throw new BatchDeleteMusicsException(MessageConstant.BATCH_DELETE_MUSICS_FAILSURE);
         }
+    }
+
+
+    /**
+     * 获取可见音乐
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result getMusic() throws GetOptsException {
+       try{
+
+           List<MusicVO>list=musicMapper.getMusic();
+            return Result.success(list);
+
+       }catch (Exception exception){
+           exception.printStackTrace();
+           throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+       }
+
     }
 
 

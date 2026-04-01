@@ -2,27 +2,28 @@ package com.xixizai.personalblogwebsite.controller.blog;
 
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
-import com.xixizai.personalblogwebsite.service.ArticleFriendLinkService;
+import com.xixizai.personalblogwebsite.service.MusicService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-@RestController
-@RequestMapping("/blog/friendLink")
-public class ArticleFriendLinkController {
+@RestController("blogMusicController")
+@RequestMapping("/blog/music")
+public class MusicController {
 
     @Resource
-    private ArticleFriendLinkService articleFriendLinkService;
+    private MusicService musicService;
 
     /**
-     * 获取可见友链
+     * 获取可见音乐
      * @return
+     * @throws GetOptsException
      */
     @GetMapping()
-    public Result getFriendLink() throws GetOptsException {
-        return articleFriendLinkService.getFriendLink();
+    public Result getMusic() throws GetOptsException {
+        return musicService.getMusic();
     }
 
 }

@@ -6,15 +6,14 @@ import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageEditDTO;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.MessageService;
-import org.apache.http.client.HttpClient;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-@RestController
+@RestController("blogMessageController")
 @RequestMapping("/blog/message")
-public class ArticleMessageController {
+public class MessageController {
 
     @Resource
     private MessageService messageService;

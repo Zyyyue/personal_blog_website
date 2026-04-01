@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.MusicDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Music;
+import com.xixizai.personalblogwebsite.pojo.vo.MusicVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -25,4 +26,8 @@ public interface MusicMapper {
 
     //批量删除音乐
     void batchDeleteMusics(List<Long> ids);
+
+    //获取可见音乐
+    @Select("select * from music where is_visible=1")
+    List<MusicVO> getMusic();
 }

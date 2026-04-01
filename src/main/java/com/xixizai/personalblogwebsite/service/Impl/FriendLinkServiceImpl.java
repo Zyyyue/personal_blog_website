@@ -7,6 +7,7 @@ import com.xixizai.personalblogwebsite.mapper.FriendLinkMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.FriendLinkDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.FriendLinks;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.FriendLinkVO;
 import com.xixizai.personalblogwebsite.service.FriendLinkService;
 import org.springframework.stereotype.Service;
 
@@ -152,5 +153,26 @@ public class FriendLinkServiceImpl implements FriendLinkService {
             exception.printStackTrace();
             throw new BatchDeleteFriendLinksException(MessageConstant.BATCH_DELETE_FRIEND_LINKS_FAILSURE);
         }
+    }
+
+    /**
+     * 获取可见友链
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result getFriendLink() throws GetOptsException {
+        try{
+
+            List<FriendLinkVO>list=friendLinkMapper.getFriendLinkList();
+            if(list==null||list.isEmpty()){
+                return Result.error("友链获取失败");
+            }
+            return Result.success(list);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+
     }
 }

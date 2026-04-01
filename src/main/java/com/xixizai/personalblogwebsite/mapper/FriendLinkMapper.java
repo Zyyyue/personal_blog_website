@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.FriendLinkDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.FriendLinks;
+import com.xixizai.personalblogwebsite.pojo.vo.FriendLinkVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -30,4 +31,8 @@ public interface FriendLinkMapper {
 
     //批量删除友链
     void batchDeleteFriendLinks(List<Long> ids);
+
+    //获取可见友链
+    @Select("select * from friend_links where is_visible=1")
+    List<FriendLinkVO> getFriendLinkList();
 }

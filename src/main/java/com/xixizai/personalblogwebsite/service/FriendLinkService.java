@@ -24,4 +24,7 @@ public interface FriendLinkService {
 
     //批量删除友链
     Result batchDeleteFriendLinks(List<Long> ids) throws BatchDeleteFriendLinksException;
+
+    //获取友链
+    Result getFriendLink() throws GetOptsException;
 }

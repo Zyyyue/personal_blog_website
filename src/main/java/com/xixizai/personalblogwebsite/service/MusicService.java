@@ -24,4 +24,7 @@ public interface MusicService {
 
     //批量删除音乐
     Result batchDeleteMusics(List<Long> ids) throws BatchDeleteMusicsException;
+
+    //获取可见音乐
+    Result getMusic() throws GetOptsException;
 }
