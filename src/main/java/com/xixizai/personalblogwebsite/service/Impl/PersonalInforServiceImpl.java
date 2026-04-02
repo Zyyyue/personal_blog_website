@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
@@ -9,7 +10,9 @@ import com.xixizai.personalblogwebsite.mapper.PersonalInforMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.PersonalInfoDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.PersonalInfo;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.PersonalInfoVO;
 import com.xixizai.personalblogwebsite.service.PersonalInforService;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,7 +39,8 @@ public class PersonalInforServiceImpl implements PersonalInforService {
             if(personalInfor==null){
                 return Result.error("没有找到管理员");
             }
-            return Result.success(personalInfor);
+            PersonalInfoVO personalInfoVO = BeanUtil.toBean(personalInfor, PersonalInfoVO.class);
+            return Result.success(personalInfoVO);
         }catch (Exception exception){
             exception.printStackTrace();
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
