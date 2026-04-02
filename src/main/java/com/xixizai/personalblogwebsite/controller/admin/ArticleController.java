@@ -117,4 +117,17 @@ public class ArticleController {
         return articleService.pageQuery(page,pageSize,title,categoryId,isPublished);
     }
 
+    /**
+     * 根据关键词文章搜索
+     * @param page
+     * @param pageSize
+     * @param keyword
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/search")
+    public Result searchArticles(@RequestParam(defaultValue = "1")Integer page,@RequestParam (defaultValue = "10")Integer pageSize,@RequestParam String keyword) throws GetOptsException {
+        return articleService.searchArticles(page,pageSize,keyword);
+    }
+
 }

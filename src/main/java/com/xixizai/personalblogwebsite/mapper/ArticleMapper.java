@@ -86,4 +86,7 @@ public interface ArticleMapper {
 
     //分页查询文章
     List<ArticleVO> pageQuery(String title, Long categoryId, Integer isPublished);
+
+    //分页查询文章
+    List<ArticleVO> pageQuerySearch(String keyword);
 }

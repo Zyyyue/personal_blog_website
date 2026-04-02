@@ -393,4 +393,31 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
 
+
+    /**
+     * 文章搜索
+     * @param page
+     * @param pageSize
+     * @param keyword
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result searchArticles(Integer page, Integer pageSize, String keyword) throws GetOptsException {
+        try{
+            //使用 PageHelper 开启分页
+            PageHelper.startPage(page, pageSize);
+            log.info("开始搜索，page={}, pageSize={}, keyword={}", page, pageSize, keyword);
+            
+            //执行查询 - 使用 Page 接收结果
+            Page<ArticleVO> pageResult = (Page<ArticleVO>) articleMapper.pageQuerySearch(keyword);
+            log.info("查询完成，total={}, 结果数={}", pageResult.getTotal(), pageResult.getResult().size());
+            
+            return Result.success(new PageResult(pageResult.getTotal(), pageResult.getResult()));
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+    }
 }

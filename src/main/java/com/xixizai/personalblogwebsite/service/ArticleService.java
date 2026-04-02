@@ -39,4 +39,7 @@ public interface ArticleService {
 
     //分页查询文章列表
     Result pageQuery(Integer page, Integer pageSize, String title, Long categoryId, Integer isPublished) throws GetOptsException;
+
+    //文章搜索
+    Result searchArticles(Integer page, Integer pageSize, String keyword) throws GetOptsException;
 }

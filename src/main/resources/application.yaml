@@ -61,3 +61,15 @@ amap:
   api:
     key: d11d678317c461e4b0bd978ac962dea7
     url: https://restapi.amap.com/v5/ip
+# 开启 MyBatis SQL 日志
+logging:
+  level:
+    com.xixizai.personalblogwebsite.mapper: debug
+    com.github.pagehelper: debug
+
+
+# PageHelper 配置
+pagehelper:
+  reasonable: false
+  support-methods-arguments: true
+
