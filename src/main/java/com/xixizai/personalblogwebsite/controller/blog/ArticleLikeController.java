@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.controller.blog;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -38,6 +39,18 @@ public class ArticleLikeController {
     @DeleteMapping("/{articleId}")
     public Result cancleArticleLike(@PathVariable Long articleId,@RequestParam Long visitorId) throws UpdateOperationsException {
         return articleLikeService.cancleArticleLike(articleId,visitorId);
+    }
+
+    /**
+     * 检查点赞状态
+     * @param articleId
+     * @param visitorId
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/{articleId}")
+    public Result checkArticleLike(@PathVariable Long articleId,@RequestParam Long visitorId) throws GetOptsException {
+        return articleLikeService.checkArticleLike(articleId,visitorId);
     }
 
 }

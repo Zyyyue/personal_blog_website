@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.service;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
@@ -15,4 +16,7 @@ public interface ArticleLikeService {
 
     //取消点赞文章
     Result cancleArticleLike(Long articleId, Long visitorId) throws UpdateOperationsException;
+
+    //检查点赞状态
+    Result checkArticleLike(Long articleId, Long visitorId) throws GetOptsException;
 }

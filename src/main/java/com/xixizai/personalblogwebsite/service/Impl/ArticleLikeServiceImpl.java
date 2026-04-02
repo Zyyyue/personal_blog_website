@@ -1,11 +1,13 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.IdNotFoundException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.mapper.ArticleLikeMapper;
+import com.xixizai.personalblogwebsite.pojo.entity.ArticleLikes;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleLikeService;
 import org.springframework.stereotype.Service;
@@ -86,6 +88,40 @@ public class ArticleLikeServiceImpl implements ArticleLikeService {
 
             exception.printStackTrace();
             throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
+
+        }
+
+    }
+
+
+    @Override
+    public Result checkArticleLike(Long articleId, Long visitorId) throws GetOptsException {
+        try{
+
+            if(articleId==null){
+                throw new IdNotFoundException(MessageConstant.ID_NOT_FOUND);
+            }
+
+            if(articleId<=0){
+                throw new PassedParameterException(MessageConstant.ID_NOT_VALID);
+            }
+
+            if(visitorId==null){
+                throw new IdNotFoundException(MessageConstant.ID_NOT_FOUND);
+            }
+
+            if(visitorId<=0){
+                throw new PassedParameterException(MessageConstant.ID_NOT_VALID);
+            }
+            ArticleLikes articleLike =articleLikeMapper.getArticleLike(articleId,visitorId);
+            if(articleLike==null){
+                return Result.error("没有该点赞");
+            }else {
+                return Result.success("有点赞");
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
 
         }
 
