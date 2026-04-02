@@ -7,6 +7,7 @@ import com.xixizai.personalblogwebsite.mapper.RssSubscriptionMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.RssSubscriptions;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.RssSubscriptionStatusVO;
 import com.xixizai.personalblogwebsite.service.RssSubscriptionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -172,7 +173,12 @@ public class RssSubscriptionImpl implements RssSubscriptionService {
         }
     }
 
-
+    /**
+     * 取消订阅
+     * @param email
+     * @return
+     * @throws UpdateOperationsException
+     */
     @Override
     public Result unSubscribe(String email) throws UpdateOperationsException {
         try{
@@ -187,6 +193,38 @@ public class RssSubscriptionImpl implements RssSubscriptionService {
             exception.printStackTrace();
             throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
         }
+    }
+
+    /**
+     * 检查订阅状态
+     * @param visitorId
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result checkWeatherSubscribe(Long visitorId) throws GetOptsException {
+        try{
+
+            if(visitorId==null){
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            if(visitorId<=0){
+                throw new IdNotValidException(MessageConstant.ID_NOT_VALID);
+            }
+
+            RssSubscriptionStatusVO rssSubscriptionStatusVO =rssSubscriptionMapper.getWeatherSubscribe(visitorId);
+
+            if(rssSubscriptionStatusVO==null){
+                return Result.error("没有查到该订阅信息");
+            }
+
+            return Result.success(rssSubscriptionStatusVO);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+
     }
 
 

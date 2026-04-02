@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.controller.blog;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
@@ -36,4 +37,18 @@ public class RssSubscriptionController {
     public Result unSubscribe(@RequestParam String email) throws UpdateOperationsException {
         return rssSubscriptionService.unSubscribe(email);
     }
+
+
+    /**
+     * 检查订阅状态
+     * @param visitorId
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/check")
+    public Result checkWeatherSubscribe(@RequestParam Long visitorId) throws GetOptsException {
+        return rssSubscriptionService.checkWeatherSubscribe(visitorId);
+    }
+
+
 }

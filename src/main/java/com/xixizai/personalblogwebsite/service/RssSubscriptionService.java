@@ -31,4 +31,7 @@ public interface RssSubscriptionService {
 
     //取消订阅
     Result unSubscribe(String email) throws UpdateOperationsException;
+
+    //检查订阅状态
+    Result checkWeatherSubscribe(Long visitorId) throws GetOptsException;
 }

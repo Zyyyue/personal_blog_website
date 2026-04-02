@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.RssSubscriptions;
+import com.xixizai.personalblogwebsite.pojo.vo.RssSubscriptionStatusVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -37,4 +38,7 @@ public interface RssSubscriptionMapper {
 
     @Update("update rss_subscriptions set is_active=0,un_subscribe_time=now() where email=#{email}")
     void unSubscribe(String email);
+
+    @Select("select * from rss_subscriptions where visitor_id=#{visitorId}")
+    RssSubscriptionStatusVO getWeatherSubscribe(Long visitorId);
 }
