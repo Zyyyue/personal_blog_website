@@ -7,6 +7,7 @@ import com.xixizai.personalblogwebsite.mapper.SkillMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.SkillDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Skills;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.SkillVO;
 import com.xixizai.personalblogwebsite.service.SkillService;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public Result getAllSkills() throws GetOptsException {
         try{
-            List<Skills> list=skillMapper.getAllSkills();
+            List<SkillVO> list=skillMapper.getAllSkills();
             if(list==null){
                 return Result.error("没有数据，获取失败");
             }
