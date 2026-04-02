@@ -40,7 +40,7 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Resource
     @Lazy
-    //打破bean相互循环
+    //打破 bean 相互循环
     private ViewService viewService;
 
     @Resource
@@ -64,7 +64,7 @@ public class VisitorServiceImpl implements VisitorService {
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
 
-            //去重一下id
+            //去重一下 id
             List<Long>distinctIds=new ArrayList<>();
             for (Long id : ids) {
                 if(!distinctIds.contains(id)){
@@ -72,13 +72,13 @@ public class VisitorServiceImpl implements VisitorService {
                 }
             }
 
-            //再看一下数据库中是否有对应id
+            //再看一下数据库中是否有对应 id
 
-            //数据库中存在id的集合是updatedIds
+            //数据库中存在 id 的集合是 updatedIds
             List<Long>updatedIds=new ArrayList<>();
-            //数据库中不存在id的集合是nulledIds
+            //数据库中不存在 id 的集合是 nulledIds
             List<Long>nulledIds=new ArrayList<>();
-            //再判断一下ids中的id是否都在数据库中存在,如果不存在的话就需要提示一下，然后删除已经存在的
+            //再判断一下 ids 中的 id 是否都在数据库中存在，如果不存在的话就需要提示一下，然后删除已经存在的
             for (Long id : distinctIds) {
                 if(visitorMapper.findById(id)==null){
                     nulledIds.add(id);
@@ -94,13 +94,13 @@ public class VisitorServiceImpl implements VisitorService {
 
             //返回结果
             if(updatedIds.isEmpty()){
-                return Result.error("传入的ID列表中，没有任何一个存在：" +nulledIds);
+                return Result.error("传入的 ID 列表中，没有任何一个存在：" +nulledIds);
             }
             if(nulledIds.isEmpty()){
                 return Result.success(("批量封禁成功，共封禁 " + updatedIds.size() + " 个游客"));
             }
             return Result.success("批量封禁成功，成功封禁 " + updatedIds.size() + " 个游客，"
-                    + "不存在的ID：" + nulledIds);
+                    + "不存在的 ID：" + nulledIds);
 
         }catch (Exception exception){
             exception.printStackTrace();
@@ -123,7 +123,7 @@ public class VisitorServiceImpl implements VisitorService {
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
 
-            //去重一下id
+            //去重一下 id
             List<Long>distinctIds=new ArrayList<>();
             for (Long id : ids) {
                 if(!distinctIds.contains(id)){
@@ -131,13 +131,13 @@ public class VisitorServiceImpl implements VisitorService {
                 }
             }
 
-            //再看一下数据库中是否有对应id
+            //再看一下数据库中是否有对应 id
 
-            //数据库中存在id的集合是updatedIds
+            //数据库中存在 id 的集合是 updatedIds
             List<Long>updatedIds=new ArrayList<>();
-            //数据库中不存在id的集合是nulledIds
+            //数据库中不存在 id 的集合是 nulledIds
             List<Long>nulledIds=new ArrayList<>();
-            //再判断一下ids中的id是否都在数据库中存在,如果不存在的话就需要提示一下，然后删除已经存在的
+            //再判断一下 ids 中的 id 是否都在数据库中存在，如果不存在的话就需要提示一下，然后删除已经存在的
             for (Long id : distinctIds) {
                 if(visitorMapper.findById(id)==null){
                     nulledIds.add(id);
@@ -153,13 +153,13 @@ public class VisitorServiceImpl implements VisitorService {
 
             //返回结果
             if(updatedIds.isEmpty()){
-                return Result.error("传入的ID列表中，没有任何一个存在：" +nulledIds);
+                return Result.error("传入的 ID 列表中，没有任何一个存在：" +nulledIds);
             }
             if(nulledIds.isEmpty()){
                 return Result.success(("批量封禁成功，共解封 " + updatedIds.size() + " 个游客"));
             }
             return Result.success("批量封禁成功，成功解封 " + updatedIds.size() + " 个游客，"
-                    + "不存在的ID：" + nulledIds);
+                    + "不存在的 ID：" + nulledIds);
 
         }catch (Exception exception){
             exception.printStackTrace();
@@ -187,7 +187,7 @@ public class VisitorServiceImpl implements VisitorService {
             Visitors existingVisitor = visitorMapper.findByFingerprint(fingerprint);
 
             if (existingVisitor != null) {
-                // 如果已存在，更新访问次数,更新时间
+                // 如果已存在，更新访问次数，更新时间
                 existingVisitor.setFingerprint(fingerprint);
                 existingVisitor.setTotalViews(existingVisitor.getTotalViews() + 1);
                 visitorMapper.updateVisitor(existingVisitor);
@@ -205,7 +205,7 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     /**
-     * 管理端根据request查询id
+     * 管理端根据 request 查询 id
      * @param request
      * @return
      * @throws GetOptsException
@@ -213,7 +213,7 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public Long getVisitorIdByRequest(HttpServletRequest request) throws GetOptsException {
         try{
-            
+
             if(request==null){
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
@@ -246,27 +246,23 @@ public class VisitorServiceImpl implements VisitorService {
                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
            }
 
-           String fingerprint = fingerprintGeneratorUtil.generateSimple(request);
-           Visitors visitors=new Visitors();
-           visitors.setFingerprint(fingerprint);
-
-           addVisitors(visitors,request);
+           // 创建 Views 对象，由 addViewRecord 统一处理访客逻辑
            Views views= Views.builder()
                    .pagePath(visitorRecordDTO.getPagePath())
                    .pageTitle(visitorRecordDTO.getPageTitle())
                    .referer(visitorRecordDTO.getReferer())
                    .build();
-           log.info("创建的 Views 对象: pagePath={}", views.getPagePath());
+           log.info("创建的 Views 对象：pagePath={}", views.getPagePath());
            viewService.addViewRecord(views,request);
            VisitorRecordVO visitorRecordVO = new VisitorRecordVO();
 
 
-           //生成Fingerprint
+           //生成 Fingerprint
            String fingerprintNow = FingerprintGeneratorUtil.generateSimple(request);
            HttpSession session = request.getSession();
-           //生成sessionId
+           //生成 sessionId
            String sessionId=session.getId();
-           //获取visitorId
+           //获取 visitorId
            Visitors byFingerprint = visitorMapper.findByFingerprint(fingerprintNow);
            visitorRecordVO=visitorRecordVO.builder()
                    .sessionId(sessionId)
