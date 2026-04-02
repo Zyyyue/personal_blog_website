@@ -10,4 +10,7 @@ public interface CommonService {
 
     //上传文件
     Result uploadFile(MultipartFile file) throws GetOptsException;
+
+    //生成算术验证码
+    Result generateCode() throws Exception;
 }

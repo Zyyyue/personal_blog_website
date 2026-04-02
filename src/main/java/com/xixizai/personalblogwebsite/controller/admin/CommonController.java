@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
-@RestController
+@RestController("adminCommonController")
 @RequestMapping("/admin/upload")
 public class CommonController {
 
