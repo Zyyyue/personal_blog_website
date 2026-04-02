@@ -1,18 +1,30 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.VisitorMapper;
+import com.xixizai.personalblogwebsite.pojo.dto.VisitorRecordDTO;
+import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.VisitorRecordVO;
+import com.xixizai.personalblogwebsite.service.ViewService;
 import com.xixizai.personalblogwebsite.service.VisitorService;
 import com.xixizai.personalblogwebsite.utils.FingerprintGeneratorUtil;
+import com.xixizai.personalblogwebsite.utils.IpUtil;
+import com.xixizai.personalblogwebsite.utils.UserAgentUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +38,16 @@ public class VisitorServiceImpl implements VisitorService {
     @Resource
     private FingerprintGeneratorUtil fingerprintGeneratorUtil;
 
+    @Resource
+    @Lazy
+    //打破bean相互循环
+    private ViewService viewService;
 
+    @Resource
+    private IpUtil ipUtil;
+
+    @Resource
+    private UserAgentUtil agentUtil;
 
     /**
      * 批量封禁访客
@@ -199,14 +220,79 @@ public class VisitorServiceImpl implements VisitorService {
 
             String fingerprint = fingerprintGeneratorUtil.generateSimple(request);
             Visitors visitor = visitorMapper.findByFingerprint(fingerprint);
-            if(visitor.getId()!=null){
+            if(visitor!=null&&visitor.getId()!=null){
                 return visitor.getId();
             }
-            throw new GetOptsException(MessageConstant.ID_NOT_FOUND);
+            return null;
         }catch (Exception exception){
             exception.printStackTrace();
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
+    }
+
+    /**
+     * 博客端记录访客信息
+     * @param visitorRecordDTO
+     * @param request
+     * @return
+     * @throws AddOperationException
+     */
+    @Transactional
+    @Override
+    public Result recordVisitorInfor(VisitorRecordDTO visitorRecordDTO,HttpServletRequest request) throws AddOperationException {
+       try{
+
+           if(visitorRecordDTO==null){
+               throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+           }
+
+           String fingerprint = fingerprintGeneratorUtil.generateSimple(request);
+           Visitors visitors=new Visitors();
+           visitors.setFingerprint(fingerprint);
+
+           addVisitors(visitors,request);
+           Views views= Views.builder()
+                   .pagePath(visitorRecordDTO.getPagePath())
+                   .pageTitle(visitorRecordDTO.getPageTitle())
+                   .referer(visitorRecordDTO.getReferer())
+                   .build();
+           log.info("创建的 Views 对象: pagePath={}", views.getPagePath());
+           viewService.addViewRecord(views,request);
+           VisitorRecordVO visitorRecordVO = new VisitorRecordVO();
+
+
+           //生成Fingerprint
+           String fingerprintNow = FingerprintGeneratorUtil.generateSimple(request);
+           HttpSession session = request.getSession();
+           //生成sessionId
+           String sessionId=session.getId();
+           //获取visitorId
+           Visitors byFingerprint = visitorMapper.findByFingerprint(fingerprintNow);
+           visitorRecordVO=visitorRecordVO.builder()
+                   .sessionId(sessionId)
+                   .visitorId(byFingerprint.getId())
+                   .visitorFingerprint(fingerprintNow)
+                   .build();
+
+           //判断是否是新访客
+           LocalDateTime createTime = byFingerprint.getCreateTime();
+           LocalDateTime updateTime = byFingerprint.getUpdateTime();
+           if(updateTime.isAfter(createTime)){
+               visitorRecordVO.setIsNewVisitor(true);
+           }else{
+               visitorRecordVO.setIsNewVisitor(false);
+           }
+
+           return Result.success(visitorRecordVO);
+       }catch (Exception exception){
+
+           exception.printStackTrace();
+           throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
+
+
+       }
+
+
     }
 
 

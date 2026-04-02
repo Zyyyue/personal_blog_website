@@ -12,6 +12,8 @@ import com.xixizai.personalblogwebsite.service.ViewService;
 import com.xixizai.personalblogwebsite.service.VisitorService;
 import com.xixizai.personalblogwebsite.utils.IpUtil;
 import com.xixizai.personalblogwebsite.utils.UserAgentUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -22,11 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class ViewServiceImpl implements ViewService {
 
 
     @Resource
+    @Lazy
     private ViewMapper viewMapper;
 
     @Resource
@@ -181,6 +185,7 @@ public class ViewServiceImpl implements ViewService {
                 clientIp=IpUtil.getLocalHostIp();
             }
             views.setIpAddress(clientIp);
+            log.info("view的pagePath={}",views.getPagePath());
             viewMapper.addViewRecord(views);
 
         }catch (Exception exception){
