@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,4 +11,7 @@ public interface ArticleLikeMapper {
     @Insert("insert into article_likes (article_id, visitor_id, like_time) values (#{articleId},#{visitorId},now())")
     void likeArticle(Long articleId, Long visitorId);
 
+    //取消点赞文章
+    @Delete("delete from article_likes where visitor_id=#{visitorId} and article_id=#{articleId}")
+    void cancleArticleLike(Long articleId, Long visitorId);
 }

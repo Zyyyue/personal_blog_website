@@ -1,8 +1,10 @@
 package com.xixizai.personalblogwebsite.controller.blog;
 
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
+import com.xixizai.personalblogwebsite.exception.UpdateOperationsException;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleLikeService;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,6 +26,18 @@ public class ArticleLikeController {
     @PostMapping("/{articleId}")
     public Result likeArticle(@PathVariable Long articleId, @RequestParam Long visitorId) throws AddOperationException {
         return articleLikeService.likeArticle(articleId,visitorId);
+    }
+
+    /**
+     * 取消点赞
+     * @param articleId
+     * @param visitorId
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @DeleteMapping("/{articleId}")
+    public Result cancleArticleLike(@PathVariable Long articleId,@RequestParam Long visitorId) throws UpdateOperationsException {
+        return articleLikeService.cancleArticleLike(articleId,visitorId);
     }
 
 }
