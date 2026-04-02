@@ -7,6 +7,7 @@ import com.xixizai.personalblogwebsite.mapper.SocialMediaMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.SocialMediaDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.SocialMedia;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.SocialMediaVO;
 import com.xixizai.personalblogwebsite.service.SocialMediaService;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class SocialMediaServiceImpl implements SocialMediaService {
     public Result getAllSocialMedias() throws GetOptsException {
         try{
 
-            List<SocialMedia> list =socialMediaMapper.getAllSocialMedias();
+            List<SocialMediaVO> list =socialMediaMapper.getAllSocialMedias();
 
             if(list==null||list.isEmpty()){
                 return Result.error("数据库中没有任何社交媒体");

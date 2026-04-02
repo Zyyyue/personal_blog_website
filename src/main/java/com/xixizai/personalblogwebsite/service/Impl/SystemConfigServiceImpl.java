@@ -59,6 +59,7 @@ public class SystemConfigServiceImpl implements SystemConfigService {
             }
 
             SystemConfig systemConfig=systemConfigMapper.getSystemConfigByConfigKey(configKey);
+
             if(systemConfig==null){
                 return Result.error("暂无任何系统配置");
             }
