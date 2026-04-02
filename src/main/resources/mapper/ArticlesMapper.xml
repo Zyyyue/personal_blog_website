@@ -127,5 +127,30 @@
 
     </select>
 
+<!--    分页查询文章-->
+    <select id="pageQuery" resultType="com.xixizai.personalblogwebsite.pojo.vo.ArticleVO">
+
+        select a.id,a.title,a.slug,a.summary,a.cover_image as coverImage,a.category_id as categoryId,
+               ac.name as categoryName,
+               a.view_count as viewCount,a.like_count as likeCount,a.comment_count as commentCount,
+               a.word_count as wordCount,a.reading_time as readingTime,
+               a.is_published as isPublished,a.is_top as isTop,
+               a.publish_time as publishTime,a.create_time as createTime,a.update_time as updateTime
+        from articles a
+        left join article_categories ac on a.category_id = ac.id
+        where
+        <if test="title!=null and title!=''">
+            title like concat('%',#{title},'%')
+        </if>
+        <if test="categoryId !=null">
+            and a.category_id=#{categoryId}
+        </if>
+        <if test="isPublished !=null">
+            and a.is_published=#{isPublished}
+        </if>
+        order by a.create_time desc
+
+    </select>
+
 
 </mapper>

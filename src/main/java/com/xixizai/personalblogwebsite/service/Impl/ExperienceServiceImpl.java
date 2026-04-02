@@ -7,6 +7,7 @@ import com.xixizai.personalblogwebsite.mapper.ExperienceMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ExperienceDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Experiences;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.ExperienceVO;
 import com.xixizai.personalblogwebsite.service.ExperienceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -190,6 +191,27 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
     }
 
+    /**
+     * 简历端获取经历
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result getExperiences() throws GetOptsException {
+       try{
+
+           List<ExperienceVO>list=experienceMapper.getExperiences();
+           if(list==null||list.isEmpty()){
+               return Result.error("没有数据");
+           }
+           return Result.success(list);
+       }catch (Exception exception){
+       exception.printStackTrace();
+       throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+
+       }
+
+    }
 
 
 }

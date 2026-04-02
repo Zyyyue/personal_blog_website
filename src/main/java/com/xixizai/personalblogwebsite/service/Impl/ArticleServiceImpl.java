@@ -1,17 +1,19 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.xixizai.personalblogwebsite.pojo.result.PageResult;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.ArticleMapper;
 import com.xixizai.personalblogwebsite.mapper.ArticleTagRelationsMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
+import com.xixizai.personalblogwebsite.pojo.entity.Articles;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
-import com.xixizai.personalblogwebsite.pojo.vo.ArticleArchiveItemVO;
-import com.xixizai.personalblogwebsite.pojo.vo.ArticleArchiveVO;
-import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleDetailVO;
-import com.xixizai.personalblogwebsite.pojo.vo.BlogArticleVO;
+import com.xixizai.personalblogwebsite.pojo.vo.*;
 import com.xixizai.personalblogwebsite.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -359,6 +361,34 @@ public class ArticleServiceImpl implements ArticleService {
 
         }
 
+
+    }
+
+    /**
+     * 分页查询
+     * @param page
+     * @param pageSize
+     * @param title
+     * @param categoryId
+     * @param isPublished
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQuery(Integer page, Integer pageSize, String title, Long categoryId, Integer isPublished) throws GetOptsException {
+        try{
+
+            //使用pageHelper开启分页
+            PageHelper.startPage(page,pageSize);
+            //执行查询
+             Page<ArticleVO> page1= (Page<ArticleVO>) articleMapper.pageQuery(title,categoryId,isPublished);
+            return Result.success(new PageResult(page1.getTotal(),page1.getResult()));
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+
+        }
 
     }
 

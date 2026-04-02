@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
@@ -99,4 +100,21 @@ public class ArticleController {
     public Result cancleOrNotTopArticle(@PathVariable Long id,@RequestParam Integer isTop) throws Exception {
         return articleService.cancleOrNotTopArticle(id,isTop);
     }
+
+
+    /**
+     * 分页查询文章列表
+     * @param page
+     * @param pageSize
+     * @param title
+     * @param categoryId
+     * @param isPublished
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/page")
+    public Result PageQuery(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue="10")Integer pageSize,@RequestParam(required = false)String title,@RequestParam(required = false)Long categoryId,@RequestParam(required = false)Integer isPublished) throws GetOptsException {
+        return articleService.pageQuery(page,pageSize,title,categoryId,isPublished);
+    }
+
 }

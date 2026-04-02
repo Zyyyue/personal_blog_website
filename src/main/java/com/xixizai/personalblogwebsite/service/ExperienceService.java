@@ -23,4 +23,7 @@ public interface ExperienceService {
 
     //批量删除经历
     Result batchDeleteExperience(List<Long> ids) throws BatchDeleteExperienceException;
+
+    //获取经历
+    Result getExperiences() throws GetOptsException;
 }

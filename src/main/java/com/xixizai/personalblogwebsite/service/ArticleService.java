@@ -36,4 +36,7 @@ public interface ArticleService {
 
     //获取文章归档
     Result getArtilceArchive() throws GetOptsException;
+
+    //分页查询文章列表
+    Result pageQuery(Integer page, Integer pageSize, String title, Long categoryId, Integer isPublished) throws GetOptsException;
 }

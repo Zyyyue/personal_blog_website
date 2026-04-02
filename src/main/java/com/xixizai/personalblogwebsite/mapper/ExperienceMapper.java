@@ -2,6 +2,7 @@ package com.xixizai.personalblogwebsite.mapper;
 
 import com.xixizai.personalblogwebsite.pojo.dto.ExperienceDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Experiences;
+import com.xixizai.personalblogwebsite.pojo.vo.ExperienceVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -27,4 +28,8 @@ public interface ExperienceMapper {
 
     //批量删除经历
     void batchDeleteExperiences(List<Long> ids);
+
+    //获取经历列表
+    @Select("select * from experiences")
+    List<ExperienceVO> getExperiences();
 }
