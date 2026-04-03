@@ -93,4 +93,10 @@ public interface ArticleMapper {
 
     //分页根据标签获取文章
     Page<ArticleVO> pageQueryArticleBytagId(Integer tagId);
+
+    //分页查询根据关键词文章搜索
+    Page<ArticleVO> pageQueryArticleBykeyWords(String keywords);
+
+    //分页查询根据分类获取文章
+    Page<ArticleVO> pageQueryArticleByCategory(Long categoryId);
 }

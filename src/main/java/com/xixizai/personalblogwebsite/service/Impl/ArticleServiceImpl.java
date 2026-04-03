@@ -460,4 +460,49 @@ public class ArticleServiceImpl implements ArticleService {
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
     }
+
+
+
+    /**
+     * 分页查询根据关键词文章搜索
+     * @param page
+     * @param pageSize
+     * @param keywords
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQueryArticleBykeyWords(Integer page, Integer pageSize, String keywords) throws GetOptsException {
+        try{
+
+            PageHelper.startPage(page,pageSize);
+            Page<ArticleVO>list=articleMapper.pageQueryArticleBykeyWords(keywords);
+            return Result.success(new PageResult(list.getTotal(),list.getResult()));
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+    }
+
+    /**
+     * 分页查询根据分类查找文章
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQueryArticleByCategory(Integer page, Integer pageSize,Long categoryId) throws GetOptsException {
+        try{
+
+            PageHelper.startPage(page,pageSize);
+            Page<ArticleVO>list=articleMapper.pageQueryArticleByCategory(categoryId);
+            return Result.success(new PageResult(list.getTotal(),list.getResult()));
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+    }
+
+
 }

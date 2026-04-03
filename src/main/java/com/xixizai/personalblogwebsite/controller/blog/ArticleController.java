@@ -60,4 +60,30 @@ public class ArticleController {
         return articleService.pageQueryArticleBytagId(page,pageSize,tagId);
     }
 
+    /**
+     *  分页查询客户端文章搜索
+     * @param page
+     * @param pageSize
+     * @param keywords
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/search")
+    public Result pageQueryArticleBykeyWords(@RequestParam Integer page,@RequestParam Integer pageSize,@RequestParam String keywords) throws GetOptsException {
+        return articleService.pageQueryArticleBykeyWords(page,pageSize,keywords);
+    }
+
+    /**
+     *  分页查询根据分类获取文章
+     * @param page
+     * @param pageSize
+     * @param categoryId
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/category/{categoryId}")
+    public Result pageQueryArticleByCategory(@RequestParam Integer page,@RequestParam Integer pageSize,@PathVariable Long categoryId) throws GetOptsException {
+        return articleService.pageQueryArticleByCategory(page,pageSize,categoryId);
+    }
+
 }
