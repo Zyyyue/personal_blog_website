@@ -420,4 +420,24 @@ public class ArticleServiceImpl implements ArticleService {
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
     }
+
+    /**
+     * 分页查询获取已经法发布文章
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQueryArticle(Integer page, Integer pageSize) throws GetOptsException {
+        try{
+
+            PageHelper.startPage(page,pageSize);
+            Page<ArticleVO>list=articleMapper.pageQueryArticle();
+            return Result.success(new PageResult(list.getTotal(),list.getResult()));
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+    }
 }

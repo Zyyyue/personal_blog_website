@@ -42,4 +42,7 @@ public interface ArticleService {
 
     //文章搜索
     Result searchArticles(Integer page, Integer pageSize, String keyword) throws GetOptsException;
+
+    //分页查询获取已经法发布文章
+    Result pageQueryArticle(Integer page, Integer pageSize) throws GetOptsException;
 }

@@ -3,10 +3,7 @@ package com.xixizai.personalblogwebsite.controller.blog;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ArticleService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -37,4 +34,17 @@ public class ArticleController {
     public Result getArtilceArchive() throws GetOptsException {
         return articleService.getArtilceArchive();
     }
+
+    /**
+     * 分页查询已经发布的文章
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/page")
+    public Result pageQueryArticle(@RequestParam Integer page,@RequestParam Integer pageSize) throws GetOptsException {
+        return articleService.pageQueryArticle(page,pageSize);
+    }
+
 }
