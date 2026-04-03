@@ -90,4 +90,7 @@ public interface ArticleMapper {
 
     //分页查询发布文章
     Page<ArticleVO> pageQueryArticle();
+
+    //分页根据标签获取文章
+    Page<ArticleVO> pageQueryArticleBytagId(Integer tagId);
 }

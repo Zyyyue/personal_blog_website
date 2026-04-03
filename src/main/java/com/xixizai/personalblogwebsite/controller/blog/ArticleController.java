@@ -47,4 +47,17 @@ public class ArticleController {
         return articleService.pageQueryArticle(page,pageSize);
     }
 
+    /**
+     *  分页查询根据标签获取文章
+     * @param page
+     * @param pageSize
+     * @param tagId
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/tag/{tagId}")
+    public Result pageQueryArticleBytagId(@RequestParam Integer page,@RequestParam Integer pageSize,@PathVariable Integer tagId) throws GetOptsException {
+        return articleService.pageQueryArticleBytagId(page,pageSize,tagId);
+    }
+
 }

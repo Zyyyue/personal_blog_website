@@ -45,4 +45,7 @@ public interface ArticleService {
 
     //分页查询获取已经法发布文章
     Result pageQueryArticle(Integer page, Integer pageSize) throws GetOptsException;
+
+    //分页查询根据标签获取文章
+    Result pageQueryArticleBytagId(Integer page,Integer pageSize,Integer tagId) throws GetOptsException;
 }
