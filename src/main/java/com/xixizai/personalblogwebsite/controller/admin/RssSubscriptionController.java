@@ -64,5 +64,17 @@ public class RssSubscriptionController {
         return rssSubscriptionService.batchDeleteRssSubscription(ids);
     }
 
+    /**
+     * 分页查询订阅列表
+     * @param page
+     * @param pageSize
+
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/page")
+    public Result pageQueryRssSubscription(@RequestParam Integer page,@RequestParam Integer pageSize) throws GetOptsException {
+        return rssSubscriptionService.pageQueryRssSubscription(page,pageSize);
+    }
 
 }

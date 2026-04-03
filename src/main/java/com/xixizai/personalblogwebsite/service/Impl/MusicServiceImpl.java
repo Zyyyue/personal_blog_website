@@ -179,22 +179,20 @@ public class MusicServiceImpl implements MusicService {
      * 分页查询音乐列表
      * @param page
      * @param pageSize
-     * @param isVisible
+
      * @return
      * @throws GetOptsException
      */
     @Override
-    public Result pageQueryMusic(Integer page, Integer pageSize, Integer isVisible) throws GetOptsException {
+    public Result pageQueryMusic(Integer page, Integer pageSize) throws GetOptsException {
         try{
 
-            if(isVisible==null||(isVisible!=0&&isVisible!=1)){
-                isVisible=1;
-            }
+
 
             //开启分页
             PageHelper.startPage(page,pageSize);
 
-            Page<MusicVO> pageResult=(Page<MusicVO>) musicMapper.pageQueryMusic(isVisible);
+            Page<MusicVO> pageResult=(Page<MusicVO>) musicMapper.pageQueryMusic();
             return Result.success(new PageResult(pageResult.getTotal(),pageResult.getResult()));
         }catch (Exception exception){
 

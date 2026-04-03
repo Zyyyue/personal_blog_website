@@ -1,11 +1,15 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.RssSubscriptionMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.RssSubscriptions;
+import com.xixizai.personalblogwebsite.pojo.result.PageResult;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.pojo.vo.RssSubscriptionStatusVO;
 import com.xixizai.personalblogwebsite.service.RssSubscriptionService;
@@ -225,6 +229,30 @@ public class RssSubscriptionImpl implements RssSubscriptionService {
             throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
 
+    }
+
+    /**
+     * 分页查询订阅
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQueryRssSubscription(Integer page, Integer pageSize) throws GetOptsException {
+        try{
+
+
+
+            //开启分页
+            PageHelper.startPage(page,pageSize);
+
+            Page<RssSubscriptions>list =rssSubscriptionMapper.pageQueryRssSubscription();
+            return Result.success(new PageResult(list.getTotal(),list.getResult()));
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
     }
 
 

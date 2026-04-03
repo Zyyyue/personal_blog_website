@@ -34,4 +34,7 @@ public interface RssSubscriptionService {
 
     //检查订阅状态
     Result checkWeatherSubscribe(Long visitorId) throws GetOptsException;
+
+    //分页查询订阅列表
+    Result pageQueryRssSubscription(Integer page, Integer pageSize) throws GetOptsException;
 }

@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.github.pagehelper.Page;
 import com.xixizai.personalblogwebsite.pojo.dto.RssSubscriptionDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.RssSubscriptions;
 import com.xixizai.personalblogwebsite.pojo.vo.RssSubscriptionStatusVO;
@@ -41,4 +42,8 @@ public interface RssSubscriptionMapper {
 
     @Select("select * from rss_subscriptions where visitor_id=#{visitorId}")
     RssSubscriptionStatusVO getWeatherSubscribe(Long visitorId);
+
+    //分页查询订阅
+    @Select("select * from rss_subscriptions order by subscribe_time desc")
+    Page<RssSubscriptions> pageQueryRssSubscription();
 }

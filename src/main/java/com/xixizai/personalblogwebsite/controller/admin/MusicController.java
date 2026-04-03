@@ -69,12 +69,12 @@ public class MusicController {
      * 分页查询音乐列表
      * @param page
      * @param pageSize
-     * @param isVisible
+
      * @return
      */
     @GetMapping("/page")
-    public Result pageQueryMusic(@RequestParam Integer page,@RequestParam Integer pageSize,@RequestParam Integer isVisible) throws GetOptsException {
-        return musicService.pageQueryMusic(page,pageSize,isVisible);
+    public Result pageQueryMusic(@RequestParam Integer page,@RequestParam Integer pageSize) throws GetOptsException {
+        return musicService.pageQueryMusic(page,pageSize);
     }
 
 }
