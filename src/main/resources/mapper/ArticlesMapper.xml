@@ -162,9 +162,11 @@
         from articles a
         left join article_categories ac on a.category_id = ac.id
         where
-
-        <if test="keyword!=null and keyword!=''">
-            (title like concat('%',#{keyword},'%')
+            is_published=1
+        <if test="keyword != null and keyword != ''">
+            and
+            (
+                title like concat('%',#{keyword},'%')
             or a.content_markdown like concat('%',#{keyword},'%'))
         </if>
         order by a.create_time desc

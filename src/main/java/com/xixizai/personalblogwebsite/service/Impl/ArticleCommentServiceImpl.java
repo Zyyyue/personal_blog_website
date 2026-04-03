@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.constant.StatusConstant;
@@ -13,7 +15,9 @@ import com.xixizai.personalblogwebsite.pojo.dto.ArticleCommentReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
 import com.xixizai.personalblogwebsite.pojo.entity.Views;
+import com.xixizai.personalblogwebsite.pojo.result.PageResult;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
+import com.xixizai.personalblogwebsite.pojo.vo.ArticleCommentVO;
 import com.xixizai.personalblogwebsite.service.ArticleCommentService;
 import com.xixizai.personalblogwebsite.service.ViewService;
 import com.xixizai.personalblogwebsite.utils.IpUtil;
@@ -72,12 +76,12 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
 
-            List<ArticleComments> articleCommentById = articleCommentMapper.getArticleCommentById(id);
+            List<ArticleCommentVO> rootComments = articleCommentMapper.getRootComments(id);
 
-            if(articleCommentById==null||articleCommentById.isEmpty()){
+            if(rootComments==null||rootComments.isEmpty()){
                 return Result.error("查找失败,该文章暂时没有评论");
             }else{
-                return Result.success(articleCommentById);
+                return Result.success(rootComments);
             }
         }catch (Exception exception){
             exception.printStackTrace();
@@ -461,6 +465,51 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
             exception.printStackTrace();
             throw new Exception("删除访客评论失败");
         }
+    }
+
+    /**
+     * 分页查询评论
+     * @param page
+     * @param pageSize
+     * @param articleId
+     * @param isApproved
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQueryComments(Integer page, Integer pageSize, Long articleId, Integer isApproved) throws GetOptsException {
+      try{
+          //处理一下
+          if(page==null||page<1){
+            page=1;
+          }
+
+          if(pageSize==null||pageSize<1){
+              pageSize=10;
+          }
+
+          if((isApproved==null)||(isApproved!=1&&isApproved!=0)){
+              isApproved=1;
+          }
+
+          //开启分页
+          PageHelper.startPage(page,pageSize);
+
+          //查询评论
+          Page<ArticleCommentVO> commentPage = articleCommentMapper.pageQueryComments(articleId, isApproved);
+
+          //封装分页结果
+          PageResult pageResult = PageResult.builder()
+                  .total(commentPage.getTotal())
+                  .records(commentPage.getResult())
+                  .build();
+
+          return Result.success(pageResult);
+      }catch (Exception exception){
+          exception.printStackTrace();
+          throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+      }
+
     }
 
     /**

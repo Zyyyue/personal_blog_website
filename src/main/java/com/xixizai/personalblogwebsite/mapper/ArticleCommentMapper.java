@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.github.pagehelper.Page;
 import com.xixizai.personalblogwebsite.pojo.entity.ArticleComments;
+import com.xixizai.personalblogwebsite.pojo.vo.ArticleCommentVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -48,4 +50,13 @@ public interface ArticleCommentMapper {
     //删除单挑评论
     @Delete("delete from article_comments where id = #{id}")
     void deleteById(Long id);
+
+    //查询根评论（带子评论）
+    List<ArticleCommentVO> getRootComments(Long articleId);
+
+    //根据根评论 ID 查询子评论
+    List<ArticleCommentVO> getChildrenByRootId(Long rootId);
+
+    //分页查询评论（支持文章 ID 和审核状态筛选，返回根评论带子评论）
+    Page<ArticleCommentVO> pageQueryComments(Long articleId, Integer isApproved);
 }

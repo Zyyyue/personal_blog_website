@@ -24,6 +24,7 @@
         </foreach>
     </delete>
 
+
     <!--    访客编辑评论-->
     <update id="updateContent">
         update article_comments set
@@ -31,4 +32,132 @@
         content=#{content},update_time=now()
         where id=#{id}
     </update>
+
+    <!--    查询根评论（带子评论）-->
+    <select id="getRootComments" resultMap="ArticleCommentVOResultMap">
+SELECT
+    id,
+    article_id as articleId,
+    root_id as rootId,
+    parent_id as parentId,
+    parent_nickname as parentNickname,
+    content_html as contentHtml,
+    visitor_id as visitorId,
+    nickname,
+    email_or_qq as emailOrQq,
+    location,
+    user_agent_os as userAgentOs,
+    user_agent_browser as userAgentBrowser,
+    is_approved as isApproved,
+    is_secret as isSecret,
+    is_admin_reply as isAdminReply,
+    create_time as createTime
+FROM article_comments
+WHERE is_approved = 1
+  AND article_id = #{articleId}
+  AND parent_id IS NULL
+ORDER BY create_time ASC
+    </select>
+
+    <!--    根据根评论 ID 查询子评论-->
+    <select id="getChildrenByRootId" resultType="com.xixizai.personalblogwebsite.pojo.vo.ArticleCommentVO">
+SELECT
+    id,
+    article_id as articleId,
+    root_id as rootId,
+    parent_id as parentId,
+    parent_nickname as parentNickname,
+    content_html as contentHtml,
+    visitor_id as visitorId,
+    nickname,
+    email_or_qq as emailOrQq,
+    location,
+    user_agent_os as userAgentOs,
+    user_agent_browser as userAgentBrowser,
+    is_approved as isApproved,
+    is_secret as isSecret,
+    is_admin_reply as isAdminReply,
+    create_time as createTime
+FROM article_comments
+WHERE is_approved = 1
+  AND root_id = #{rootId}
+ORDER BY create_time ASC
+    </select>
+
+    <!--    结果映射-->
+    <resultMap id="ArticleCommentVOResultMap" type="com.xixizai.personalblogwebsite.pojo.vo.ArticleCommentVO">
+        <id property="id" column="id"/>
+        <result property="articleId" column="articleId"/>
+        <result property="rootId" column="rootId"/>
+        <result property="parentId" column="parentId"/>
+        <result property="parentNickname" column="parentNickname"/>
+        <result property="contentHtml" column="contentHtml"/>
+        <result property="visitorId" column="visitorId"/>
+        <result property="nickname" column="nickname"/>
+        <result property="emailOrQq" column="emailOrQq"/>
+        <result property="location" column="location"/>
+        <result property="userAgentOs" column="userAgentOs"/>
+        <result property="userAgentBrowser" column="userAgentBrowser"/>
+        <result property="isApproved" column="isApproved"/>
+        <result property="isSecret" column="isSecret"/>
+        <result property="isAdminReply" column="isAdminReply"/>
+        <result property="createTime" column="createTime"/>
+        <collection property="children" ofType="com.xixizai.personalblogwebsite.pojo.vo.ArticleCommentVO"
+                    select="getChildrenByRootId" column="id"/>
+    </resultMap>
+
+    <!--    分页查询评论（支持文章 ID 和审核状态筛选，返回根评论带子评论）-->
+    <select id="pageQueryComments" resultMap="ArticleCommentVOResultMapWithChildren">
+SELECT
+    id,
+    article_id as articleId,
+    root_id as rootId,
+    parent_id as parentId,
+    parent_nickname as parentNickname,
+    content_html as contentHtml,
+    visitor_id as visitorId,
+    nickname,
+    email_or_qq as emailOrQq,
+    location,
+    user_agent_os as userAgentOs,
+    user_agent_browser as userAgentBrowser,
+    is_approved as isApproved,
+    is_secret as isSecret,
+    is_admin_reply as isAdminReply,
+    create_time as createTime
+FROM article_comments
+<where>
+    <if test="articleId != null">
+        AND article_id = #{articleId}
+    </if>
+    <if test="isApproved != null">
+        AND is_approved = #{isApproved}
+    </if>
+    AND parent_id IS NULL
+</where>
+ORDER BY create_time DESC
+    </select>
+
+    <!--    结果映射（带子评论）-->
+    <resultMap id="ArticleCommentVOResultMapWithChildren" type="com.xixizai.personalblogwebsite.pojo.vo.ArticleCommentVO">
+        <id property="id" column="id"/>
+        <result property="articleId" column="articleId"/>
+        <result property="rootId" column="rootId"/>
+        <result property="parentId" column="parentId"/>
+        <result property="parentNickname" column="parentNickname"/>
+        <result property="contentHtml" column="contentHtml"/>
+        <result property="visitorId" column="visitorId"/>
+        <result property="nickname" column="nickname"/>
+        <result property="emailOrQq" column="emailOrQq"/>
+        <result property="location" column="location"/>
+        <result property="userAgentOs" column="userAgentOs"/>
+        <result property="userAgentBrowser" column="userAgentBrowser"/>
+        <result property="isApproved" column="isApproved"/>
+        <result property="isSecret" column="isSecret"/>
+        <result property="isAdminReply" column="isAdminReply"/>
+        <result property="createTime" column="createTime"/>
+        <collection property="children" ofType="com.xixizai.personalblogwebsite.pojo.vo.ArticleCommentVO"
+                    select="getChildrenByRootId" column="id"/>
+    </resultMap>
+
 </mapper>

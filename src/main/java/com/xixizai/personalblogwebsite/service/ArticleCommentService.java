@@ -34,4 +34,7 @@ public interface ArticleCommentService {
 
     //访客删除评论
     Result deleteComment(Long id, Long visitorId) throws Exception;
+
+    //分页查询评论
+    Result pageQueryComments(Integer page, Integer pageSize, Long articleId, Integer isApproved) throws GetOptsException;
 }

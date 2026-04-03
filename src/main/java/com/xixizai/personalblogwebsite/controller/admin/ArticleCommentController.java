@@ -65,5 +65,18 @@ public class ArticleCommentController {
         return articleCommentService.adminReplyComment(articleCommentReplyDTO,request);
     }
 
+    /**
+     * 分页查询评论
+     * @param page
+     * @param pageSize
+     * @param articleId
+     * @param isApproved
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/page")
+    public Result pageQueryComments(@RequestParam Integer page,@RequestParam Integer pageSize,@RequestParam Long articleId,@RequestParam Integer isApproved) throws GetOptsException {
+        return articleCommentService.pageQueryComments(page,pageSize,articleId,isApproved);
+    }
 
 }
