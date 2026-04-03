@@ -55,4 +55,8 @@ public class MessageController {
         return messageService.adminReplyMessage(messageReplyDTO,request);
     }
 
+    public Result pageQueryMessages(){
+
+    }
+
 }
