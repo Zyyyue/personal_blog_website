@@ -1,9 +1,14 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteOperationLogsException;
 import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.OperationLogMapper;
+import com.xixizai.personalblogwebsite.pojo.entity.OperationLogs;
+import com.xixizai.personalblogwebsite.pojo.result.PageResult;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.OperationLogService;
 import org.springframework.stereotype.Service;
@@ -74,6 +79,28 @@ public class OperationLogServiceImpl implements OperationLogService {
         }catch (Exception exception){
             exception.printStackTrace();
             throw new BatchDeleteOperationLogsException(MessageConstant.BATCH_DELETE_OPERATIONLOGS_FAILSURE);
+        }
+    }
+
+    /**
+     * 分页查询操作日志
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQuery(Integer page, Integer pageSize) throws GetOptsException {
+        try{
+
+            //开启分页
+            PageHelper.startPage(page,pageSize);
+
+            Page<OperationLogs> list=operationLogMapper.pageQueryOperationLog();
+            return Result.success(new PageResult(list.getTotal(),list.getResult()));
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
         }
     }
 }

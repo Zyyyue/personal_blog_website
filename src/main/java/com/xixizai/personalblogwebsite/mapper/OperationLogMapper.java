@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.github.pagehelper.Page;
 import com.xixizai.personalblogwebsite.pojo.entity.OperationLogs;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -15,4 +16,8 @@ public interface OperationLogMapper {
 
     //批量删除操作日志
     void batchDeleteOperationLogs(List<Long> ids);
+
+    //分页查询操作日志
+    @Select("select * from operation_logs order by operation_time")
+    Page<OperationLogs> pageQueryOperationLog();
 }
