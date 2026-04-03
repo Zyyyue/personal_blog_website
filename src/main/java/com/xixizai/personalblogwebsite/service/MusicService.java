@@ -27,4 +27,7 @@ public interface MusicService {
 
     //获取可见音乐
     Result getMusic() throws GetOptsException;
+
+    //分页查询音乐列表
+    Result pageQueryMusic(Integer page, Integer pageSize, Integer isVisible) throws GetOptsException;
 }

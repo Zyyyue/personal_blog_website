@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.github.pagehelper.Page;
 import com.xixizai.personalblogwebsite.pojo.dto.MusicDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Music;
 import com.xixizai.personalblogwebsite.pojo.vo.MusicVO;
@@ -30,4 +31,8 @@ public interface MusicMapper {
     //获取可见音乐
     @Select("select * from music where is_visible=1")
     List<MusicVO> getMusic();
+
+    //分页查询音乐列表
+    @Select("select id,title,artist,duration,cover_image,music_url,lyric_url,has_lyric,lyric_type from music where is_visible=#{isVisible} order by create_time desc")
+    Page<MusicVO> pageQueryMusic(Integer isVisible);
 }

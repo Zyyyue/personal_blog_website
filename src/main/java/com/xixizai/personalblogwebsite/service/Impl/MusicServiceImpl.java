@@ -1,11 +1,15 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
 import com.xixizai.personalblogwebsite.mapper.MusicMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.MusicDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Music;
+import com.xixizai.personalblogwebsite.pojo.result.PageResult;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.pojo.vo.MusicVO;
 import com.xixizai.personalblogwebsite.service.MusicService;
@@ -168,6 +172,36 @@ public class MusicServiceImpl implements MusicService {
            exception.printStackTrace();
            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
        }
+
+    }
+
+    /**
+     * 分页查询音乐列表
+     * @param page
+     * @param pageSize
+     * @param isVisible
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQueryMusic(Integer page, Integer pageSize, Integer isVisible) throws GetOptsException {
+        try{
+
+            if(isVisible==null||(isVisible!=0&&isVisible!=1)){
+                isVisible=1;
+            }
+
+            //开启分页
+            PageHelper.startPage(page,pageSize);
+
+            Page<MusicVO> pageResult=(Page<MusicVO>) musicMapper.pageQueryMusic(isVisible);
+            return Result.success(new PageResult(pageResult.getTotal(),pageResult.getResult()));
+        }catch (Exception exception){
+
+            exception.printStackTrace();
+            throw  new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+
+        }
 
     }
 
