@@ -32,6 +32,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.ValidationException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -76,12 +77,15 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
                 throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
             }
 
-            List<ArticleCommentVO> rootComments = articleCommentMapper.getRootComments(id);
+            List<ArticleCommentVO> allComments = articleCommentMapper.getRootComments(id);
 
-            if(rootComments==null||rootComments.isEmpty()){
+            // 组装树形结构
+            List<ArticleCommentVO> treeComments = buildCommentTree(allComments);
+
+            if(treeComments==null||treeComments.isEmpty()){
                 return Result.error("查找失败,该文章暂时没有评论");
             }else{
-                return Result.success(rootComments);
+                return Result.success(treeComments);
             }
         }catch (Exception exception){
             exception.printStackTrace();
@@ -492,16 +496,22 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
               isApproved=1;
           }
 
-          //开启分页
-          PageHelper.startPage(page,pageSize);
+          //查询该文章的所有评论（平铺列表）
+          List<ArticleCommentVO> allComments = articleCommentMapper.getAllCommentsByArticleId(articleId, isApproved);
 
-          //查询评论
-          Page<ArticleCommentVO> commentPage = articleCommentMapper.pageQueryComments(articleId, isApproved);
+          //组装树形结构
+          List<ArticleCommentVO> treeComments = buildCommentTree(allComments);
+
+          //手动分页
+          int total = treeComments.size();
+          int fromIndex = (page - 1) * pageSize;
+          int toIndex = Math.min(fromIndex + pageSize, total);
+          List<ArticleCommentVO> pagedComments = (fromIndex < total) ? treeComments.subList(fromIndex, toIndex) : new ArrayList<>();
 
           //封装分页结果
           PageResult pageResult = PageResult.builder()
-                  .total(commentPage.getTotal())
-                  .records(commentPage.getResult())
+                  .total((long) total)
+                  .records(pagedComments)
                   .build();
 
           return Result.success(pageResult);
@@ -510,6 +520,51 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
           throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
       }
 
+    }
+
+    /**
+     * 组装评论树形结构
+     * @param allComments 平铺的评论列表
+     * @return 树形结构的评论列表（只返回根评论，子评论已组装到 children 中）
+     */
+    private List<ArticleCommentVO> buildCommentTree(List<ArticleCommentVO> allComments) {
+        if (allComments == null || allComments.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // 根评论列表
+        List<ArticleCommentVO> rootComments = new ArrayList<>();
+        // 用于快速查找的 Map
+        Map<Long, ArticleCommentVO> commentMap = new HashMap<>();
+
+        // 初始化所有评论，确保 children 不为 null
+        for (ArticleCommentVO comment : allComments) {
+            comment.setChildren(new ArrayList<>());
+            commentMap.put(comment.getId(), comment);
+        }
+
+        // 组装树形结构
+        for (ArticleCommentVO comment : allComments) {
+            if (comment.getParentId() == null || comment.getParentId() == 0) {
+                // 根评论
+                rootComments.add(comment);
+            } else {
+                // 子评论，找到父评论并添加
+                ArticleCommentVO parent = commentMap.get(comment.getParentId());
+                if (parent != null) {
+                    parent.getChildren().add(comment);
+                } else {
+                    // 父评论不存在（可能被过滤或已删除），作为根评论处理
+                    rootComments.add(comment);
+                }
+            }
+        }
+
+        // 根评论按创建时间排序
+        rootComments.sort((a, b) -> b.getCreateTime().compareTo(a.getCreateTime()));
+        // 子评论也按创建时间排序（已在上面按顺序添加）
+
+        return rootComments;
     }
 
     /**
