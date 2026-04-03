@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.github.pagehelper.Page;
 import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
 import org.apache.ibatis.annotations.*;
 
@@ -31,4 +32,8 @@ public interface VisitorMapper {
     //更新访客
     @Update("update visitors set update_time=now(),total_views=#{totalViews},last_visit_time=now() where fingerprint=#{fingerprint} ")
     void updateVisitor(Visitors existingVisitor);
+
+    //分页查询访客
+    @Select("select * from visitors order by create_time desc")
+    Page<Visitors> pageQueryVisitor();
 }

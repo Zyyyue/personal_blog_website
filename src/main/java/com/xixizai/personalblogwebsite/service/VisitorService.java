@@ -30,4 +30,7 @@ public interface VisitorService {
 
     //记录访客信息
     Result recordVisitorInfor(VisitorRecordDTO visitorRecordDTO,HttpServletRequest request) throws AddOperationException;
+
+    //分页查询访客列表
+    Result pageQueryVisitor(Integer page, Integer pageSize) throws GetOptsException;
 }

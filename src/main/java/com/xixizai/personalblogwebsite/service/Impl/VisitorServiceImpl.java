@@ -1,6 +1,7 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
-import cn.hutool.core.bean.BeanUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.*;
@@ -8,6 +9,7 @@ import com.xixizai.personalblogwebsite.mapper.VisitorMapper;
 import com.xixizai.personalblogwebsite.pojo.dto.VisitorRecordDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
+import com.xixizai.personalblogwebsite.pojo.result.PageResult;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.pojo.vo.VisitorRecordVO;
 import com.xixizai.personalblogwebsite.service.ViewService;
@@ -289,6 +291,27 @@ public class VisitorServiceImpl implements VisitorService {
        }
 
 
+    }
+
+    /**
+     * 分页查询访客
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQueryVisitor(Integer page, Integer pageSize) throws GetOptsException {
+        try{
+
+            //开启分页
+            PageHelper.startPage(page,pageSize);
+            Page<Visitors> list=visitorMapper.pageQueryVisitor();
+            return Result.success(new PageResult(list.getTotal(),list.getResult()));
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
     }
 
 

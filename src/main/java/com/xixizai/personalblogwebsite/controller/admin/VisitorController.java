@@ -1,13 +1,11 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.BatchBlockVisitorsException;
 import com.xixizai.personalblogwebsite.exception.BatchUnblockVisitorsException;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.VisitorService;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -40,4 +38,18 @@ public class VisitorController {
     public Result batchUnblockVisitors(@RequestParam List<Long>ids) throws BatchUnblockVisitorsException {
         return visitorService.batchUnblockVisitors(ids);
     }
+
+    /**
+     * 分页查询访客
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/page")
+    public Result pageQueryVisitor(@RequestParam Integer page,@RequestParam Integer pageSize) throws GetOptsException {
+        return visitorService.pageQueryVisitor(page,pageSize);
+    }
+
+
 }
