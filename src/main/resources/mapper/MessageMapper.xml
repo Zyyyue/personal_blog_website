@@ -28,4 +28,27 @@
         where visitor_id=#{visitorId}
     </select>
 
+    <!--    分页查询留言（平铺列表，用于组装树形结构）-->
+    <select id="getAllMessages" resultType="com.xixizai.personalblogwebsite.pojo.vo.MessageVO">
+        SELECT
+            id,
+            root_id as rootId,
+            parent_id as parentId,
+            parent_nickname as parentNickname,
+            content_html as contentHtml,
+            visitor_id as visitorId,
+            nickname,
+            email_or_qq as emailOrQq,
+            location,
+            user_agent_os as userAgentOs,
+            user_agent_browser as userAgentBrowser,
+            is_approved as isApproved,
+            is_secret as isSecret,
+            is_admin_reply as isAdminReply,
+            create_time as createTime
+        FROM messages
+        WHERE is_approved = #{isApproved}
+        ORDER BY create_time ASC
+    </select>
+
 </mapper>

@@ -38,4 +38,7 @@ public interface MessageService {
 
     //删除留言
     Result deleteMessage(Long id, Long visitorId) throws Exception;
+
+    //分页查询留言
+    Result pageQueryMessages(Integer page, Integer pageSize, Integer isApproved) throws GetOptsException;
 }

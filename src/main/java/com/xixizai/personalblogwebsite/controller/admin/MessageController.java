@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AdminReplyMessageException;
 import com.xixizai.personalblogwebsite.exception.BatchApproveMessageException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteMessageException;
@@ -55,8 +56,17 @@ public class MessageController {
         return messageService.adminReplyMessage(messageReplyDTO,request);
     }
 
-    public Result pageQueryMessages(){
-
+    /**
+     * 分页查询留言
+     * @param page
+     * @param pageSize
+     * @param isApproved
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/page")
+    public Result pageQueryMessages(@RequestParam Integer page,@RequestParam Integer pageSize,@RequestParam Integer isApproved) throws GetOptsException {
+        return messageService.pageQueryMessages(page,pageSize,isApproved);
     }
 
 }

@@ -47,4 +47,7 @@ public interface MessageMapper {
     //删除该留言
     @Delete("delete from messages where id=#{id}")
     void deleteById(Long id);
+
+    //分页查询留言（平铺列表，用于组装树形结构）
+    List<MessageVO> getAllMessages(Integer isApproved);
 }

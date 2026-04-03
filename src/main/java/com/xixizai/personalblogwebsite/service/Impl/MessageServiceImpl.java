@@ -1,6 +1,8 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.constant.StatusConstant;
@@ -10,6 +12,7 @@ import com.xixizai.personalblogwebsite.pojo.dto.MessageDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageEditDTO;
 import com.xixizai.personalblogwebsite.pojo.dto.MessageReplyDTO;
 import com.xixizai.personalblogwebsite.pojo.entity.Messages;
+import com.xixizai.personalblogwebsite.pojo.result.PageResult;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.pojo.vo.MessageVO;
 import com.xixizai.personalblogwebsite.service.MessageService;
@@ -23,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -425,5 +429,99 @@ public class MessageServiceImpl implements MessageService {
            throw new Exception("删除留言失败");
 
        }
+    }
+
+
+    /**
+     * 分页查询留言
+     * @param page
+     * @param pageSize
+     * @param isApproved
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQueryMessages(Integer page, Integer pageSize, Integer isApproved) throws GetOptsException {
+        try{
+            //处理一下
+            if(page==null||page<1){
+              page=1;
+            }
+
+            if(pageSize==null||pageSize<1){
+                pageSize=10;
+            }
+
+            if((isApproved==null)||(isApproved!=1&&isApproved!=0)){
+                isApproved=1;
+            }
+
+            //查询该文章的所有评论（平铺列表）
+            List<MessageVO> allMessages = messageMapper.getAllMessages(isApproved);
+
+            //组装树形结构
+            List<MessageVO> treeMessages = buildMessageTree(allMessages);
+
+            //手动分页
+            int total = treeMessages.size();
+            int fromIndex = (page - 1) * pageSize;
+            int toIndex = Math.min(fromIndex + pageSize, total);
+            List<MessageVO> pagedMessages = (fromIndex < total) ? treeMessages.subList(fromIndex, toIndex) : new ArrayList<>();
+
+            //封装分页结果
+            PageResult pageResult = PageResult.builder()
+                    .total((long) total)
+                    .records(pagedMessages)
+                    .build();
+
+            return Result.success(pageResult);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+        }
+    }
+
+    /**
+     * 组装留言树形结构
+     * @param allMessages 平铺的留言列表
+     * @return 树形结构的留言列表（只返回根留言，子留言已组装到 children 中）
+     */
+    private List<MessageVO> buildMessageTree(List<MessageVO> allMessages) {
+        if (allMessages == null || allMessages.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // 根留言列表
+        List<MessageVO> rootMessages = new ArrayList<>();
+        // 用于快速查找的 Map
+        Map<Long, MessageVO> messageMap = new HashMap<>();
+
+        // 初始化所有留言，确保 children 不为 null
+        for (MessageVO message : allMessages) {
+            message.setChildren(new ArrayList<>());
+            messageMap.put(message.getId(), message);
+        }
+
+        // 组装树形结构
+        for (MessageVO message : allMessages) {
+            if (message.getParentId() == null || message.getParentId() == 0) {
+                // 根留言
+                rootMessages.add(message);
+            } else {
+                // 子留言，找到父留言并添加
+                MessageVO parent = messageMap.get(message.getParentId());
+                if (parent != null) {
+                    parent.getChildren().add(message);
+                } else {
+                    // 父留言不存在（可能被过滤或已删除），作为根留言处理
+                    rootMessages.add(message);
+                }
+            }
+        }
+
+        // 根留言按创建时间排序
+        rootMessages.sort((a, b) -> b.getCreateTime().compareTo(a.getCreateTime()));
+
+        return rootMessages;
     }
 }
