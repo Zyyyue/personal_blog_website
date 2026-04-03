@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.service;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteViewRecordsException;
 import com.xixizai.personalblogwebsite.pojo.dto.ArticleDTO;
@@ -18,4 +19,7 @@ public interface ViewService {
 
     //添加浏览记录
     void addViewRecord(Views view, HttpServletRequest request) throws AddOperationException;
+
+    //分页查询浏览量
+    Result pageQueryView(Integer page, Integer pageSzie) throws GetOptsException;
 }

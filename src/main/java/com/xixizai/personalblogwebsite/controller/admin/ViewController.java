@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.controller.admin;
 
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteViewRecordsException;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ViewService;
@@ -25,5 +26,18 @@ public class ViewController {
     public Result batchDeleteViewsRecords(@RequestParam List<Long> ids) throws BatchDeleteViewRecordsException {
         return viewService.batchDeleteViewRecords(ids);
     }
+
+    /**
+     * 分页查询浏览记录
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws GetOptsException
+     */
+    @GetMapping("/page")
+    public Result pageQueryView(@RequestParam Integer page,@RequestParam Integer pageSize) throws GetOptsException {
+        return viewService.pageQueryView(page,pageSize);
+    }
+
 
 }

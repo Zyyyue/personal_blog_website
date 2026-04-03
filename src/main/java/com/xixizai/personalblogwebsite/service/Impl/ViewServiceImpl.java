@@ -1,5 +1,8 @@
 package com.xixizai.personalblogwebsite.service.Impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import com.xixizai.personalblogwebsite.constant.MessageConstant;
 import com.xixizai.personalblogwebsite.exception.AddOperationException;
 import com.xixizai.personalblogwebsite.exception.BatchDeleteViewRecordsException;
@@ -7,6 +10,7 @@ import com.xixizai.personalblogwebsite.exception.PassedParameterException;
 import com.xixizai.personalblogwebsite.mapper.ViewMapper;
 import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import com.xixizai.personalblogwebsite.pojo.entity.Visitors;
+import com.xixizai.personalblogwebsite.pojo.result.PageResult;
 import com.xixizai.personalblogwebsite.pojo.result.Result;
 import com.xixizai.personalblogwebsite.service.ViewService;
 import com.xixizai.personalblogwebsite.service.VisitorService;
@@ -192,6 +196,30 @@ public class ViewServiceImpl implements ViewService {
             exception.printStackTrace();
             throw new AddOperationException(MessageConstant.ADD_OPERATION_FAILSURE);
         }
+    }
+
+
+    /**
+     * 分页查询浏览记录
+     * @param page
+     * @param pageSzie
+     * @return
+     * @throws GetOptsException
+     */
+    @Override
+    public Result pageQueryView(Integer page, Integer pageSzie) throws GetOptsException {
+       try{
+            //开启分页
+           PageHelper.startPage(page,pageSzie);
+           Page<Views> list=viewMapper.pageQueryView();
+           return Result.success(new PageResult(list.getTotal(),list.getResult()));
+
+       }catch (Exception exception){
+
+           exception.printStackTrace();
+           throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
+
+       }
     }
 
 

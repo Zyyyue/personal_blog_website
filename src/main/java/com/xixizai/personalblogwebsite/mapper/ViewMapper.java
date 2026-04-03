@@ -1,5 +1,6 @@
 package com.xixizai.personalblogwebsite.mapper;
 
+import com.github.pagehelper.Page;
 import com.xixizai.personalblogwebsite.pojo.entity.Views;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,4 +21,8 @@ public interface ViewMapper {
     //添加浏览记录
     @Insert("insert into views (visitor_id, page_path, referer, page_title, ip_address, user_agent, view_time)values (#{visitorId},#{pagePath},#{referer},#{pageTitle},#{ipAddress},#{userAgent},now())")
     void addViewRecord(Views views);
+
+    //分页查询浏览记录
+    @Select("select * from views order by view_time desc ")
+    Page<Views> pageQueryView();
 }
