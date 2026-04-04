@@ -39,4 +39,10 @@ public class MusicVO {
 
     // 歌词类型,lrc,json,txt
     private String lyricType;
+
+    // 排序，越小越靠前
+    private Integer sort;
+
+    // 是否可见
+    private Integer isVisible;
 }

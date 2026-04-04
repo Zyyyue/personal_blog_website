@@ -13,11 +13,16 @@ export const useMusicStore = defineStore('music', {
   }),
 
   actions: {
-    async fetchList() {
+    async fetchList(params) {
       this.loading = true
       try {
-        const res = await getMusics()
-        this.list = res.data || []
+        const res = await getMusics(params)
+        // 分页数据格式：{ total, records }
+        if (res.data?.records) {
+          this.list = res.data.records
+        } else if (res.data) {
+          this.list = res.data
+        }
         return res
       } finally {
         this.loading = false

@@ -13,13 +13,13 @@
       <el-table :data="musicStore.list" v-loading="musicStore.loading">
         <el-table-column prop="title" label="标题" min-width="200" />
         <el-table-column prop="artist" label="艺术家" min-width="150" />
-        <el-table-column prop="url" label="音乐 URL" min-width="300" show-overflow-tooltip />
-        <el-table-column prop="cover" label="封面" width="100" align="center">
+        <el-table-column prop="musicUrl" label="音乐 URL" min-width="300" show-overflow-tooltip />
+        <el-table-column prop="coverImage" label="封面" width="100" align="center">
           <template #default="{ row }">
             <el-image
-              v-if="row.cover"
-              :src="row.cover"
-              :preview-src-list="[row.cover]"
+              v-if="row.coverImage"
+              :src="row.coverImage"
+              :preview-src-list="[row.coverImage]"
               fit="cover"
               style="width: 50px; height: 50px; border-radius: 4px"
             />
@@ -58,11 +58,11 @@
         <el-form-item label="艺术家" prop="artist">
           <el-input v-model="formData.artist" placeholder="请输入艺术家名称" />
         </el-form-item>
-        <el-form-item label="音乐 URL" prop="url">
-          <el-input v-model="formData.url" placeholder="请输入音乐文件地址" />
+        <el-form-item label="音乐 URL" prop="musicUrl">
+          <el-input v-model="formData.musicUrl" placeholder="请输入音乐文件地址" />
         </el-form-item>
-        <el-form-item label="封面地址" prop="cover">
-          <el-input v-model="formData.cover" placeholder="请输入封面图片地址" />
+        <el-form-item label="封面地址" prop="coverImage">
+          <el-input v-model="formData.coverImage" placeholder="请输入封面图片地址" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="formData.sort" :min="0" />
@@ -93,14 +93,14 @@ const formData = reactive({
   id: null,
   title: '',
   artist: '',
-  url: '',
-  cover: '',
+  musicUrl: '',
+  coverImage: '',
   sort: 0
 })
 
 const rules = {
   title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
-  url: [{ required: true, message: '请输入音乐 URL', trigger: 'blur' }]
+  musicUrl: [{ required: true, message: '请输入音乐 URL', trigger: 'blur' }]
 }
 
 const load = () => {
@@ -113,8 +113,8 @@ const handleAdd = () => {
   formData.id = null
   formData.title = ''
   formData.artist = ''
-  formData.url = ''
-  formData.cover = ''
+  formData.musicUrl = ''
+  formData.coverImage = ''
   formData.sort = 0
   dialogVisible.value = true
 }
@@ -125,8 +125,8 @@ const handleEdit = (row) => {
   formData.id = row.id
   formData.title = row.title
   formData.artist = row.artist
-  formData.url = row.url
-  formData.cover = row.cover
+  formData.musicUrl = row.musicUrl
+  formData.coverImage = row.coverImage
   formData.sort = row.sort || 0
   dialogVisible.value = true
 }

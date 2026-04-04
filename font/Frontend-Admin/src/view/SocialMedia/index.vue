@@ -14,10 +14,10 @@
         <el-table-column prop="name" label="名称" min-width="150" />
         <el-table-column prop="icon" label="图标" width="100" align="center">
           <template #default="{ row }">
-            <el-icon :size="24"><component :is="row.icon" /></el-icon>
+            <i :class="row.icon" style="font-size: 18px;"></i>
           </template>
         </el-table-column>
-        <el-table-column prop="url" label="链接" min-width="300" show-overflow-tooltip />
+        <el-table-column prop="link" label="链接" min-width="300" show-overflow-tooltip />
         <el-table-column prop="sort" label="排序" width="80" />
         <el-table-column label="操作" width="150" align="center" fixed="right">
           <template #default="{ row }">
@@ -51,8 +51,8 @@
         <el-form-item label="图标" prop="icon">
           <el-input v-model="formData.icon" placeholder="请输入图标类名 (如：Github)" />
         </el-form-item>
-        <el-form-item label="链接" prop="url">
-          <el-input v-model="formData.url" placeholder="请输入链接地址" />
+        <el-form-item label="链接" prop="link">
+          <el-input v-model="formData.link" placeholder="请输入链接地址" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="formData.sort" :min="0" />
@@ -83,13 +83,13 @@ const formData = reactive({
   id: null,
   name: '',
   icon: '',
-  url: '',
+  link: '',
   sort: 0
 })
 
 const rules = {
   name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
-  url: [{ required: true, message: '请输入链接', trigger: 'blur' }]
+  link: [{ required: true, message: '请输入链接', trigger: 'blur' }]
 }
 
 const load = () => {
@@ -102,7 +102,7 @@ const handleAdd = () => {
   formData.id = null
   formData.name = ''
   formData.icon = ''
-  formData.url = ''
+  formData.link = ''
   formData.sort = 0
   dialogVisible.value = true
 }
@@ -113,7 +113,7 @@ const handleEdit = (row) => {
   formData.id = row.id
   formData.name = row.name
   formData.icon = row.icon
-  formData.url = row.url
+  formData.link = row.link
   formData.sort = row.sort || 0
   dialogVisible.value = true
 }

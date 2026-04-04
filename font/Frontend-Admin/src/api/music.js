@@ -1,9 +1,11 @@
 import http from '@/utils/request'
 
 /**
- * 获取所有音乐
+ * 获取所有音乐（分页）
+ * @param {{ page?: number, pageSize?: number }} params
  */
-export const getMusics = () => http.get('/admin/music')
+export const getMusics = (params) =>
+  http.get('/admin/music/page', { params: { page: params?.page || 1, pageSize: params?.pageSize || 100 } })
 
 /**
  * 根据 ID 获取音乐

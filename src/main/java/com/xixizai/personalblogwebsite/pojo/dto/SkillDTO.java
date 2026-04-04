@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * 技能DTO
+ * 技能 DTO
  */
 @Data
 @Builder
@@ -18,19 +18,24 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class SkillDTO implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     // 技能名称
     @NotBlank(message = "技能名称不能为空")
-    @Size(max = 20, message = "技能名称不能超过20字")
+    @Size(max = 20, message = "技能名称不能超过 20 字")
     private String name;
 
     // 技能描述
-    @Size(max = 255, message = "技能描述不能超过255字")
+    @Size(max = 255, message = "技能描述不能超过 255 字")
     private String description;
 
-    // 图标url
+    // 图标 url
     private String icon;
+
+    // 熟练度，0-100
+    private Integer level;
 
     // 排序，越小越靠前
     private Integer sort;
