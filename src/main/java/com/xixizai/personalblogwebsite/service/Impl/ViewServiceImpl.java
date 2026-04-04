@@ -207,11 +207,11 @@ public class ViewServiceImpl implements ViewService {
      * @throws GetOptsException
      */
     @Override
-    public Result pageQueryView(Integer page, Integer pageSize) throws GetOptsException {
+    public Result pageQueryView(Integer page, Integer pageSize, String ip, Integer type) throws GetOptsException {
        try{
             //开启分页
            PageHelper.startPage(page,pageSize);
-           Page<Views> list=viewMapper.pageQueryView();
+           Page<com.xixizai.personalblogwebsite.pojo.vo.ViewVO> list=viewMapper.pageQueryViewRecords(ip, type);
            return Result.success(new PageResult(list.getTotal(),list.getResult()));
 
        }catch (Exception exception){

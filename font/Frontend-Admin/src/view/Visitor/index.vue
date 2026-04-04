@@ -32,11 +32,15 @@
     <el-card class="table-wrap" v-loading="visitorStore.loading">
       <el-table :data="visitorStore.list" border stripe>
         <el-table-column prop="ip" label="IP 地址" width="140" />
-        <el-table-column prop="ipInfo" label="IP 归属地" min-width="150" />
-        <el-table-column prop="visitTime" label="访问时间" width="160">
-          <template #default="{ row }">{{ fmtDate(row.visitTime) }}</template>
+        <el-table-column prop="ipInfo" label="IP 归属地" min-width="150">
+          <template #default="{ row }">
+            {{ row.province || row.country || '-' }} {{ row.city || '' }}
+          </template>
         </el-table-column>
-        <el-table-column prop="visitPage" label="访问页面" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="firstVisitTime" label="首次访问时间" width="160">
+          <template #default="{ row }">{{ fmtDate(row.firstVisitTime) }}</template>
+        </el-table-column>
+        <el-table-column prop="totalViews" label="访问次数" width="80" align="center" />
         <el-table-column label="状态" width="80" align="center">
           <template #default="{ row }">
             <el-tag :type="row.isBlocked ? 'danger' : 'success'">

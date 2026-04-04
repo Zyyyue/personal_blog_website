@@ -21,5 +21,5 @@ public interface ViewService {
     void addViewRecord(Views view, HttpServletRequest request) throws AddOperationException;
 
     //分页查询浏览量
-    Result pageQueryView(Integer page, Integer pageSzie) throws GetOptsException;
+    Result pageQueryView(Integer page, Integer pageSize, String ip, Integer type) throws GetOptsException;
 }

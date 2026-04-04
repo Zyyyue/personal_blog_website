@@ -1,23 +1,23 @@
 import http from '@/utils/request'
 
 /**
- * 获取所有 RSS 订阅
+ * 获取所有 RSS 链接
  */
-export const getRssSubscriptions = () => http.get('/admin/rssSubscription')
+export const getRssSubscriptions = () => http.get('/admin/rssLink')
 
 /**
- * 添加 RSS 订阅
+ * 添加 RSS 链接
  * @param {object} data
  */
 export const addRssSubscription = (data) =>
-  http.post('/admin/rssSubscription', data)
+  http.post('/admin/rssLink', data)
 
 /**
  * 根据 ID 获取订阅
  * @param {number} id
  */
 export const getRssSubscriptionById = (id) =>
-  http.get(`/admin/rssSubscription/${id}`)
+  http.get(`/admin/rssLink/${id}`)
 
 /**
  * 分页查询订阅
@@ -31,11 +31,11 @@ export const getRssSubscriptionPage = (params) =>
  * @param {object} data
  */
 export const updateRssSubscription = (data) =>
-  http.put('/admin/rssSubscription', data)
+  http.put('/admin/rssLink', data)
 
 /**
  * 批量删除订阅
  * @param {number[]} ids
  */
 export const deleteRssSubscriptions = (ids) =>
-  http.delete('/admin/rssSubscription', { params: { ids: ids.join(',') } })
+  http.delete('/admin/rssLink', { params: { ids: ids.join(',') } })

@@ -31,12 +31,17 @@ public class ViewController {
      * 分页查询浏览记录
      * @param page
      * @param pageSize
+     * @param ip
+     * @param type
      * @return
      * @throws GetOptsException
      */
     @GetMapping("/page")
-    public Result pageQueryView(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer pageSize) throws GetOptsException {
-        return viewService.pageQueryView(page,pageSize);
+    public Result pageQueryView(@RequestParam(defaultValue = "1") Integer page,
+                                @RequestParam(defaultValue = "10") Integer pageSize,
+                                @RequestParam(required = false) String ip,
+                                @RequestParam(required = false) Integer type) throws GetOptsException {
+        return viewService.pageQueryView(page, pageSize, ip, type);
     }
 
 

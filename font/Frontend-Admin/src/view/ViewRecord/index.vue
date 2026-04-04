@@ -33,15 +33,21 @@
     <el-card class="table-wrap" v-loading="viewRecordStore.loading">
       <el-table :data="viewRecordStore.list" border stripe>
         <el-table-column prop="ip" label="IP 地址" width="140" />
-        <el-table-column prop="ipInfo" label="IP 归属地" min-width="150" />
+        <el-table-column label="IP 归属地" min-width="150">
+          <template #default="{ row }">
+            {{ row.province === '-' || !row.province ? (row.country === '-' || !row.country ? '-' : row.country) : row.province }} {{ row.city && row.city !== '-' ? row.city : '' }}
+          </template>
+        </el-table-column>
         <el-table-column prop="type" label="类型" width="100">
           <template #default="{ row }">
             <el-tag v-if="row.type === 1">文章</el-tag>
             <el-tag v-else-if="row.type === 2" type="success">首页</el-tag>
             <el-tag v-else-if="row.type === 3" type="warning">关于</el-tag>
+            <el-tag v-else>其他</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="articleId" label="文章 ID" width="80" />
+        <el-table-column prop="pageTitle" label="页面标题" min-width="200" />
         <el-table-column prop="visitTime" label="访问时间" width="160">
           <template #default="{ row }">{{ fmtDate(row.visitTime) }}</template>
         </el-table-column>
@@ -104,7 +110,10 @@ const load = () => {
   })
 }
 
-const fmtDate = (d) => (d ? dayjs(d).format('YYYY-MM-DD HH:mm') : '-')
+const fmtDate = (d) => {
+  if (!d || d === '-') return '-'
+  return dayjs(d).format('YYYY-MM-DD HH:mm')
+}
 
 onMounted(load)
 </script>

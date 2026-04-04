@@ -2,8 +2,10 @@ package com.xixizai.personalblogwebsite.mapper;
 
 import com.github.pagehelper.Page;
 import com.xixizai.personalblogwebsite.pojo.entity.Views;
+import com.xixizai.personalblogwebsite.pojo.vo.ViewVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -23,6 +25,5 @@ public interface ViewMapper {
     void addViewRecord(Views views);
 
     //分页查询浏览记录
-    @Select("select * from views order by view_time desc ")
-    Page<Views> pageQueryView();
+    Page<ViewVO> pageQueryViewRecords(@Param("ip") String ip, @Param("type") Integer type);
 }

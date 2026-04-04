@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<!--这个写包名加上类名-->
 <mapper namespace="com.xixizai.personalblogwebsite.mapper.ViewMapper">
 
-<!--    批量删除浏览记录-->
+    <!--    批量删除浏览记录-->
     <delete id="batchDeleteViewRecords">
         delete from views
         where id in
@@ -12,5 +11,64 @@
             #{id}
         </foreach>
     </delete>
+
+    <!--    浏览记录 ResultMap-->
+    <resultMap id="ViewVOResultMap" type="com.xixizai.personalblogwebsite.pojo.vo.ViewVO">
+        <id property="id" column="id"/>
+        <result property="ip" column="ip"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="country" column="country"/>
+        <result property="type" column="type"/>
+        <result property="articleId" column="articleId"/>
+        <result property="pageTitle" column="pageTitle"/>
+        <result property="pagePath" column="pagePath"/>
+        <result property="visitTime" column="visitTime"/>
+    </resultMap>
+
+    <!--    分页查询浏览记录-->
+    <select id="pageQueryViewRecords" resultMap="ViewVOResultMap">
+        SELECT
+            v.id,
+            COALESCE(v.ip_address, '-') as ip,
+            COALESCE(vi.province, '-') as province,
+            COALESCE(vi.city, '-') as city,
+            COALESCE(vi.country, '-') as country,
+            CASE
+                WHEN v.page_path IS NULL THEN 0
+                WHEN v.page_path LIKE '/article/%' THEN 1
+                WHEN v.page_path = '/' THEN 2
+                WHEN v.page_path LIKE '/about%' THEN 3
+                ELSE 0
+            END as type,
+            CASE
+                WHEN v.page_path LIKE '/article/%' THEN SUBSTRING_INDEX(v.page_path, '/', -1)
+                ELSE NULL
+            END as articleId,
+            COALESCE(v.page_title, '-') as pageTitle,
+            COALESCE(v.page_path, '-') as pagePath,
+            v.view_time as visitTime
+        FROM views v
+        LEFT JOIN visitors vi ON v.visitor_id = vi.id
+        <where>
+            <if test="ip != null and ip != ''">
+                AND v.ip_address LIKE CONCAT('%', #{ip}, '%')
+            </if>
+            <if test="type != null">
+                <choose>
+                    <when test="type == 1">
+                        AND v.page_path LIKE '/article/%'
+                    </when>
+                    <when test="type == 2">
+                        AND v.page_path = '/'
+                    </when>
+                    <when test="type == 3">
+                        AND v.page_path LIKE '/about%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY v.view_time DESC
+    </select>
 
 </mapper>
