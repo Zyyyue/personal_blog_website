@@ -60,7 +60,7 @@ public class FriendLinkController {
      * @throws BatchDeleteFriendLinksException
      */
     @DeleteMapping()
-    public Result batchDeleteFriendLinks(@RequestParam List<Long>ids) throws BatchDeleteFriendLinksException {
+    public Result batchDeleteFriendLinks(@RequestParam(required = false) List<Long>ids) throws BatchDeleteFriendLinksException {
         return friendLinkService.batchDeleteFriendLinks(ids);
     }
 

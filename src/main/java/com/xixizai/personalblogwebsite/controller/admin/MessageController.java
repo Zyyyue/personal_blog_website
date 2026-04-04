@@ -65,7 +65,7 @@ public class MessageController {
      * @throws GetOptsException
      */
     @GetMapping("/page")
-    public Result pageQueryMessages(@RequestParam Integer page,@RequestParam Integer pageSize,@RequestParam Integer isApproved) throws GetOptsException {
+    public Result pageQueryMessages(@RequestParam Integer page,@RequestParam Integer pageSize,@RequestParam(required = false) Integer isApproved) throws GetOptsException {
         return messageService.pageQueryMessages(page,pageSize,isApproved);
     }
 

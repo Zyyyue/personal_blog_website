@@ -146,6 +146,38 @@ public class SystemConfigServiceImpl implements SystemConfigService {
     }
 
     /**
+     * 批量保存配置
+     * @param configDTOs
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @Override
+    public Result batchSaveConfigs(List<SystemConfigDTO> configDTOs) throws UpdateOperationsException {
+        try {
+            if (configDTOs == null || configDTOs.isEmpty()) {
+                throw new PassedParameterException(MessageConstant.PASSED_PARAMETER_NOT_NULL);
+            }
+
+            for (SystemConfigDTO configDTO : configDTOs) {
+                // 先根据 configKey 查询是否存在
+                SystemConfig existingConfig = systemConfigMapper.getSystemConfigByConfigKey(configDTO.getConfigKey());
+                if (existingConfig != null) {
+                    // 存在则更新
+                    configDTO.setId(existingConfig.getId());
+                    systemConfigMapper.updateConfigByKey(configDTO);
+                } else {
+                    // 不存在则添加
+                    systemConfigMapper.insertConfigIfNotExists(configDTO);
+                }
+            }
+            return Result.success("保存成功");
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new UpdateOperationsException(MessageConstant.UPDATE_OPERATIONS_FAILSURE);
+        }
+    }
+
+    /**
      * 批量删除配置
      * @param ids
      * @return

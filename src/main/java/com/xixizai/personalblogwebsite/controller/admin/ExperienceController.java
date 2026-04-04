@@ -26,7 +26,7 @@ public class ExperienceController {
      * @throws GetOptsException
      */
     @GetMapping()
-    public Result getExperienceList(@RequestParam List<Integer>types) throws GetOptsException {
+    public Result getExperienceList(@RequestParam(required = false) List<Integer>types) throws GetOptsException {
         return experienceService.getExperienceList(types);
     }
 

@@ -492,29 +492,18 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
               pageSize=10;
           }
 
-          if((isApproved==null)||(isApproved!=1&&isApproved!=0)){
-              isApproved=1;
-          }
-
-          //查询该文章的所有评论（平铺列表）
-          List<ArticleCommentVO> allComments = articleCommentMapper.getAllCommentsByArticleId(articleId, isApproved);
-
-          //组装树形结构
-          List<ArticleCommentVO> treeComments = buildCommentTree(allComments);
-
-          //手动分页
-          int total = treeComments.size();
-          int fromIndex = (page - 1) * pageSize;
-          int toIndex = Math.min(fromIndex + pageSize, total);
-          List<ArticleCommentVO> pagedComments = (fromIndex < total) ? treeComments.subList(fromIndex, toIndex) : new ArrayList<>();
+          //使用PageHelper分页查询
+          PageHelper.startPage(page, pageSize);
+          List<ArticleCommentVO> comments = articleCommentMapper.pageQueryComments(articleId, isApproved);
+          Page<ArticleCommentVO> pageResult = (Page<ArticleCommentVO>) comments;
 
           //封装分页结果
-          PageResult pageResult = PageResult.builder()
-                  .total((long) total)
-                  .records(pagedComments)
+          PageResult result = PageResult.builder()
+                  .total(pageResult.getTotal())
+                  .records(pageResult.getResult())
                   .build();
 
-          return Result.success(pageResult);
+          return Result.success(result);
       }catch (Exception exception){
           exception.printStackTrace();
           throw new GetOptsException(MessageConstant.GET_OPERATIONS_FAILSURE);
@@ -525,7 +514,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     /**
      * 组装评论树形结构
      * @param allComments 平铺的评论列表
-     * @return 树形结构的评论列表（只返回根评论，子评论已组装到 children 中）
+     * @return 树形结构的评论列表只返回根评论子评论已组装到children中
      */
     private List<ArticleCommentVO> buildCommentTree(List<ArticleCommentVO> allComments) {
         if (allComments == null || allComments.isEmpty()) {
@@ -546,15 +535,15 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         // 组装树形结构
         for (ArticleCommentVO comment : allComments) {
             if (comment.getParentId() == null || comment.getParentId() == 0) {
-                // 根评论
+                //根评论
                 rootComments.add(comment);
             } else {
-                // 子评论，找到父评论并添加
+                // 子评论找到父评论并添加
                 ArticleCommentVO parent = commentMap.get(comment.getParentId());
                 if (parent != null) {
                     parent.getChildren().add(comment);
                 } else {
-                    // 父评论不存在（可能被过滤或已删除），作为根评论处理
+                    // 父评论不存在可能被过滤或已删除作为根评论处理
                     rootComments.add(comment);
                 }
             }

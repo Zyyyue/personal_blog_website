@@ -75,8 +75,13 @@ public class ArticleCommentController {
      * @throws GetOptsException
      */
     @GetMapping("/page")
-    public Result pageQueryComments(@RequestParam Integer page,@RequestParam Integer pageSize,@RequestParam Long articleId,@RequestParam Integer isApproved) throws GetOptsException {
-        return articleCommentService.pageQueryComments(page,pageSize,articleId,isApproved);
+    public Result pageQueryComments(
+        @RequestParam(defaultValue = "1") Integer page,
+        @RequestParam(defaultValue = "15") Integer pageSize,
+        @RequestParam(required = false) Long articleId,
+        @RequestParam(required = false) Integer isApproved
+    ) throws GetOptsException {
+        return articleCommentService.pageQueryComments(page, pageSize, articleId, isApproved);
     }
 
 }

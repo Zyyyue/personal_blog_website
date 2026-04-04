@@ -28,7 +28,7 @@ public class AdminController {
      * @param sendCodeDTO
      * @return
      */
-    @PostMapping ("/admin/sendCode")
+    @PostMapping ("/sendCode")
     public Result sendCode(@RequestBody SendCodeDTO sendCodeDTO) throws VisitorSendCodeException, AccountNotFoundException, VerifyCodeCoolDownException, EmailSendErrorException {
     String username=sendCodeDTO.getUsername();
      adminService.sendVerifyCode(username);
@@ -44,7 +44,7 @@ public class AdminController {
      * @throws VerifyCodeErrorException
      * @throws AccountNotFoundException
      */
-    @PostMapping("/admin/login")
+    @PostMapping("/login")
     public Result<AdminLoginVO>login(@RequestBody @Valid AdminLoginDTO adminLoginDTO) throws VerifyCodeLockException, PasswordErrorException, VerifyCodeErrorException, AccountNotFoundException {
         return adminService.login(adminLoginDTO);
     }
@@ -54,7 +54,7 @@ public class AdminController {
      * @return
      * @throws FindNoAdminByIdException
      */
-    @GetMapping("/admin")
+    @GetMapping("/")
     public Result<AdminVO>getAdminInfor() throws FindNoAdminByIdException {
         return adminService.getAdminInfor();
     }
@@ -67,7 +67,7 @@ public class AdminController {
      * @throws UpdateAdminPasswordException
      * @throws PasswordErrorException
      */
-    @PutMapping("/admin/changePassword")
+    @PutMapping("/changePassword")
     public Result changeAdminPassword(@RequestBody AdminChangePasswordDTO adminChangePasswordDTO) throws PasswordNotNullException, UpdateAdminPasswordException, PasswordErrorException {
         return adminService.changeAdminPassword(adminChangePasswordDTO);
     }
@@ -77,7 +77,7 @@ public class AdminController {
      * @param adminChangeNicknameDTO
      * @return
      */
-    @PutMapping("/admin/changeNickname")
+    @PutMapping("/changeNickname")
     public Result changeAdminNickname(@RequestBody @Valid AdminChangeNicknameDTO adminChangeNicknameDTO) throws UpdateAdminNicknameException {
         return adminService.changeAdminNickname(adminChangeNicknameDTO);
     }
@@ -91,7 +91,7 @@ public class AdminController {
      * @throws VerifyCodeErrorException
      * @throws UpdateAdminEmailException
      */
-    @PutMapping("/admin/changeEmail")
+    @PutMapping("/changeEmail")
     public Result changeAdminEmail(@RequestBody @Valid AdminChangeEmailDTO adminChangeEmailDTO) throws VerifyCodeLockException, AccountNotFoundException, VerifyCodeErrorException, UpdateAdminEmailException {
         return adminService.changeAdminEmail(adminChangeEmailDTO);
     }
@@ -100,7 +100,7 @@ public class AdminController {
      * 退出登录
      * @return
      */
-    @PostMapping("/admin/logout")
+    @PostMapping("/logout")
     public Result logout(@RequestHeader("Authorization") String token) throws LogoutFailsureException {
         return adminService.logout(token);
     }

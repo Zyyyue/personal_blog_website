@@ -138,16 +138,17 @@
                a.publish_time as publishTime,a.create_time as createTime,a.update_time as updateTime
         from articles a
         left join article_categories ac on a.category_id = ac.id
-        where
-        <if test="title!=null and title!=''">
-            title like concat('%',#{title},'%')
-        </if>
-        <if test="categoryId !=null">
-            and a.category_id=#{categoryId}
-        </if>
-        <if test="isPublished !=null">
-            and a.is_published=#{isPublished}
-        </if>
+        <where>
+            <if test="title!=null and title!=''">
+                and title like concat('%',#{title},'%')
+            </if>
+            <if test="categoryId !=null">
+                and a.category_id=#{categoryId}
+            </if>
+            <if test="isPublished !=null">
+                and a.is_published=#{isPublished}
+            </if>
+        </where>
         order by a.create_time desc
 
     </select>

@@ -54,12 +54,13 @@ public interface ArticleCommentMapper {
     //查询根评论（平铺列表，用于组装树形结构）
     List<ArticleCommentVO> getRootComments(Long articleId);
 
-    //分页查询评论（支持文章 ID 和审核状态筛选，返回树形结构）
-    Page<ArticleCommentVO> pageQueryComments(Long articleId, Integer isApproved);
 
     //查询文章的所有评论（平铺列表，用于组装树形结构）
     List<ArticleCommentVO> getAllCommentsByArticleId(Long articleId, Integer isApproved);
 
     //根据文章 ID 查询评论（平铺列表）
     List<ArticleCommentVO> getCommentsByArticleId(Long articleId);
+
+    //管理端分页查询评论（平铺列表）
+    List<ArticleCommentVO> pageQueryComments(Long articleId, Integer isApproved);
 }

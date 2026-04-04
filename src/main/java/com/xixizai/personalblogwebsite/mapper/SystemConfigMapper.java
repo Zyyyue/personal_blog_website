@@ -31,6 +31,14 @@ public interface SystemConfigMapper {
     @Update("update system_config set config_key=#{configKey},config_value=#{configValue},config_type=#{configType},description=#{description},update_time=now() where id=#{id}")
     void updateSystemConfig(SystemConfigDTO systemConfigdto);
 
+    //根据配置键更新配置值
+    @Update("update system_config set config_value=#{configValue},update_time=now() where config_key=#{configKey}")
+    void updateConfigByKey(SystemConfigDTO configDTO);
+
+    //根据配置键添加配置（如果不存在）
+    @Insert("insert into system_config (config_key, config_value, config_type, description, create_time, update_time) values (#{configKey},#{configValue},#{configType},#{description},now(),now())")
+    void insertConfigIfNotExists(SystemConfigDTO configDTO);
+
     //批量删除配置
     void batchDeleteSystemConfigs(List<Long> ids);
 }

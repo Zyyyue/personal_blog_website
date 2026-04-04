@@ -28,6 +28,9 @@ public interface SystemConfigService {
     //更新配置
     Result updateSystemConfig(SystemConfigDTO systemConfigdto) throws UpdateOperationsException;
 
+    //批量保存配置
+    Result batchSaveConfigs(List<SystemConfigDTO> configDTOs) throws UpdateOperationsException;
+
     //批量删除配置
     Result batchDeleteSystemConfigs(List<Long> ids) throws BatchDeleteSystemConfigsException;
 }

@@ -75,6 +75,17 @@ public class SystemConfigController {
     }
 
     /**
+     * 批量保存配置
+     * @param configDTOs
+     * @return
+     * @throws UpdateOperationsException
+     */
+    @PostMapping("/batch")
+    public Result batchSaveConfigs(@RequestBody List<SystemConfigDTO> configDTOs) throws UpdateOperationsException {
+        return systemConfigService.batchSaveConfigs(configDTOs);
+    }
+
+    /**
      * 批量删除系统配置
      * @param ids
      * @return

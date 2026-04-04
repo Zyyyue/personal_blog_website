@@ -142,7 +142,7 @@ public class ViewServiceImpl implements ViewService {
                 //获取用户代理
                 String userAgentString = request.getHeader("User-Agent");
                 String browserName = userAgentUtil.getBrowserName(userAgentString);
-                String osName = userAgentUtil.getOsName(browserName);
+                String osName = userAgentUtil.getOsName(userAgentString);
                 //获取经纬度
 
                 Map<String, String> locationFromRequest = IpUtil.getGeoInfo(clientIp);
@@ -202,15 +202,15 @@ public class ViewServiceImpl implements ViewService {
     /**
      * 分页查询浏览记录
      * @param page
-     * @param pageSzie
+     * @param pageSize
      * @return
      * @throws GetOptsException
      */
     @Override
-    public Result pageQueryView(Integer page, Integer pageSzie) throws GetOptsException {
+    public Result pageQueryView(Integer page, Integer pageSize) throws GetOptsException {
        try{
             //开启分页
-           PageHelper.startPage(page,pageSzie);
+           PageHelper.startPage(page,pageSize);
            Page<Views> list=viewMapper.pageQueryView();
            return Result.success(new PageResult(list.getTotal(),list.getResult()));
 
