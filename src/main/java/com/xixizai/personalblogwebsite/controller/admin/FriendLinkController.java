@@ -18,7 +18,7 @@ import java.util.List;
 public class FriendLinkController {
 
     @Resource
-    private FriendLinkService friendLinkServic;
+    private FriendLinkService friendLinkService;
 
     /**
      * 获取所有友链
@@ -27,7 +27,7 @@ public class FriendLinkController {
      */
     @GetMapping()
     public Result getAllFriendLinks() throws GetOptsException {
-        return friendLinkServic.getAllFriendLinks();
+        return friendLinkService.getAllFriendLinks();
     }
 
     /**
@@ -38,7 +38,7 @@ public class FriendLinkController {
      */
     @PostMapping()
     public Result addFriendLink(@RequestBody FriendLinkDTO friendLinkDTO) throws AddOperationException {
-        return friendLinkServic.addFriendLink(friendLinkDTO);
+        return friendLinkService.addFriendLink(friendLinkDTO);
     }
 
     /**
@@ -50,7 +50,7 @@ public class FriendLinkController {
      */
     @PutMapping()
     public Result updateFriendLink(@RequestBody FriendLinkDTO friendLinkDTO) throws PassedParameterException, UpdateOperationsException {
-        return friendLinkServic.updateFriendLink(friendLinkDTO);
+        return friendLinkService.updateFriendLink(friendLinkDTO);
     }
 
     /**
@@ -61,7 +61,7 @@ public class FriendLinkController {
      */
     @DeleteMapping()
     public Result batchDeleteFriendLinks(@RequestParam List<Long>ids) throws BatchDeleteFriendLinksException {
-        return friendLinkServic.batchDeleteFriendLinks(ids);
+        return friendLinkService.batchDeleteFriendLinks(ids);
     }
 
 }

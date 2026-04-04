@@ -47,7 +47,7 @@ public interface ArticleService {
     Result pageQueryArticle(Integer page, Integer pageSize) throws GetOptsException;
 
     //分页查询根据标签获取文章
-    Result pageQueryArticleBytagId(Integer page,Integer pageSize,Integer tagId) throws GetOptsException;
+    Result pageQueryArticleBytagId(Integer page,Integer pageSize,Long tagId) throws GetOptsException;
 
     //分页查询根据关键词文章搜索
     Result pageQueryArticleBykeyWords(Integer page, Integer pageSize, String keywords) throws GetOptsException;

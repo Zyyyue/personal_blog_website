@@ -35,7 +35,7 @@ public class ViewController {
      * @throws GetOptsException
      */
     @GetMapping("/page")
-    public Result pageQueryView(@RequestParam Integer page,@RequestParam Integer pageSize) throws GetOptsException {
+    public Result pageQueryView(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer pageSize) throws GetOptsException {
         return viewService.pageQueryView(page,pageSize);
     }
 

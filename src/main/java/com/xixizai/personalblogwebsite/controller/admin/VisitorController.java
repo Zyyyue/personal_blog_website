@@ -47,7 +47,7 @@ public class VisitorController {
      * @throws GetOptsException
      */
     @GetMapping("/page")
-    public Result pageQueryVisitor(@RequestParam Integer page,@RequestParam Integer pageSize) throws GetOptsException {
+    public Result pageQueryVisitor(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer pageSize) throws GetOptsException {
         return visitorService.pageQueryVisitor(page,pageSize);
     }
 

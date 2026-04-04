@@ -449,7 +449,7 @@ public class ArticleServiceImpl implements ArticleService {
      * @return
      */
     @Override
-    public Result pageQueryArticleBytagId(Integer page,Integer pageSize,Integer tagId) throws GetOptsException {
+    public Result pageQueryArticleBytagId(Integer page,Integer pageSize,Long tagId) throws GetOptsException {
         try{
 
             PageHelper.startPage(page,pageSize);

@@ -73,7 +73,7 @@ public class MusicController {
      * @return
      */
     @GetMapping("/page")
-    public Result pageQueryMusic(@RequestParam Integer page,@RequestParam Integer pageSize) throws GetOptsException {
+    public Result pageQueryMusic(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer pageSize) throws GetOptsException {
         return musicService.pageQueryMusic(page,pageSize);
     }
 

@@ -43,7 +43,7 @@ public class ArticleController {
      * @throws GetOptsException
      */
     @GetMapping("/page")
-    public Result pageQueryArticle(@RequestParam Integer page,@RequestParam Integer pageSize) throws GetOptsException {
+    public Result pageQueryArticle(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer pageSize) throws GetOptsException {
         return articleService.pageQueryArticle(page,pageSize);
     }
 
@@ -56,7 +56,7 @@ public class ArticleController {
      * @throws GetOptsException
      */
     @GetMapping("/tag/{tagId}")
-    public Result pageQueryArticleBytagId(@RequestParam Integer page,@RequestParam Integer pageSize,@PathVariable Integer tagId) throws GetOptsException {
+    public Result pageQueryArticleBytagId(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer pageSize,@PathVariable Long tagId) throws GetOptsException {
         return articleService.pageQueryArticleBytagId(page,pageSize,tagId);
     }
 
@@ -69,7 +69,7 @@ public class ArticleController {
      * @throws GetOptsException
      */
     @GetMapping("/search")
-    public Result pageQueryArticleBykeyWords(@RequestParam Integer page,@RequestParam Integer pageSize,@RequestParam String keywords) throws GetOptsException {
+    public Result pageQueryArticleBykeyWords(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer pageSize,@RequestParam String keywords) throws GetOptsException {
         return articleService.pageQueryArticleBykeyWords(page,pageSize,keywords);
     }
 
@@ -82,7 +82,7 @@ public class ArticleController {
      * @throws GetOptsException
      */
     @GetMapping("/category/{categoryId}")
-    public Result pageQueryArticleByCategory(@RequestParam Integer page,@RequestParam Integer pageSize,@PathVariable Long categoryId) throws GetOptsException {
+    public Result pageQueryArticleByCategory(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer pageSize,@PathVariable Long categoryId) throws GetOptsException {
         return articleService.pageQueryArticleByCategory(page,pageSize,categoryId);
     }
 
